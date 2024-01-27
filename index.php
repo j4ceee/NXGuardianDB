@@ -33,8 +33,8 @@ if (!$failed) {
             <a href="./index.php" class="active">Start</a>
             <?php
             if ($db_setup) {
-                echo '<a href="">List Games</a>
-                      <a href="">Add Game</a>';
+                echo '<a href="">Search Games</a>
+                      <a href="./add_game.php">Add Game</a>';
             }
             ?>
         </nav>
@@ -131,15 +131,24 @@ if (!$failed) {
             if ($db_setup) {
                 echo "
                 <div class=\"menu-buttons\">
-                    <button class=\"menu-btn\" onclick=\"window.location=''\">Add Game</button>
-                    <button class=\"menu-btn\" onclick=\"window.location=''\">List Games</button>
+                    <button class=\"menu-btn\" onclick=\"window.location='./add_game.php'\">Add Game</button>
+                    <button class=\"menu-btn\" onclick=\"window.location=''\">Search Games</button>
                 </div>";
             }
             ?>
         </div>
     </main>
     <footer>
-
+        <nav class="nav-bottom navbar">
+            <a href="./index.php">Start</a>
+            <a href="./index.php">Disclaimer</a>
+            <?php
+            if ($db_setup) {
+                echo '<a href="">Search Games</a>
+                      <a href="">Add Game</a>';
+            }
+            ?>
+        </nav>
     </footer>
 </div>
 </body>

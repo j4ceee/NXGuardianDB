@@ -48,6 +48,7 @@ CREATE TABLE `platforms`
 (
     `platformID`   int(11) NOT NULL AUTO_INCREMENT, -- primary key
     `platformName` varchar(20) NOT NULL,            -- name of platform (e.g. Steam, Xbox, Playstation)
+    `platformCategory` varchar(20) NOT NULL,            -- name of platform category (e.g. PC, Xbox, Playstation)
 
     PRIMARY KEY (`platformID`),
     UNIQUE (`platformName`) -- every platform should have a unique name (no duplicates)

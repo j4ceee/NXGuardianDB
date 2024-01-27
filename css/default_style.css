@@ -49,18 +49,6 @@ header {
     z-index: 99999;
     background-color: var(--ryu-dark);
 }
-footer {
-    height: 6rem;
-    padding: 1rem 0;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    background: #000;
-}
 
 .logo-header {
     height: 3rem;
@@ -130,6 +118,34 @@ footer {
         display: none;
     }
 }
+
+/*--------------------Footer-------------------------*/
+
+footer {
+    height: 6rem;
+    padding: 1rem 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    background: var(--ryu-dark);
+}
+
+.nav-bottom a {
+    font-weight: normal;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.nav-bottom a:hover {
+    color: var(--ryu-purple);
+    text-shadow: var(--ryu-purple) 0 0 1px;
+    transition: 0.2s;
+}
+
 
 /*--------------------Start page-------------------------*/
 
@@ -228,4 +244,93 @@ footer {
     color: var(--ryu-red);
     border-color: var(--ryu-red);
     transition: 0.2s;
+}
+
+/*--------------------Manage Game Page-------------------------*/
+
+.manage_game_container {
+    color: whitesmoke;
+    font-family: sans-serif;
+}
+
+.platforms-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: start;
+}
+
+.plat_category {
+    display: flex;
+    flex-wrap: wrap;
+    width: 25%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    gap: 1.5rem;
+}
+
+.plat_category > h3 {
+    width: 100%;
+    text-align: center;
+    margin: .5rem 0 0 0;
+    padding: 0;
+}
+
+.plat_list_entry {
+    width: 8.7rem;
+    height: 5.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    position: relative;
+    border-radius: 1rem;
+    font-size: .8rem;
+    transition: 0.2s;
+}
+
+.plat_list_entry:hover,
+.plat_list_entry:focus-within {
+    background-color: var(--ryu-dark);
+    transition: 0.2s;
+}
+
+.plat_list_check {
+    -webkit-appearance: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    margin: 0;
+    z-index: 999;
+    border: transparent 0 solid;
+    border-radius: 1rem;
+    transition: 0.2s;
+}
+
+.plat_list_check:checked{
+    border: var(--ryu-red) .2rem solid;
+    border-radius: 1rem;
+    transition: 0.2s;
+}
+
+.plat_list_entry > label {
+    position: absolute;
+    bottom: 6%;
+    cursor: pointer;
+    text-wrap: normal;
+    text-align: center;
+    z-index: 50;
+}
+
+.plat_list_logo {
+    position: absolute;
+    width: auto;
+    max-width: 90%;
+    height: 3rem;
+    z-index: 50;
+    top: 10%;
 }

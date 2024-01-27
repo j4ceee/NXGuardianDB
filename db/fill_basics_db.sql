@@ -12,22 +12,25 @@ time_zone = "+00:00";
 USE
 `jaceedb`;
 
-INSERT INTO `platforms` (`platformID`, `platformName`)
-VALUES (1, 'Steam'),
-       (2, 'Epic Games'),
-       (3, 'GOG'),
-       (4, 'Playstation 5'),
-       (5, 'Playstation 4'),
-       (6, 'Playstation 3'),
-       (7, 'Playstation 2'),
-       (8, 'Xbox Series X/S'),
-       (9, 'Xbox One X/S'),
-       (10, 'Xbox 360'),
-       (11, 'Nintendo Switch'),
-       (12, 'Nintendo Wii U'),
-       (13, 'Nintendo Wii'),
-       (14, 'Nintendo 3DS/2DS'),
-       (15, 'Nintendo DS/DSi');
+INSERT INTO `platforms` (`platformID`, `platformName`, `platformCategory`)
+VALUES (1, 'Steam', 'PC'),
+       (2, 'Epic Games', 'PC'),
+       (3, 'GOG', 'PC'),
+       (4, 'Origin', 'PC'),
+       (5, 'Uplay', 'PC'),
+       (6, 'Battle.net', 'PC'),
+       (7, 'Playstation 5', 'Playstation'),
+       (8, 'Playstation 4', 'Playstation'),
+       (9, 'Playstation 3', 'Playstation'),
+       (10, 'Playstation 2', 'Playstation'),
+       (11, 'Xbox Series X/S', 'Xbox'),
+       (12, 'Xbox One X/S', 'Xbox'),
+       (13, 'Xbox 360', 'Xbox'),
+       (14, 'Nintendo Switch', 'Nintendo'),
+       (15, 'Nintendo Wii U', 'Nintendo'),
+       (16, 'Nintendo Wii', 'Nintendo'),
+       (17, 'Nintendo 3DS/2DS', 'Nintendo'),
+       (18, 'Nintendo DS/DSi', 'Nintendo');
 
 INSERT INTO `playermodes` (`modeID`, `modeName`)
 VALUES (1, 'Singleplayer'), -- Singleplayer
