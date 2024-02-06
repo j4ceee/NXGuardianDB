@@ -48,6 +48,7 @@ CREATE TABLE `platforms`
 (
     `platformID`   int(11) NOT NULL AUTO_INCREMENT, -- primary key
     `platformName` varchar(20) NOT NULL,            -- name of platform (e.g. Steam, Xbox, Playstation)
+    `platformCategory` varchar(20) NOT NULL,            -- name of platform category (e.g. PC, Xbox, Playstation)
 
     PRIMARY KEY (`platformID`),
     UNIQUE (`platformName`) -- every platform should have a unique name (no duplicates)
@@ -60,9 +61,11 @@ CREATE TABLE `playermodes`
 (
     `modeID`   int(11) NOT NULL AUTO_INCREMENT, -- primary key
     `modeName` varchar(30) NOT NULL,            -- name of player mode (e.g. single player, splitscreen, online multiplayer)
+    `modeShort` varchar(10) NOT NULL,           -- short name
 
     PRIMARY KEY (`modeID`),
-    UNIQUE (`modeName`) -- every player mode should have a unique name (no duplicates)
+    UNIQUE (`modeName`), -- every player mode should have a unique name (no duplicates)
+    UNIQUE (`modeShort`) -- every player mode should have a unique name (no duplicates)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
