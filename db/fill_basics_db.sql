@@ -32,13 +32,13 @@ VALUES (1, 'Steam', 'PC'),
        (17, 'Nintendo 3DS/2DS', 'Nintendo'),
        (18, 'Nintendo DS/DSi', 'Nintendo');
 
-INSERT INTO `playermodes` (`modeID`, `modeName`)
-VALUES (1, 'Singleplayer'), -- Singleplayer
-       (2, 'Local Multiplayer'), -- Splitscreen / Shared Screen
-       (3, 'Local LAN Play'), -- local multiplayer in the same network
-       (4, 'Local Wireless Play'), -- nintendo specific multiplayer over direct wireless connection between devices
-       (5, 'Online Multiplayer'), -- Online Multiplayer
-       (6, 'Massively Multiplayer (MMO)'); -- MMO
+INSERT INTO `playermodes` (`modeID`, `modeName`, `modeShort`)
+VALUES (1, 'Singleplayer', 'single'), -- Singleplayer
+       (2, 'Local Multiplayer', 'local_mp'), -- Splitscreen / Shared Screen
+       (3, 'Local LAN Play', 'local_lan'), -- local multiplayer in the same network
+       (4, 'Local Wireless Play', 'local_wir'), -- nintendo specific multiplayer over direct wireless connection between devices
+       (5, 'Online Multiplayer', 'online_mp'), -- Online Multiplayer
+       (6, 'Massively Multiplayer (MMO)', 'online_mmo'); -- MMO
 
 
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;

@@ -85,29 +85,44 @@ if (!$failed) {
     <main>
         <div class="manage_game_container">
             <form class="text_container" action="validate.php" method="post">
-                <fieldset class="input_form">
+                <fieldset class="basic_info_form">
                     <legend>Game Information</legend>
 
-                    <label for="title">Title:</label>
-                    <input type="text" name="title" id="title" required>
+                    <div class="game_info_cont">
+                        <div class="game_info_field">
+                            <label for="title">Game Title:</label>
+                            <input type="text" class="win_dark_input" name="title" id="title" required>
+                        </div>
 
-                    <label for="developer">Developer:</label>
-                    <input list="developers" name="developer" id="developer" required>
+                        <div class="game_info_field">
+                            <label for="developer">Developer:</label>
+                            <input list="developers" class="win_dark_input" name="developer" id="developer" required>
+                        </div>
 
-                    <label for="release">Release Date:</label>
-                    <input type="date" name="release" id="release" required>
+                        <div class="game_info_field">
+                            <label for="release">Release Date:</label>
+                            <input type="date" class="win_dark_input" name="release" id="release" required>
+                        </div>
 
-                    <label for="sgdb-id">SteamGridDB ID:</label>
-                    <input type="number" name="sgdb-id" id="sgdb-id" min="0" max="999999" step="1" required>
+                        <div class="game_info_field">
+                            <label for="sgdb-id">SteamGridDB ID:</label>
+                            <input type="number" class="win_dark_input" name="sgdb-id" id="sgdb-id" min="0" max="999999" step="1" required>
+                        </div>
 
-                    <label for="sgdb-grid-id">SteamGridDB Grid ID:</label>
-                    <input type="number" name="sgdb-grid-id" id="sgdb-grid-id" min="0" max="999999" step="1">
+                        <div class="game_info_field">
+                            <label for="sgdb-grid-id">SGDB Grid ID:</label>
+                            <input type="number" class="win_dark_input" name="sgdb-grid-id" id="sgdb-grid-id" min="0" max="999999" step="1">
+                        </div>
+
+                        <div class="game_info_empty"></div>
+                        <div class="game_info_empty"></div>
+                        <div class="game_info_empty"></div>
+                    </div>
                 </fieldset>
 
-                <fieldset>
+                <fieldset class="platforms_form">
                     <legend>Platforms</legend>
                     <div class="platforms-container">
-                        <!-- Dynamically generate platform checkboxes with JavaScript -->
                         <?php
                         $conn->exec("USE $dbname"); // use database
                         $sql = "SELECT * FROM platforms ORDER BY platformCategory, platformID"; // SQL statement to select all platforms
@@ -137,8 +152,10 @@ if (!$failed) {
                                 echo '<input type="checkbox" class="plat_list_check" id="platform' . htmlspecialchars($platform['platformID']) . '" name="platform' . htmlspecialchars($platform['platformID']) . '" value="' . htmlspecialchars($platform['platformID']) . '">';
                                 // same as 'echo '<input type="checkbox" name="platforms" value="' . $platform['platformID'] . '">';' but with htmlspecialchars()
                                 echo '<label for="platform' . htmlspecialchars($platform['platformID']) . '">'. htmlspecialchars($platform['platformName']) . '</label>';
-                                echo '<img class="plat_list_logo" src="./img/platforms/' . htmlspecialchars($platform['platformID']) . '.svg">';
+                                //echo '<img class="plat_list_logo" src="./img/platforms/' . htmlspecialchars($platform['platformID']) . '.svg">';
+                                echo '<div class="plat_list_logo" style="mask: url(./img/platforms/' . htmlspecialchars($platform['platformID']) . '.svg) no-repeat center / contain; -webkit-mask: url(./img/platforms/' . htmlspecialchars($platform['platformID']) . '.svg) no-repeat center / contain"> </div>';
                                 echo '</div>';
+                                echo "\r\n"; // line break
                             }
 
                             echo '</div>';
@@ -147,6 +164,59 @@ if (!$failed) {
                     </div>
                 </fieldset>
 
+                <fieldset class="platform_specs_form">
+                    <legend>Platform Specifications</legend>
+
+                    <div class="platform_spec_cont">
+                        <template id="platform_template">
+                            <fieldset class="platform_info info_[platID]"> <!-- each plat_list_entry has its ID under <label for="platform[platID]"> -->
+                                <legend><img src="./img/platforms/[platID].svg" class="platform_info_logo" alt="Platform Logo"/>[platName] Specifications</legend> <!-- each plat_list_entry has its Name under <label for="platform[platID]">[platName]</label> -->
+
+                                <div class="platform_info_field">
+                                    <label for="store_link_[platID]">Store Link:</label>
+                                    <input type="url" class="win_dark_input" name="store_link_[platID]" id="store_link_[platID]">
+                                </div>
+
+                                <div class="platform_info_field">
+                                    <label for="release_plat_[platID]">Release Date:</label>
+                                    <input type="date" class="win_dark_input" name="release_plat_[platID]" id="release_plat_[platID]">
+                                </div>
+
+                                <fieldset class="multiplayer_info mp_info_[platID]">
+                                    <legend>Multiplayer Functionality</legend>
+
+                                    <?php
+                                    $sql = "SELECT * FROM playermodes ORDER BY modeID"; // SQL statement to select all platforms
+                                    $stmt = $conn->query($sql);
+
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                        echo '<div class="mp_feature_check_cont">';
+                                        //echo '<input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '[platID]" id="' . htmlspecialchars($row['modeShort']) . '[platID]" required>';
+                                        echo "\r\n"; // line break
+                                        //echo '<span class="win_dark_check"></span>';
+                                        echo "\r\n"; // line break
+                                        //echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '[platID]">' . htmlspecialchars($row['modeName']) . '</label>';
+                                        echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '_[platID]"><input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_[platID]"><span class="win_dark_check"></span>' . htmlspecialchars($row['modeName']) . '</label>';
+                                        echo '</div>';
+                                        echo "\r\n\r\n"; // line break
+
+                                        if ($row['modeShort'] != 'single') {
+                                            echo '<div class="mp_feature_count_cont">';
+                                            echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" min="1" max="999" step="1">';
+                                            echo "\r\n"; // line break
+                                            echo "<span>-</span>";
+                                            echo "\r\n"; // line break
+                                            echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" min="1" max="999" step="1">';
+                                            echo '</div>';
+                                        }
+                                        echo "\r\n\r\n"; // line break
+                                    }
+                                    ?>
+                                </fieldset>
+                            </fieldset>
+                        </template>
+                    </div>
+                </fieldset>
 
                 <input type="submit" value="Add game" class="submit_button">
             </form>
@@ -161,5 +231,6 @@ if (!$failed) {
         </nav>
     </footer>
 </div>
+<script src="./js/game_editor.js"></script>
 </body>
 </html>
