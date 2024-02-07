@@ -565,32 +565,35 @@ input[type="number"]
     }
 }
 
-/*
+
 .mp_feature_check {
     position: absolute;
     opacity: 0;
     visibility: hidden;
-} */
+    left: -2rem;
+}
 
 .mp_feature_label {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: .1rem 0 .1rem 0; /* .1rem 0 .1rem 2rem; */
+    padding: .1rem 0 .1rem 0;
     cursor: pointer;
     width: fit-content;
+    position: relative;
+    margin-left: 2rem;
 }
-/*
+
 .win_dark_check {
     display: inline-block;
     height: 25px;
     width: 25px;
     background-color: transparent;
     position: absolute;
-    left: 4.4%;
     border-radius: 0.5rem;
     border: #393939 4px solid;
     transition: .2s;
+    left: -2.4rem;
 }
 
 .mp_feature_label:hover .win_dark_check {
@@ -628,7 +631,7 @@ input[type="number"]
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-*/
+
 
 /*--------------------Game List-------------------------*/
 
@@ -660,6 +663,7 @@ input[type="number"]
     border-radius: 1rem;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .game > .game_details {
@@ -718,4 +722,13 @@ input[type="number"]
 
 .game_mp_features {
     padding: 0 1rem;
+}
+
+.game_delete {
+    position: absolute;
+    right: .7rem;
+    bottom: 0;
+    gap: 1rem;
+    display: flex;
+    height: 1.8rem;
 }

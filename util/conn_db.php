@@ -1,19 +1,45 @@
 <?php
-$servername = "localhost"; // server name to connect to
-$username = "root"; // username to connect to server
-$password = ""; // password to connect to server
+global $dbname;
 $dbname = "jaceedb"; // database name to connect to
-$failed = false; // initialize $failed to false
 
-try {
-    $conn = new PDO("mysql:host=$servername", $username, $password); // connect to server with PDO
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set PDO error mode to exception
+global $conn;
+$conn = null; // initialize $conn to null
+
+function getPDO(): ?PDO
+{
+    $servername = "localhost"; // server name to connect to
+    $username = "root"; // username to connect to server
+    $password = ""; // password to connect to server
+
+    if ($GLOBALS['conn'] == null) {
+        try {
+            $GLOBALS['conn'] = new PDO("mysql:host=$servername", $username, $password); // connect to database with PDO
+            $GLOBALS['conn']->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // set PDO error mode to exception
+        }
+        catch(PDOException $e) {
+            return null;
+        }
+    }
+
+    // return $conn
+    return $GLOBALS['conn'];
 }
-catch(PDOException $e) {
-    $failed = true; // set $failed to true
 
-    // Redirect back to index.php
-    header("Location: ../index.php");
-    exit();
+function checkDBExists(): bool
+{
+    $conn = getPDO(); // get PDO connection
+    if ($conn == null) {
+        return false;
+    }
+    $stmt = $conn->prepare("SHOW DATABASES LIKE :dbname"); // prepare statement to check if database exists, :dbname is a placeholder
+    $stmt->execute(['dbname' => $GLOBALS['dbname']]); // execute statement with database name
+    $result = $stmt->fetchAll(); // fetch all results and store in $result
+    return count($result) > 0; // return true if database exists, false otherwise
+}
+
+function useDB(): void
+{
+    $conn = getPDO(); // get PDO connection
+    $conn->exec("USE " . $GLOBALS['dbname']); // use database
 }
 ?>
