@@ -34,6 +34,7 @@ if (!$failed) {
             <?php
             if ($db_setup) {
                 echo '<a href="">Search Games</a>
+                      <a href="./list_games.php">List Games</a>
                       <a href="./add_game.php">Add Game</a>';
             }
             ?>

@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'gameName' => $_POST['title'],
         'gameRelease' => $_POST['release'],
         'devID' => $devID,
-        'steamgridID' => $_POST['sgdb-id'],
+        'steamgridID' => 1234, // TODO: handle appropriately if this field is optional
         'steamgridImageID' => $_POST['sgdb-grid-id'] // TODO: handle appropriately if this field is optional
     ]);
     $gameID = $conn->lastInsertId();
@@ -115,12 +115,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Iterate over multiplayer modes submitted for this platform
         foreach ($_POST as $key => $value) {
-            if (str_starts_with($key, 'single_' . $platformDetails['id']) ||
-                str_starts_with($key, 'local_mp_' . $platformDetails['id']) ||
-                str_starts_with($key, 'local_lan_' . $platformDetails['id']) ||
-                str_starts_with($key, 'local_wir_' . $platformDetails['id']) ||
-                str_starts_with($key, 'online_mp_' . $platformDetails['id']) ||
-                str_starts_with($key, 'online_mmo_' . $platformDetails['id'])) {
+            // Check if the key starts with the multiplayer mode prefix and is related to the current platform
+            if (preg_match('/^single_' . $platformDetails['id'] . '(?!\d)/', $key) ||
+                preg_match('/^local_mp_' . $platformDetails['id'] . '(?!\d)/', $key) ||
+                preg_match('/^local_lan_' . $platformDetails['id'] . '(?!\d)/', $key) ||
+                preg_match('/^local_wir_' . $platformDetails['id'] . '(?!\d)/', $key) ||
+                preg_match('/^online_mp_' . $platformDetails['id'] . '(?!\d)/', $key) ||
+                preg_match('/^online_mmo_' . $platformDetails['id'] . '(?!\d)/', $key)) {
                 echo "Key: $key\n";
 
                 // First, find the last underscore which separates the modeShort (and potential suffix) from the platform ID
@@ -150,6 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $minPlayers = $_POST[$modeShort . '_min_' . $platformDetails['id']] ?? 0;
                         $maxPlayers = $_POST[$modeShort . '_max_' . $platformDetails['id']] ?? 0;
 
+                        echo "<br>";
                         echo "Debugging SQL Statement:\n";
                         echo "Game Platform ID: $gamePlatformID\n";
                         echo "Mode ID: $modeID\n";
