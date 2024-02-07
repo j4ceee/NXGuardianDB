@@ -47,10 +47,10 @@ function handlePlatformSelectionChange(event) {
 }
 
 function addPlatformInfoContainer(platID, platName) {
-    // Get the template and clone it
+    // get the template and clone it
     const template = document.getElementById('platform_template').content.cloneNode(true);
 
-    // Replace placeholders within the cloned template
+    // replace placeholders within the cloned template
     // for platform name and image
     const legend = template.querySelector('legend'); // get the legend element
     const img = legend.querySelector('img'); // get the img element
@@ -76,7 +76,7 @@ function addPlatformInfoContainer(platID, platName) {
         element.className = element.className.replace('[platID]', platID);
     });
 
-    // for input names, for, and id
+    // for input names, for and id
     template.querySelectorAll('input, label').forEach(element => {
         const name = element.name || element.htmlFor || element.id; // handle input, label, and id
         if (name) {
@@ -101,13 +101,13 @@ function addPlatformInfoContainer(platID, platName) {
             const mpFeatureCountCont = this.closest('.mp_feature_check_cont').nextElementSibling; // get the container for the multiplayer feature count (siblings of the checkbox)
             if (mpFeatureCountCont.classList.contains('mp_feature_count_cont')) {
                 if (this.checked) {
-                    // If the checkbox is checked, set visibility to visible and required to true
+                    // if the checkbox is checked, set visibility to visible and required to true
                     mpFeatureCountCont.style.visibility = 'visible';
                     mpFeatureCountCont.querySelectorAll('input').forEach(input => {
                         input.required = true;
                     });
                 } else {
-                    // If the checkbox is not checked, set visibility to hidden and required to false
+                    // if the checkbox is not checked, set visibility to hidden and required to false
                     mpFeatureCountCont.style.visibility = 'hidden';
                     mpFeatureCountCont.querySelectorAll('input').forEach(input => {
                         input.required = false;

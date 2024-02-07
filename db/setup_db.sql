@@ -34,7 +34,7 @@ CREATE TABLE `games`
     `gameRelease` date         NOT NULL,           -- release date of game
     `devID`       int(11) NOT NULL,                -- foreign key to developers table
     `steamgridID` int(12) NOT NULL,                -- SteamGridDB ID
-    `steamgridImageID` varchar(40) NOT NULL,           -- SteamGridDB Grid Image ID
+    `steamgridImageID` varchar(40) NOT NULL,       -- SteamGridDB Grid Image ID
 
     PRIMARY KEY (`gameID`),
     -- UNIQUE (`gameName`), -- every game should have a unique name / some games have the same name (e.g. Need for Speed)
