@@ -37,6 +37,7 @@ if (!$failed) {
         <nav class="navbar">
             <a href="./index.php">Start</a>
             <a href="">Search Games</a>
+            <a href="./list_games.php">List Games</a>
             <a href="./add_game.php" class="active">Add Game</a>
         </nav>
 
@@ -104,14 +105,16 @@ if (!$failed) {
                             <input type="date" class="win_dark_input" name="release" id="release" required>
                         </div>
 
+                        <!--
                         <div class="game_info_field">
                             <label for="sgdb-id">SteamGridDB ID:</label>
                             <input type="number" class="win_dark_input" name="sgdb-id" id="sgdb-id" min="0" max="999999" step="1" required>
                         </div>
+                        -->
 
                         <div class="game_info_field">
                             <label for="sgdb-grid-id">SGDB Grid ID:</label>
-                            <input type="number" class="win_dark_input" name="sgdb-grid-id" id="sgdb-grid-id" min="0" max="999999" step="1">
+                            <input type="text" class="win_dark_input" name="sgdb-grid-id" id="sgdb-grid-id" required>
                         </div>
 
                         <div class="game_info_empty"></div>

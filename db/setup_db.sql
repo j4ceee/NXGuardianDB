@@ -34,11 +34,11 @@ CREATE TABLE `games`
     `gameRelease` date         NOT NULL,           -- release date of game
     `devID`       int(11) NOT NULL,                -- foreign key to developers table
     `steamgridID` int(12) NOT NULL,                -- SteamGridDB ID
-    `steamgridImageID` int(12) NOT NULL,           -- SteamGridDB Grid Image ID
+    `steamgridImageID` varchar(40) NOT NULL,           -- SteamGridDB Grid Image ID
 
     PRIMARY KEY (`gameID`),
     -- UNIQUE (`gameName`), -- every game should have a unique name / some games have the same name (e.g. Need for Speed)
-    FOREIGN KEY (`devID`) references `developers` (`devID`) -- foreign key to developers table
+    FOREIGN KEY (`devID`) references `developers` (`devID`) ON DELETE CASCADE -- foreign key to developers table
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -81,7 +81,7 @@ CREATE TABLE game_platform_link
     `storeLink`       varchar(150) NULL,           -- link to store page for game on platform
 
     PRIMARY KEY (`game_platformID`),
-    FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`),
+    FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE CASCADE,
     FOREIGN KEY (`platformID`) REFERENCES `platforms` (`platformID`)
 
 ) ENGINE = InnoDB
@@ -92,12 +92,14 @@ CREATE TABLE game_platform_link
 -- links games to platforms to player modes
 CREATE TABLE game_platform_player_link
 (
+    `game_platform_playerID` int(11) NOT NULL AUTO_INCREMENT, -- primary key
     `game_platformID` int(11) NOT NULL,                                                -- foreign key to game_platform_link table
     `modeID`          int(11) NOT NULL,                                                -- foreign key to playermodes table
     `minPlayers`      int(11) NOT NULL CHECK ( `minPlayers` >= 0 ),                    -- minimum number of players for mode
     `maxPlayers`      int(11) NOT NULL CHECK ( `maxPlayers` >= `minPlayers` ),         -- maximum number of players for mode
 
-    FOREIGN KEY (`game_platformID`) REFERENCES game_platform_link (`game_platformID`), -- foreign key to game_platform_link table
+    PRIMARY KEY (`game_platform_playerID`),
+    FOREIGN KEY (`game_platformID`) REFERENCES game_platform_link (`game_platformID`) ON DELETE CASCADE, -- foreign key to game_platform_link table
     FOREIGN KEY (`modeID`) REFERENCES `playermodes` (`modeID`)                         -- foreign key to playermodes table
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
