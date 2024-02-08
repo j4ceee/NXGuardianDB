@@ -1,5 +1,5 @@
 <?php
-include_once './util/conn_db.php'; // include database connection file
+include_once './conn_db.php'; // include database connection file
 
 $PDO = getPDO(); // get PDO connection
 
@@ -35,13 +35,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // add game-----------------------------------------------------------------------------------
-    $stmt = $PDO->prepare("INSERT INTO games (gameName, gameRelease, devID, steamgridID, steamgridImageID) VALUES (:gameName, :gameRelease, :devID, :steamgridID, :steamgridImageID)");
+    $stmt = $PDO->prepare("INSERT INTO games (gameName, gameRelease, devID, steamgridID, imageLink) VALUES (:gameName, :gameRelease, :devID, :steamgridID, :imageLink)");
     $stmt->execute([
         'gameName' => trim($_POST['title']),
         'gameRelease' => trim($_POST['release']),
         'devID' => $devID,
         'steamgridID' => 1234, // TODO: handle optional field
-        'steamgridImageID' => trim($_POST['sgdb-grid-id']) // TODO: handle as link in frontend & database
+        'imageLink' => trim($_POST['imageLink']) // TODO: handle as link in frontend & database
     ]);
     $gameID = $PDO->lastInsertId();
 
@@ -194,6 +194,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // TODO: redirect to list_games.php
+    // redirect to list_games.php with:
+    // - success message
+    // - game ID
+
+    header("Location: ../list_games.php?gameID=$gameID");
+
+
 }
 
 function getModeIDFromModeName($PDO, $modeShort) {
@@ -202,5 +209,3 @@ function getModeIDFromModeName($PDO, $modeShort) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['modeID'] : null;
 }
-
-?>
