@@ -18,6 +18,57 @@ template_header('List Games', 'list');
             <?php
             // TODO: add search function directly in the page (not part of exam)
 
+            var_dump($_POST);
+
+            // collect search criteria from form
+            $title = isset($_POST['title']) ? trim($_POST['title']) : null;
+            $developer = isset($_POST['developer']) ? trim($_POST['developer']) : null;
+
+            // collect platforms based on dynamic keys
+            $platforms = [];
+            foreach ($_POST as $key => $value) {
+                if (str_starts_with($key, 'platform')) { // checks if the key starts with 'platform'
+                    $platforms[] = $value;
+                }
+            }
+
+            // Initialize an associative array for multiplayer modes with player counts
+            $multiplayerModesWithCounts = [];
+
+             // get all modeShort from database table playermodes
+            $stmt = $PDO->prepare("SELECT modeShort FROM playermodes");
+            $stmt->execute();
+            $modes = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            // loop through each mode and check if it is selected
+            foreach ($modes as $modeKey) {
+                if (isset($_POST[$modeKey]) && $_POST[$modeKey] === 'on') { // mode is selected
+                    $minKey = $modeKey . '_min'; // create the key for the min player count
+                    $maxKey = $modeKey . '_max'; // create the key for the max player count
+                    $minPlayers = isset($_POST[$minKey]) && $_POST[$minKey] !== '' ? (int)$_POST[$minKey] : null; // get the min player count
+                    $maxPlayers = isset($_POST[$maxKey]) && $_POST[$maxKey] !== '' ? (int)$_POST[$maxKey] : null; // get the max player count
+
+                    if ($minPlayers !== null) {
+                        $multiplayerModesWithCounts[$modeKey]['min'] = $minPlayers;
+                    }
+
+                    if ($maxPlayers !== null) {
+                        $multiplayerModesWithCounts[$modeKey]['max'] = $maxPlayers;
+                    }
+                }
+            }
+
+            // debug output
+            echo "<p>Search Criteria:</p>";
+            echo "<p>Title: " . htmlspecialchars($title) . "</p>";
+            echo "<p>Developer: " . htmlspecialchars($developer) . "</p>";
+            echo "<p>Platforms: " . htmlspecialchars(implode(', ', $platforms)) . "</p>";
+
+            // output multiplayer modes with player counts
+            foreach ($multiplayerModesWithCounts as $mode => $counts) {
+                echo "<p>Mode: " . htmlspecialchars($mode) . " - Min: " . htmlspecialchars($counts['min'] ?? 'N/A') . ", Max: " . htmlspecialchars($counts['max'] ?? 'N/A') . "</p>";
+            }
+
             // get all games with multiplayer modes
             $stmt = $PDO->prepare("
             SELECT 

@@ -13,7 +13,7 @@ useDB();
 template_header('Add Game', 'add');
 ?>
 <div class="manage_game_container">
-    <form class="text_container" action="validate.php" method="post">
+    <form class="add_game_form" action="./util/validate_add.php" method="post">
         <fieldset class="basic_info_form">
             <legend>Game Information</legend>
 
@@ -23,6 +23,7 @@ template_header('Add Game', 'add');
                     <input type="text" class="win_dark_input" name="title" id="title" required>
                 </div>
 
+                <!-- TODO: populate developer list from database -->
                 <div class="game_info_field">
                     <label for="developer">Developer:</label>
                     <input list="developers" class="win_dark_input" name="developer" id="developer" required>

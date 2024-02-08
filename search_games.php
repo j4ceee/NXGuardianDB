@@ -13,7 +13,7 @@ useDB();
 template_header('Search Game', 'search');
 ?>
         <div class="manage_game_container">
-            <form class="text_container" action="validate.php" method="post">
+            <form class="add_game_form" action="./list_games.php" method="post">
                 <fieldset class="basic_info_form">
                     <legend>Game Information</legend>
 
@@ -23,6 +23,7 @@ template_header('Search Game', 'search');
                             <input type="text" class="win_dark_input" name="title" id="title">
                         </div>
 
+                        <!-- TODO: populate developer list from database -->
                         <div class="game_info_field">
                             <label for="developer">Developer:</label>
                             <input list="developers" class="win_dark_input" name="developer" id="developer">
@@ -74,44 +75,37 @@ template_header('Search Game', 'search');
                 </fieldset>
 
                 <fieldset class="mp_specs_form">
-                    <legend>Platform Specifications</legend>
+                    <legend>Multiplayer Specifications</legend>
 
-                    <div class="platform_spec_cont">
-                                <fieldset class="multiplayer_info mp_info_[platID]">
-                                    <legend>Multiplayer Functionality</legend>
-
+                    <div class="mp_info_search">
                                     <?php
                                     $sql = "SELECT * FROM playermodes ORDER BY modeID"; // SQL statement to select all platforms
                                     $stmt = $PDO->query($sql);
 
                                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                         echo '<div class="mp_feature_check_cont">';
-                                        //echo '<input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '[platID]" id="' . htmlspecialchars($row['modeShort']) . '[platID]" required>';
                                         echo "\r\n"; // line break
-                                        //echo '<span class="win_dark_check"></span>';
                                         echo "\r\n"; // line break
-                                        //echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '[platID]">' . htmlspecialchars($row['modeName']) . '</label>';
-                                        echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '_[platID]"><input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_[platID]"><span class="win_dark_check"></span>' . htmlspecialchars($row['modeName']) . '</label>';
+                                        echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '"><input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '" id="' . htmlspecialchars($row['modeShort']) . '"><span class="win_dark_check"></span>' . htmlspecialchars($row['modeName']) . '</label>';
                                         echo '</div>';
                                         echo "\r\n\r\n"; // line break
 
                                         if ($row['modeShort'] != 'single') {
                                             echo '<div class="mp_feature_count_cont">';
-                                            echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" min="1" max="999" step="1">';
+                                            echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min" id="' . htmlspecialchars($row['modeShort']) . '_min" min="1" max="999" step="1">';
                                             echo "\r\n"; // line break
                                             echo "<span>-</span>";
                                             echo "\r\n"; // line break
-                                            echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" min="1" max="999" step="1">';
+                                            echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max" id="' . htmlspecialchars($row['modeShort']) . '_max" min="1" max="999" step="1">';
                                             echo '</div>';
                                         }
                                         echo "\r\n\r\n"; // line break
                                     }
                                     ?>
-                                </fieldset>
                     </div>
                 </fieldset>
 
-                <input type="submit" value="Add game" class="submit_button">
+                <input type="submit" value="Search game" class="submit_button">
             </form>
         </div>
-<?php template_footer(); ?>
+<?php template_footer("search_games.js"); ?>
