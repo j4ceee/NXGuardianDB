@@ -1,10 +1,10 @@
 <?php
-include_once './util/conn_db.php'; // include database connection file
+include_once './conn_db.php'; // include database connection file
 
 $PDO = getPDO(); // get PDO connection
 
 if (!checkDBExists()) {
-    header("Location: ./index.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -54,7 +54,7 @@ else {
 }
 // redirect to list_games.php
 // TODO: add a message to the URL
-header("Location: ./list_games.php");
+header("Location: ../list_games.php");
 
 function getGameID($PDO, $game_platformID): int
 {

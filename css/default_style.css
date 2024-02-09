@@ -8,6 +8,7 @@
     --ryu-red: #FF5F55FF;
     --ryu-purple: #88418b;
     --ryu-green: #01df4f;
+    --bright-grey: #6f6f6f;
 }
 
 * {
@@ -685,10 +686,6 @@ input[type="number"]
     position: relative;
 }
 
-.game > .game_details {
-    display: block;
-}
-
 .game:hover > .game_details,
 .game:focus-within > .game_details {
     display: block;
@@ -700,11 +697,13 @@ input[type="number"]
     align-items: center;
     margin: 0 1rem;
     width: min-content;
+    text-decoration: none;
+    color: whitesmoke;
 }
 
 .game_prev > h2 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-top: 1rem;
     width: 100%;
     max-width: 100%;
@@ -736,11 +735,17 @@ input[type="number"]
 }
 
 .game_details {
+    display: block;
+    width: 26rem;
     margin-left: 4rem;
 }
 
 .game_mp_features {
     padding: 0 1rem;
+}
+
+.game_mp_features > li {
+    padding: .3rem;
 }
 
 .game_delete {

@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $platformDetails['store_link'] = trim($_POST["store_link_$platformID"]);
             }
             if (isset($_POST["release_date_$platformID"])) {
-                $platformDetails['release_date'] = trim($_POST["release_date_$platformID"]);
+                $platformDetails['release_date'] = trim($_POST["release_plat_$platformID"]);
             }
 
             // add to selected platforms array

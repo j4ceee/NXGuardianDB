@@ -15,10 +15,10 @@ USE
 INSERT INTO `platforms` (`platformID`, `platformName`, `platformCategory`)
 VALUES (1, 'Steam', 'PC'),
        (2, 'Epic Games', 'PC'),
-       (3, 'GOG', 'PC'),
+       (3, 'Microsoft Store', 'PC'),
        (4, 'Origin', 'PC'),
        (5, 'Uplay', 'PC'),
-       (6, 'Microsoft Store', 'PC'),
+       (6, 'Battle.net', 'PC'),
        (7, 'Playstation 5', 'Playstation'),
        (8, 'Playstation 4', 'Playstation'),
        (9, 'Playstation 3', 'Playstation'),
