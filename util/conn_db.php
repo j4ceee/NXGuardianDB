@@ -37,9 +37,14 @@ function checkDBExists(): bool
     return count($result) > 0; // return true if database exists, false otherwise
 }
 
-function useDB(): void
+function useDB(): bool
 {
     $conn = getPDO(); // get PDO connection
-    $conn->exec("USE " . $GLOBALS['dbname']); // use database
+    try {
+        $conn->exec("USE " . $GLOBALS['dbname']); // use database
+    } catch (PDOException $e) {
+        return false;
+    }
+    return true;
 }
 ?>

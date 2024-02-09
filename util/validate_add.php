@@ -154,7 +154,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // iterate over multiplayer modes submitted for this platform
         foreach ($_POST as $key => $value) {
             // check if the key starts with the multiplayer mode prefix and is related to the current platform
-            // TODO: compare to all strings modeShort from DB instead of typing all strings again here
 
             foreach ($modes as $modeShort) {
                 // following regex pattern checks if the key starts with the modeShort and platform ID, but not followed by a digit
@@ -216,10 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // TODO: redirect to list_games.php
-    // redirect to list_games.php with:
-    // - success message
-    // - game ID
+    // TODO: success message after redirect
 
     header("Location: ../list_games.php?gameID=$gameID");
 
