@@ -69,10 +69,13 @@ template_header('Search Game', 'search');
 
                     <div class="mp_info_search">
                                     <?php
-                                    $sql = "SELECT * FROM playermodes ORDER BY modeID"; // SQL statement to select all platforms
-                                    $stmt = $PDO->query($sql);
+                                    $query = "SELECT * FROM playermodes ORDER BY modeID"; // SQL statement to select all platforms
+                                    $stmt = $PDO->prepare($query);
+                                    $stmt->execute();
+                                    $playermodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                                    foreach ($playermodes as $row) {
                                         echo '<div class="mp_feature_check_cont">';
                                         echo "\r\n"; // line break
                                         echo "\r\n"; // line break
@@ -82,11 +85,8 @@ template_header('Search Game', 'search');
 
                                         if ($row['modeShort'] != 'single') {
                                             echo '<div class="mp_feature_count_cont">';
-                                            echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min" id="' . htmlspecialchars($row['modeShort']) . '_min" min="1" max="999" step="1">';
+                                            echo '<input type="number" class="mp_feature_Players win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_players" id="' . htmlspecialchars($row['modeShort']) . '_players" min="1" max="999" step="1">';
                                             echo "\r\n"; // line break
-                                            echo "<span>-</span>";
-                                            echo "\r\n"; // line break
-                                            echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max" id="' . htmlspecialchars($row['modeShort']) . '_max" min="1" max="999" step="1">';
                                             echo '</div>';
                                         }
                                         echo "\r\n\r\n"; // line break

@@ -106,10 +106,13 @@ template_header('Add Game', 'add');
                             <legend>Multiplayer Functionality</legend>
 
                             <?php
-                            $sql = "SELECT * FROM playermodes ORDER BY modeID"; // SQL statement to select all platforms
-                            $stmt = $PDO->query($sql);
+                            $query = "SELECT * FROM playermodes ORDER BY modeID"; // SQL statement to select all platforms
+                            $stmt = $PDO->prepare($query);
+                            $stmt->execute();
+                            $playermodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+                            foreach ($playermodes as $row) {
                                 echo '<div class="mp_feature_check_cont">';
                                 //echo '<input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '[platID]" id="' . htmlspecialchars($row['modeShort']) . '[platID]" required>';
                                 echo "\r\n"; // line break

@@ -17,7 +17,6 @@ function createGamePlatformSelection(array $platformsByCategory, array $previous
             } else {
                 echo '<input type="checkbox" class="plat_list_check" id="platform' . htmlspecialchars($platform['platformID']) . '" name="platform' . htmlspecialchars($platform['platformID']) . '" value="' . htmlspecialchars($platform['platformID']) . '">';
             }
-            echo '<input type="checkbox" class="plat_list_check" id="platform' . htmlspecialchars($platform['platformID']) . '" name="platform' . htmlspecialchars($platform['platformID']) . '" value="' . htmlspecialchars($platform['platformID']) . '">';
 
             // same as 'echo '<input type="checkbox" name="platforms" value="' . $platform['platformID'] . '">';' but with htmlspecialchars()
             echo '<label for="platform' . htmlspecialchars($platform['platformID']) . '">' . htmlspecialchars($platform['platformName']) . '</label>';
