@@ -47,17 +47,11 @@ template_header('List Games', 'list');
 
                 $multiplayerModesWithCounts[$modeKey] = array('mode' => $modeKey); // add mode to array
 
-                $minKey = $modeKey . '_min'; // create the key for the min player count
-                $maxKey = $modeKey . '_max'; // create the key for the max player count
-                $minPlayers = isset($_POST[$minKey]) && $_POST[$minKey] !== '' ? (int)$_POST[$minKey] : null; // get the min player count
-                $maxPlayers = isset($_POST[$maxKey]) && $_POST[$maxKey] !== '' ? (int)$_POST[$maxKey] : null; // get the max player count
+                $playerKey = $modeKey . '_players'; // create the key for the min player count
+                $currPlayers = isset($_POST[$playerKey]) && $_POST[$playerKey] !== '' ? (int)$_POST[$playerKey] : null; // get the min player count
 
-                if ($minPlayers !== null) {
-                    $multiplayerModesWithCounts[$modeKey]['min'] = $minPlayers;
-                }
-
-                if ($maxPlayers !== null) {
-                    $multiplayerModesWithCounts[$modeKey]['max'] = $maxPlayers;
+                if ($currPlayers !== null) {
+                    $multiplayerModesWithCounts[$modeKey]['players'] = $currPlayers;
                 }
             }
         }
@@ -151,27 +145,36 @@ template_header('List Games', 'list');
 
                 foreach ($multiplayerModesWithCounts as $mode => $counts) {
                     $modeKey = ":mode_$mode";
-                    $minPlayersKey = ":minPlayers_$mode";
-                    $maxPlayersKey = ":maxPlayers_$mode";
+                    $playersKey = ":players_$mode";
 
                     // add mode and player count to parameters
                     $params[$modeKey] = $mode;
-                    $params[$minPlayersKey] = $counts['min'] ?? ($counts['max'] ?? 9999); // default to 0 if not set
-                    $params[$maxPlayersKey] = $counts['max'] ?? 9999; // no max set -> default to very high number
 
-                    // create subquerry for each mode with player counts and add to array
-                    $modeSubquerries[] = "EXISTS (
+                    if ($counts['players'] !== null) {
+                        $params[$playersKey] = $counts['players']; // default to 0 if not set
+
+                        // create subquerry for each mode with player counts and add to array
+                        $modeSubquerries[] = "EXISTS (
                                                     SELECT 1
                                                     FROM game_platform_player_link gppl
                                                     INNER JOIN playermodes pm ON gppl.modeID = pm.modeID
                                                     WHERE gppl.game_platformID = gpl.game_platformID
                                                     AND pm.modeShort = $modeKey
-                                                    AND gppl.minPlayers <= $minPlayersKey
-                                                    AND gppl.maxPlayers <= $maxPlayersKey
+                                                    AND gppl.minPlayers <= $playersKey
+                                                    AND gppl.maxPlayers >= $playersKey
                                                 )";
-                    //TODO: fix min max player selection
-                                                    // gppl.minPlayers >= $minPlayersKey -> only games with a higher or equal min player count
-                                                    // gppl.maxPlayers <= $maxPlayersKey -> only games with a lower or equal max player count
+                                                // check if player count is within the range of the mode, so:
+                                                // minPlayers <= players <= maxPlayers
+                    } else {
+                        // create subquerry for each mode without player counts and add to array
+                        $modeSubquerries[] = "EXISTS (
+                                                    SELECT 1
+                                                    FROM game_platform_player_link gppl
+                                                    INNER JOIN playermodes pm ON gppl.modeID = pm.modeID
+                                                    WHERE gppl.game_platformID = gpl.game_platformID
+                                                    AND pm.modeShort = $modeKey
+                                                )";
+                    }
                 }
 
                 // add subquerries to conditions
@@ -218,6 +221,8 @@ template_header('List Games', 'list');
                 echo "<div class='game game_platform_" . htmlspecialchars($row['game_platformID']) . "' tabindex='0'>";
 
                 // delete buttons
+                echo "<a href='./edit_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='edit_button' title='Edit Game'>Edit Game</a>";
+
                 echo "<div class='game_delete'>";
                 // button to delete game_platform entry
                 echo "<a href='./util/delete_game.php?game_platformID=" . htmlspecialchars($row['game_platformID']) . "' class='delete_button' title='Delete Game-Platform Entry'>X Game Plat Entry</a>";

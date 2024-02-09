@@ -1,21 +1,25 @@
 window.onload = function() {
-    // get all input elements
-    const inputs = document.querySelectorAll('input');
+    // only continue if no gameID is present in the URL
+    if (!window.location.href.includes('gameID')) {
 
-    // loop through each input element
-    inputs.forEach(input => {
-        switch(input.type) {
-            case 'text':
-            case 'number':
-            case 'url':
-            case 'date':
-                input.value = ''; // set value to empty string
-                break;
-            case 'checkbox':
-                input.checked = false; // uncheck checkbox
-                break;
-        }
-    });
+        // get all input elements
+        const inputs = document.querySelectorAll('input');
+
+        // loop through each input element
+        inputs.forEach(input => {
+            switch (input.type) {
+                case 'text':
+                case 'number':
+                case 'url':
+                case 'date':
+                    input.value = ''; // set value to empty string
+                    break;
+                case 'checkbox':
+                    input.checked = false; // uncheck checkbox
+                    break;
+            }
+        });
+    }
 }
 
 
