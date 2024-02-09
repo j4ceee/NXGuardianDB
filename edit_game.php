@@ -224,31 +224,30 @@ template_header('Edit Game', null);
 
                             foreach ($playermodes as $row) {
 
-                                /*
                                 // set multiplayer mode checkbox to checked if it exists in game_platform_player_link
                                 // set min/max player count to values from game_platform_player_link
                                 $query = "
-                                    SELECT
-                                        minPlayers,
-                                        maxPlayers
-                                    FROM
-                                        game_platform_player_link
-                                    JOIN
+                                            SELECT
+                                                gppl.minPlayers,
+                                                gppl.maxPlayers
+                                            FROM
+                                                game_platform_player_link gppl
+                                            JOIN
+                                                game_platform_link gpl ON gppl.game_platformID = gpl.game_platformID
+                                            WHERE
+                                                gpl.gameID = :gameID
+                                            AND
+                                                gpl.platformID = :platformID
+                                            AND
+                                                modeID = :modeID";
 
-                                    WHERE
-                                        gameID = :gameID
-                                    AND
-                                        platformID = :platformID
-                                    AND
-                                        modeID = :modeID";
                                 $stmt = $PDO->prepare($query);
                                 $stmt->bindParam(':gameID', $gameID);
                                 $stmt->bindParam(':platformID', $platID);
                                 $stmt->bindParam(':modeID', $row['modeID']);
                                 $stmt->execute();
                                 $mpData = $stmt->fetch(PDO::FETCH_ASSOC);
-                                */
-                                $mpData = null;
+
                                 // check if the multiplayer mode exists in the fetched data
                                 $isChecked = $mpData ? 'checked' : '';
                                 $minPlayers = $mpData['minPlayers'] ?? '';
@@ -280,6 +279,11 @@ template_header('Edit Game', null);
                 ?>
             </div>
         </fieldset>
+
+        <?php
+        // sent gameID via POST to validate_update.php
+        echo '<input type="hidden" name="gameID" value="' . $gameID . '">';
+        ?>
 
         <input type="submit" value="Update game" class="submit_button">
     </form>
