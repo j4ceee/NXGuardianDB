@@ -28,6 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.plat_list_check').forEach(checkbox => {
         checkbox.addEventListener('change', handlePlatformSelectionChange);
     });
+
+    document.querySelectorAll('.plat_list_check').forEach(checkbox => {
+        let platID = checkbox.value;
+        addPlatformMPListener(platID);
+    });
 });
 
 function handlePlatformSelectionChange(event) {
@@ -98,26 +103,54 @@ function addPlatformInfoContainer(platID, platName) {
     const platformSpecCont = document.querySelector('.platform_spec_cont');
     platformSpecCont.appendChild(template);
 
+    // add event listeners to the multiplayer checkboxes
+    addPlatformMPListener(platID);
+}
+
+function addPlatformMPListener(platID) {
+
+    const platformSpecCont = document.querySelector('.platform_spec_cont');
+
     // attach event listeners to all multiplayer checkboxes
     const platformInfoContainer = platformSpecCont.querySelector(`.platform_info.info_${platID}`);
+    if (!platformInfoContainer) {
+        return;
+    }
     platformInfoContainer.querySelectorAll('.mp_feature_check').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const mpFeatureCountCont = this.closest('.mp_feature_check_cont').nextElementSibling; // get the container for the multiplayer feature count (siblings of the checkbox)
-            if (mpFeatureCountCont.classList.contains('mp_feature_count_cont')) {
-                if (this.checked) {
-                    // if the checkbox is checked, set visibility to visible and required to true
-                    mpFeatureCountCont.style.visibility = 'visible';
-                    mpFeatureCountCont.querySelectorAll('input').forEach(input => {
-                        input.required = true;
-                    });
-                } else {
-                    // if the checkbox is not checked, set visibility to hidden and required to false
-                    mpFeatureCountCont.style.visibility = 'hidden';
-                    mpFeatureCountCont.querySelectorAll('input').forEach(input => {
-                        input.required = false;
-                    });
-                }
+        const mpFeatureCountCont = checkbox.closest('.mp_feature_check_cont').nextElementSibling; // get the container for the multiplayer feature count (siblings of the checkbox)
+
+        if (mpFeatureCountCont.classList.contains('mp_feature_count_cont')) {
+            if (checkbox.checked) {
+                showMPFeatureCount(platID, mpFeatureCountCont);
             }
-        });
+
+            checkbox.addEventListener('change', function () {
+
+                if (this.checked) {
+                    showMPFeatureCount(platID, mpFeatureCountCont);
+                } else {
+                    hideMPFeatureCount(platID, mpFeatureCountCont);
+                }
+
+            });
+        }
     });
+}
+
+function showMPFeatureCount(platID, mpFeatureCountCont) {
+    if (mpFeatureCountCont) {
+        mpFeatureCountCont.style.visibility = 'visible';
+        mpFeatureCountCont.querySelectorAll('input').forEach(input => {
+            input.required = true;
+        });
+    }
+}
+
+function hideMPFeatureCount(platID, mpFeatureCountCont) {
+    if (mpFeatureCountCont) {
+        mpFeatureCountCont.style.visibility = 'hidden';
+        mpFeatureCountCont.querySelectorAll('input').forEach(input => {
+            input.required = false;
+        });
+    }
 }

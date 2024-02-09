@@ -16,10 +16,14 @@ ini_set('display_errors', 1);
 // check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //var_dump($_POST);
-    // TODO: validate input
 
     // add developer-------------------------------------------------------------------------------
     $developerName = trim($_POST['developer']);
+
+    // sanitize input
+    $developerName = htmlspecialchars($developerName);
+
+
     // check if developer exists
     $stmt = $PDO->prepare("SELECT devID FROM developers WHERE devName = :devName");
     $stmt->execute(['devName' => $developerName]);
@@ -35,13 +39,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // add game-----------------------------------------------------------------------------------
+    $gameName = trim($_POST['title']);
+    $gameRelease = trim($_POST['release']);
+    $imageLink = trim($_POST['imageLink']);
+
+    // sanitize input
+    $gameName = htmlspecialchars($gameName);
+    $gameRelease = htmlspecialchars($gameRelease);
+    $imageLink = filter_var($imageLink, FILTER_SANITIZE_URL);
+
+
     $stmt = $PDO->prepare("INSERT INTO games (gameName, gameRelease, devID, steamgridID, imageLink) VALUES (:gameName, :gameRelease, :devID, :steamgridID, :imageLink)");
     $stmt->execute([
-        'gameName' => trim($_POST['title']),
-        'gameRelease' => trim($_POST['release']),
+        'gameName' => $gameName,
+        'gameRelease' => $gameRelease,
         'devID' => $devID,
         'steamgridID' => 1234, // TODO: handle optional field
-        'imageLink' => trim($_POST['imageLink']) // TODO: handle as link in frontend & database
+        'imageLink' => $imageLink // TODO: handle as link in frontend & database
     ]);
     $gameID = $PDO->lastInsertId();
 
@@ -53,7 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     foreach ($_POST as $key => $value) {
         // check if the form field name indicates a platform selection
         if (str_starts_with($key, 'platform')) {
-            $platformID = $value;
+            $platformID = (int)$value;
+
+            $platformID = filter_var($platformID, FILTER_SANITIZE_NUMBER_INT);
 
             // initialize array to store platform details
             $platformDetails = [
@@ -64,10 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // capture platform-specific details if they exist
             if (isset($_POST["store_link_$platformID"])) {
-                $platformDetails['store_link'] = trim($_POST["store_link_$platformID"]);
+                $storeLink = htmlspecialchars(trim($_POST["store_link_$platformID"]));
+                $platformDetails['storeLink'] = empty($storeLink) ? null : $storeLink;
             }
             if (isset($_POST["release_date_$platformID"])) {
-                $platformDetails['release_date'] = trim($_POST["release_plat_$platformID"]);
+                $releaseDate = htmlspecialchars(trim($_POST["release_plat_$platformID"]));
+                $platformDetails['releaseDate'] = empty($releaseDate) ? null : $releaseDate;
             }
 
             // add to selected platforms array
@@ -145,6 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (preg_match($pattern, $key)) {
                     echo "Key: $key\n";
 
+                    $key = htmlspecialchars($key);
+
                     // find the last underscore which separates modeShort (and potential suffix) from platform ID
                     $lastUnderscorePos = strrpos($key, '_');
                     if ($lastUnderscorePos !== false) {
@@ -168,8 +188,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         if ($modeID !== null) {
                             // get min and max players, else default to 0
-                            $minPlayers = $_POST[$modeShort . '_min_' . $platformDetails['id']] ?? 0;
-                            $maxPlayers = $_POST[$modeShort . '_max_' . $platformDetails['id']] ?? 0;
+                            $minPlayers = (int)$_POST[$modeShort . '_min_' . $platformDetails['id']] ?? 0;
+                            $maxPlayers = (int)$_POST[$modeShort . '_max_' . $platformDetails['id']] ?? 0;
+
+                            $minPlayers = filter_var($minPlayers, FILTER_SANITIZE_NUMBER_INT);
+                            $maxPlayers = filter_var($maxPlayers, FILTER_SANITIZE_NUMBER_INT);
 
                             echo "<br>";
                             echo "Debugging SQL Statement:\n";

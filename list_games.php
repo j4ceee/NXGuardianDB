@@ -52,6 +52,8 @@ template_header('List Games', 'list');
 
                 if ($currPlayers !== null) {
                     $multiplayerModesWithCounts[$modeKey]['players'] = $currPlayers;
+                } else {
+                    $multiplayerModesWithCounts[$modeKey]['players'] = null;
                 }
             }
         }
@@ -189,12 +191,12 @@ template_header('List Games', 'list');
 
 
         // debug output
-
+        /*
         echo "Debug Query: " . htmlspecialchars($query);
         echo "<br><br><p></p><br>";
         echo "Debug Params: ";
         print_r($params);
-
+        */
 
         $stmt = $PDO->prepare($query);
 

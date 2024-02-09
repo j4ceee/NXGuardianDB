@@ -169,9 +169,9 @@ footer {
 
 /*--------------------Start page-------------------------*/
 
-.db-status {
+.db-status,
+.db-restore {
     position: absolute;
-    top: 6rem;
     right: 1rem;
     padding: 1rem 1.5rem;
     background-color: var(--ryu-dark);
@@ -185,6 +185,15 @@ footer {
     align-items: center;
     justify-content: center;
     flex-direction: row;
+}
+
+.db-status {
+    top: 6rem;
+}
+
+.db-restore {
+    bottom: 8rem;
+    text-decoration: none;
 }
 
 .status-symbol {
