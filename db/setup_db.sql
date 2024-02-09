@@ -33,8 +33,8 @@ CREATE TABLE `games`
     `gameName`    varchar(176) NOT NULL,           -- name of game
     `gameRelease` date         NOT NULL,           -- release date of game
     `devID`       int(11) NOT NULL,                -- foreign key to developers table
-    `steamgridID` int(12) NOT NULL,                -- SteamGridDB ID
-    `steamgridImageID` varchar(40) NOT NULL,       -- SteamGridDB Grid Image ID
+    `steamgridID` int(12) NOT NULL,                -- SteamGridDB ID --TODO: implement SteamGridDB feature
+    `imageLink` varchar(150) NOT NULL,             -- Link to image of game
 
     PRIMARY KEY (`gameID`),
     -- UNIQUE (`gameName`), -- every game should have a unique name / some games have the same name (e.g. Need for Speed)
@@ -104,6 +104,18 @@ CREATE TABLE game_platform_player_link
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+
+-- database optimization
+
+ALTER TABLE games ADD FULLTEXT(gameName);
+ALTER TABLE developers ADD FULLTEXT(devName);
+
+CREATE INDEX idx_devID ON games(devID);
+CREATE INDEX idx_platformID ON game_platform_link(platformID);
+CREATE INDEX idx_gameID ON game_platform_link(gameID);
+CREATE INDEX idx_game_platformID ON game_platform_player_link(game_platformID);
+CREATE INDEX idx_modeID ON game_platform_player_link(modeID);
 
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;

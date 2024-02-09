@@ -267,6 +267,32 @@ footer {
 
 /*-------------------------------Manage Game Page-------------------------------------------*/
 
+.add_game_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.submit_button {
+    background-color: transparent;
+    border: var(--ryu-green) solid 3px;
+    border-radius: .6rem;
+    color: var(--ryu-green);
+    padding: .5rem 2rem;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin: 2rem 0;
+    transition: .2s;
+}
+
+.submit_button:hover {
+    background-color: var(--ryu-green);
+    color: var(--ryu-dark);
+    transition: .2s;
+}
+
 .manage_game_container {
     color: whitesmoke;
     font-family: sans-serif;
@@ -274,6 +300,9 @@ footer {
     > form > fieldset {
         border: none;
         padding: 2rem 1rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     legend {
@@ -313,11 +342,6 @@ footer {
 
 /*--------------------Game Info Container------------------------*/
 
-.basic_info_form {
-    display: flex;
-    flex-direction: column;
-}
-
 .game_info_cont {
     display: flex;
     flex-direction: row;
@@ -350,11 +374,6 @@ footer {
 }
 
 /*--------------------Platform Container-------------------------*/
-
-.platforms_form {
-    display: flex;
-    flex-direction: column;
-}
 
 .platforms-container {
     display: flex;
@@ -731,4 +750,19 @@ input[type="number"]
     gap: 1rem;
     display: flex;
     height: 1.8rem;
+}
+
+/*--------------------Search game-------------------------*/
+
+.mp_info_search {
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: 6fr;
+    gap: .5rem;
+    align-items: center;
+    border: none;
+    background: var(--ryu-dark);
+    padding: 2rem;
+    border-radius: 2rem;
+    width: fit-content;
 }
