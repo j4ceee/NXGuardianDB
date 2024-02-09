@@ -131,7 +131,6 @@ function addPlatformMPListener(platID) {
                 } else {
                     hideMPFeatureCount(platID, mpFeatureCountCont);
                 }
-
             });
         }
     });
