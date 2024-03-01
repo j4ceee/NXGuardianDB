@@ -470,7 +470,7 @@ footer {
     height: 3rem;
     z-index: 50;
     top: 10%;
-    background-color: #6f6f6f;
+    background-color: var(--bright-grey);
     transition: 0.2s;
 }
 
@@ -745,25 +745,29 @@ input[type="number"]
 
 .game_details {
     display: block;
+    flex-direction: row;
     width: 26rem;
+    height: 100%;
     margin-left: 4rem;
 }
 
 .game_mp_features {
-    padding: 0 1rem;
+    align-self: center;
+    padding: 0 1rem 0 1.5rem;
+    list-style: none;
 }
 
 .game_mp_features > li {
-    padding: .3rem;
+    padding: .5rem .3rem;
+    position: relative;
 }
 
-.game_delete {
+.mp_mode_logo {
     position: absolute;
-    right: .7rem;
-    bottom: 0;
-    gap: 1rem;
-    display: flex;
-    height: 1.8rem;
+    left: -1.47rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--ryu-red);
 }
 
 .edit_button {
@@ -771,6 +775,46 @@ input[type="number"]
     right: .7rem;
     top: .3rem;
     height: 1.8rem;
+}
+
+.edit_icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    cursor: pointer;
+}
+
+.game_delete {
+    position: absolute;
+    right: .7rem;
+    bottom: .1rem;
+    gap: 1rem;
+    display: flex;
+    height: 1.8rem;
+}
+
+.delete_button {
+    position: relative;
+}
+
+.trash_icon {
+    width: 1.3rem;
+    height: 1.3rem;
+    cursor: pointer;
+
+}
+
+.trash_gpl_icon,
+.trash_game_icon {
+    width: .9rem;
+    height: .9rem;
+    cursor: pointer;
+    position: absolute;
+    top: -0.5rem;
+    right: -.2rem;
+}
+
+.trash_game_icon {
+    border-radius: .2rem;
 }
 
 /*--------------------Search game-------------------------*/
