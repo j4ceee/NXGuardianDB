@@ -142,26 +142,7 @@ template_header('Edit Game', null);
                             $stmt = $PDO->query($sql);
 
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo '<div class="mp_feature_check_cont">';
-                                //echo '<input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '[platID]" id="' . htmlspecialchars($row['modeShort']) . '[platID]" required>';
-                                echo "\r\n"; // line break
-                                //echo '<span class="win_dark_check"></span>';
-                                echo "\r\n"; // line break
-                                //echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '[platID]">' . htmlspecialchars($row['modeName']) . '</label>';
-                                echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '_[platID]"><input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_[platID]"><span class="win_dark_check"></span>' . htmlspecialchars($row['modeName']) . '</label>';
-                                echo '</div>';
-                                echo "\r\n\r\n"; // line break
-
-                                if ($row['modeShort'] != 'single') {
-                                    echo '<div class="mp_feature_count_cont">';
-                                    echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" min="1" max="999" step="1">';
-                                    echo "\r\n"; // line break
-                                    echo "<span>-</span>";
-                                    echo "\r\n"; // line break
-                                    echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" min="1" max="999" step="1">';
-                                    echo '</div>';
-                                }
-                                echo "\r\n\r\n"; // line break
+                                generateMPCheckboxes($row); // line break
                             }
                             ?>
                         </fieldset>
@@ -253,23 +234,7 @@ template_header('Edit Game', null);
                                 $minPlayers = $mpData['minPlayers'] ?? '';
                                 $maxPlayers = $mpData['maxPlayers'] ?? '';
 
-                                echo '<div class="mp_feature_check_cont">';
-                                echo "\r\n"; // line break
-                                echo "\r\n"; // line break
-                                echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '_' .htmlspecialchars($platID) . '"><input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '_' .htmlspecialchars($platID) . '" id="' . htmlspecialchars($row['modeShort']) . '_' .htmlspecialchars($platID) . '" ' . $isChecked . '><span class="win_dark_check"></span>' . htmlspecialchars($row['modeName']) . '</label>';
-                                echo '</div>';
-                                echo "\r\n\r\n"; // line break
-
-                                if ($row['modeShort'] != 'single') {
-                                    echo '<div class="mp_feature_count_cont">';
-                                    echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min_' .htmlspecialchars($platID) . '" id="' . htmlspecialchars($row['modeShort']) . '_min_' .htmlspecialchars($platID) . '" min="1" max="999" step="1" value="' . $minPlayers . '">';
-                                    echo "\r\n"; // line break
-                                    echo "<span>-</span>";
-                                    echo "\r\n"; // line break
-                                    echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max_' .htmlspecialchars($platID) . '" id="' . htmlspecialchars($row['modeShort']) . '_max_' .htmlspecialchars($platID) . '" min="1" max="999" step="1" value="' . $maxPlayers . '">';
-                                    echo '</div>';
-                                }
-                                echo "\r\n\r\n"; // line break
+                                generateMPCheckboxes($row);
                             }
                     echo <<<EOT
                         </fieldset>

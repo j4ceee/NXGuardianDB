@@ -1,5 +1,6 @@
 <?php
 include_once './conn_db.php'; // include database connection file
+include_once './validate.php';
 
 $PDO = getPDO(); // get PDO connection
 
@@ -10,21 +11,24 @@ if (!checkDBExists()) {
 
 useDB();
 
-error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //var_dump($_POST);
+    var_dump($_POST);
 
     // add developer-------------------------------------------------------------------------------
+
+    // check if developer is set
+    validate_inputs($_POST);
+
     $developerName = trim($_POST['developer']);
 
     // sanitize input
     $developerName = htmlspecialchars($developerName);
 
 
-    // check if developer exists
+    // check if developer exists in database
     $stmt = $PDO->prepare("SELECT devID FROM developers WHERE devName = :devName");
     $stmt->execute(['devName' => $developerName]);
     $dev = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -113,11 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // TODO: handle no platforms selected
-    if (empty($selectedPlatforms)) {
-        echo "No platforms selected";
-    }
-
 
     // get all modeShort from database table playermodes
     $stmt = $PDO->prepare("SELECT modeShort FROM playermodes");
@@ -136,6 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Release Date: {$platformDetails['release_date']}\n";
         echo "Store Link: {$platformDetails['store_link']}\n";
         */
+
 
         $stmt = $PDO->prepare("INSERT INTO game_platform_link (gameID, platformID, releaseDate, storeLink) VALUES (:gameID, :platformID, :releaseDate, :storeLink)");
         $stmt->execute([
@@ -218,7 +218,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // TODO: success message after redirect
 
     header("Location: ../list_games.php?gameID=$gameID");
-
 
 }
 
