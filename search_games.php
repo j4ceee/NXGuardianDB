@@ -95,7 +95,7 @@ template_header('Search Game', 'search');
                     </div>
                 </fieldset>
 
-                <input type="submit" value="Search game" class="submit_button">
+                <input type="submit" value="Search games" class="submit_button">
             </form>
         </div>
 <?php template_footer("search_games.js"); ?>

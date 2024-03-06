@@ -16,7 +16,7 @@ template_header('List Games', 'list');
 
     <div class="game-list">
         <?php
-        // TODO: add search function directly in the page (not part of exam)
+        // TODO: add search function directly in the page
 
         // get gameID via URL
         $gameID = isset($_GET['gameID']) ? (int)$_GET['gameID'] : null;
@@ -33,7 +33,7 @@ template_header('List Games', 'list');
             }
         }
 
-        // Initialize an associative array for multiplayer modes with player counts
+        // initialize an associative array for multiplayer modes with player counts
         $multiplayerModesWithCounts = [];
 
         // get all modeShort from database table playermodes
@@ -50,11 +50,8 @@ template_header('List Games', 'list');
                 $playerKey = $modeKey . '_players'; // create the key for the min player count
                 $currPlayers = isset($_POST[$playerKey]) && $_POST[$playerKey] !== '' ? (int)$_POST[$playerKey] : null; // get the min player count
 
-                if ($currPlayers !== null) {
-                    $multiplayerModesWithCounts[$modeKey]['players'] = $currPlayers;
-                } else {
-                    $multiplayerModesWithCounts[$modeKey]['players'] = null;
-                }
+                $multiplayerModesWithCounts[$modeKey]['players'] = $currPlayers;
+                // sets player count to null if not set or empty, else to the value from the form
             }
         }
 
@@ -73,7 +70,7 @@ template_header('List Games', 'list');
         }
         */
 
-        // get all games with multiplayer modes
+        // get all games with all infos
         $query = "
             SELECT 
                 g.gameName AS game_name,
@@ -87,6 +84,7 @@ template_header('List Games', 'list');
                 gpl.platformID,
                 gpl.storeLink AS storeLink,
                 pm.modeName AS multiplayer_mode,
+                pm.modeShort AS multiplayer_mode_short,
                 gppl.minPlayers AS min_players,
                 gppl.maxPlayers AS max_players
             FROM 
@@ -132,18 +130,20 @@ template_header('List Games', 'list');
                 // create an array of placeholders for the platforms
                 $placeholders = [];
                 foreach ($platforms as $index => $platform) {
-                    $placeholder = ":platform" . $index; // unique placeholder for each platform
-                    $placeholders[] = $placeholder;
+                    $placeholder = ":platform" . $index; // unique placeholder for each platform (e.g. :platform0, :platform1, ...)
+                    $placeholders[] = $placeholder; // add placeholder to array
                     $params[$placeholder] = $platform; // add platform ID to parameters array
                 }
-                $conditions[] = "p.platformID IN (" . implode(',', $placeholders) . ")"; //
+                $conditions[] = "p.platformID IN (" . implode(',', $placeholders) . ")"; // create a condition with all placeholders
+                // e.g. p.platformID IN (:platform0, :platform1, :platform2, ...)
+                // this will list all games that are available on at least one of the selected platforms
             }
 
             if (!empty($multiplayerModesWithCounts)) {
                 $selectedModeCount = count($multiplayerModesWithCounts);
 
                 // placeholder for each mode
-                $modeSubquerries = [];
+                $modeSubqueries = [];
 
                 foreach ($multiplayerModesWithCounts as $mode => $counts) {
                     $modeKey = ":mode_$mode";
@@ -155,8 +155,8 @@ template_header('List Games', 'list');
                     if ($counts['players'] !== null) {
                         $params[$playersKey] = $counts['players']; // default to 0 if not set
 
-                        // create subquerry for each mode with player counts and add to array
-                        $modeSubquerries[] = "EXISTS (
+                        // create subquery for each mode with player counts and add to array
+                        $modeSubqueries[] = "EXISTS (
                                                     SELECT 1
                                                     FROM game_platform_player_link gppl
                                                     INNER JOIN playermodes pm ON gppl.modeID = pm.modeID
@@ -169,7 +169,7 @@ template_header('List Games', 'list');
                                                 // minPlayers <= players <= maxPlayers
                     } else {
                         // create subquerry for each mode without player counts and add to array
-                        $modeSubquerries[] = "EXISTS (
+                        $modeSubqueries[] = "EXISTS (
                                                     SELECT 1
                                                     FROM game_platform_player_link gppl
                                                     INNER JOIN playermodes pm ON gppl.modeID = pm.modeID
@@ -180,8 +180,8 @@ template_header('List Games', 'list');
                 }
 
                 // add subquerries to conditions
-                if (!empty($modeSubquerries)) {
-                    $conditions[] = implode(' AND ', $modeSubquerries);
+                if (!empty($modeSubqueries)) {
+                    $conditions[] = implode(' AND ', $modeSubqueries);
                 }
             }
         }
@@ -219,17 +219,27 @@ template_header('List Games', 'list');
                     echo "</ul></div></div>"; // close the previous list and game div if not first
                 }
                 $lastGamePlatformID = $row['game_platformID'];
+
                 // start a new game-platform div
                 echo "<div class='game game_platform_" . htmlspecialchars($row['game_platformID']) . "' tabindex='0'>";
 
-                // delete buttons
-                echo "<a href='./edit_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='edit_button' title='Edit Game'>Edit Game</a>";
+                // edit button
+                echo "<a href='./edit_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='edit_button' title='Edit " . htmlspecialchars($row['game_name']) . "'>
+                        <img class='edit_icon' src='./icons/noun-edit-1047822-grey.svg' alt='Edit " . htmlspecialchars($row['game_name']) . "'>
+                      </a>";
 
+                // delete buttons
                 echo "<div class='game_delete'>";
                 // button to delete game_platform entry
-                echo "<a href='./util/delete_game.php?game_platformID=" . htmlspecialchars($row['game_platformID']) . "' class='delete_button' title='Delete Game-Platform Entry'>X Game Plat Entry</a>";
-                // button to delete game entry
-                echo "<a href='./util/delete_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='delete_button' title='Delete Game'>X Game</a>";
+                echo "<a href='./util/delete_game.php?game_platformID=" . htmlspecialchars($row['game_platformID']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['platform']) . " version'>
+                        <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['platform']) . " version'>
+                        <img class='trash_gpl_icon' src='./img/platforms/" . htmlspecialchars($row['platformID']) . ".svg' class='trash_game_icon' alt='Platform Logo'/>
+                      </a>";
+                // button to delete game
+                echo "<a href='./util/delete_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['game_name']) . "'>
+                        <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['game_name']) . "'>
+                        <img class='trash_game_icon' src='" . htmlspecialchars($row['imageLink']) . "' alt='Game Image'/>
+                      </a>";
                 echo "</div>";
 
                 // if store link is set, create a link to the store
@@ -243,18 +253,20 @@ template_header('List Games', 'list');
                 echo "<div class='game_image'>";
                 echo "<img src='" . htmlspecialchars($row['imageLink']) . "' alt='Game Image'>";
 
-                // show platform icon (colour if available, else b/w)
+                // show platform icon (in colour if available, else b/w)
                 echo "<img src='./img/platforms/" . htmlspecialchars($row['platformID']) . "_col.svg' class='platform_info_logo' alt='Platform Logo' onerror=\"this.onerror=null; this.src='./img/platforms/" . htmlspecialchars($row['platformID']) . ".svg'\"/>";
                 echo "</div>";
 
                 echo "<h2>" . htmlspecialchars($row['game_name']) . "</h2>";
 
+                // close the link or div
                 if ($row['storeLink'] !== null && $row['storeLink'] !== '') {
                     echo "</a>";
                 } else {
                     echo "</div>";
                 }
 
+                // create a div for the game details
                 echo "<div class='game_details'>";
                 echo "<p>Developer: " . htmlspecialchars($row['developer']) . "</p>";
                 echo "<p>Release Date: " . htmlspecialchars($row['release_date']) . "</p>";
@@ -262,7 +274,8 @@ template_header('List Games', 'list');
 
             }
             // always output the current multiplayer feature
-            echo "<li>" . htmlspecialchars($row['multiplayer_mode']);
+            //echo "<li> <img class='mp_mode_logo' src='./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg' class='platform_info_logo' alt='Multiplayer Mode Logo'>" . htmlspecialchars($row['multiplayer_mode']);
+            echo "<li> <div class=\"mp_mode_logo\" style=\"mask: url(./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg) no-repeat center / contain; -webkit-mask: url(./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg) no-repeat center / contain\"> </div>" . htmlspecialchars($row['multiplayer_mode']);
 
             // check if any player number 0 -> set to 1
             if ($row['min_players'] == 0) {
