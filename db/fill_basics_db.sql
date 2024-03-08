@@ -38,7 +38,7 @@ VALUES (1, 'Singleplayer', 'single'), -- Singleplayer
        (3, 'Local LAN Play', 'local_lan'), -- local multiplayer in the same network
        (4, 'Local Wireless Play', 'local_wir'), -- nintendo specific multiplayer over direct wireless connection between devices
        (5, 'Online Multiplayer', 'online_mp'), -- Online Multiplayer
-       (6, 'Massively Multiplayer (MMO)', 'online_mmo'); -- MMO
+       (6, 'MMO', 'online_mmo'); -- MMO
 
 
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
