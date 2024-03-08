@@ -1,6 +1,7 @@
 <?php
 include_once './util/conn_db.php'; // include database connection file
 include_once './util/header_footer.php';
+include_once './util/validate.php';
 include_once './util/utility_func.php';
 
 $PDO = getPDO(); // get PDO connection
@@ -49,7 +50,6 @@ template_header('Add Game', 'add');
 
                 <div class="game_info_empty"></div>
                 <div class="game_info_empty"></div>
-                <div class="game_info_empty"></div>
             </div>
         </fieldset>
 
@@ -86,7 +86,8 @@ template_header('Add Game', 'add');
             <div class="platform_spec_cont">
                 <template id="platform_template">
                     <fieldset class="platform_info info_[platID]">
-                        <legend><img src="./img/platforms/[platID].svg" class="platform_info_logo" alt="Platform Logo"/>[platName]
+                        <legend><!--suppress HtmlUnknownTarget -->
+                            <img src="./img/platforms/[platID].svg" class="platform_info_logo" alt="Platform Logo"/>[platName]
                             Specifications
                         </legend>
 
@@ -111,28 +112,8 @@ template_header('Add Game', 'add');
                             $stmt->execute();
                             $playermodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
                             foreach ($playermodes as $row) {
-                                echo '<div class="mp_feature_check_cont">';
-                                //echo '<input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '[platID]" id="' . htmlspecialchars($row['modeShort']) . '[platID]" required>';
-                                echo "\r\n"; // line break
-                                //echo '<span class="win_dark_check"></span>';
-                                echo "\r\n"; // line break
-                                //echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '[platID]">' . htmlspecialchars($row['modeName']) . '</label>';
-                                echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '_[platID]"><input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_[platID]"><span class="win_dark_check"></span>' . htmlspecialchars($row['modeName']) . '</label>';
-                                echo '</div>';
-                                echo "\r\n\r\n"; // line break
-
-                                if ($row['modeShort'] != 'single') {
-                                    echo '<div class="mp_feature_count_cont">';
-                                    echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" min="1" max="999" step="1">';
-                                    echo "\r\n"; // line break
-                                    echo "<span>-</span>";
-                                    echo "\r\n"; // line break
-                                    echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" min="1" max="999" step="1">';
-                                    echo '</div>';
-                                }
-                                echo "\r\n\r\n"; // line break
+                                generateMPCheckboxes($row, true); // line break
                             }
                             ?>
                         </fieldset>
@@ -144,4 +125,7 @@ template_header('Add Game', 'add');
         <input type="submit" value="Add game" class="submit_button">
     </form>
 </div>
-<?php template_footer("game_editor.js"); ?>
+<?php template_footer("game_editor.js");
+
+getErrorMsg();
+?>

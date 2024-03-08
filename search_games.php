@@ -76,20 +76,7 @@ template_header('Search Game', 'search');
 
 
                                     foreach ($playermodes as $row) {
-                                        echo '<div class="mp_feature_check_cont">';
-                                        echo "\r\n"; // line break
-                                        echo "\r\n"; // line break
-                                        echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . '"><input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . '" id="' . htmlspecialchars($row['modeShort']) . '"><span class="win_dark_check"></span>' . htmlspecialchars($row['modeName']) . '</label>';
-                                        echo '</div>';
-                                        echo "\r\n\r\n"; // line break
-
-                                        if ($row['modeShort'] != 'single') {
-                                            echo '<div class="mp_feature_count_cont">';
-                                            echo '<input type="number" class="mp_feature_Players win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_players" id="' . htmlspecialchars($row['modeShort']) . '_players" min="1" max="999" step="1">';
-                                            echo "\r\n"; // line break
-                                            echo '</div>';
-                                        }
-                                        echo "\r\n\r\n"; // line break
+                                        generateMPCheckboxes($row, false);
                                     }
                                     ?>
                     </div>

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection CssUnknownTarget */
 include_once './util/conn_db.php'; // include database connection file
 include_once './util/header_footer.php';
 
@@ -83,6 +83,7 @@ template_header('List Games', 'list');
                 gpl.game_platformID,
                 gpl.platformID,
                 gpl.storeLink AS storeLink,
+                pm.modeID as multiplayer_modeID,
                 pm.modeName AS multiplayer_mode,
                 pm.modeShort AS multiplayer_mode_short,
                 gppl.minPlayers AS min_players,
@@ -115,14 +116,18 @@ template_header('List Games', 'list');
 
             // check if title is set and not empty -> add to query and parameters
             if ($title !== null && $title !== '') {
-                $conditions[] = "MATCH(g.gameName) AGAINST (:title IN NATURAL LANGUAGE MODE)"; // LIKE -> search for partial matches
-                $params[':title'] = $title;
+                $conditions[] = "g.gameName LIKE :title"; // LIKE -> search for partial matches
+                $params[':title'] = "%" . $title . "%";
+                //$conditions[] = "MATCH(g.gameName) AGAINST (:title IN BOOLEAN MODE)"; // LIKE -> search for partial matches
+                //$params[':title'] = $title . "*";
             }
 
             // check if developer is set and not empty -> add to query and parameters
             if ($developer !== null && $developer !== '') {
-                $conditions[] = "MATCH(d.devName) AGAINST (:developer IN NATURAL LANGUAGE MODE)"; // = -> exact match
-                $params[':developer'] = $developer;
+                $conditions[] = "d.devName LIKE :developer"; // = -> exact match
+                $params[':developer'] = "%" . $developer . "%";
+                //$conditions[] = "MATCH(d.devName) AGAINST (:developer IN BOOLEAN MODE)"; //
+                //$params[':developer'] = $developer . "*";
             }
 
             // check if platforms is not empty ->
@@ -187,7 +192,7 @@ template_header('List Games', 'list');
         }
 
         $query .= " WHERE " . implode(' AND ', $conditions);
-        $query .= " ORDER BY g.gameName, p.platformName, pm.modeName DESC";
+        $query .= " ORDER BY g.gameName, p.platformName, pm.modeID ASC";
 
 
         // debug output
@@ -268,14 +273,15 @@ template_header('List Games', 'list');
 
                 // create a div for the game details
                 echo "<div class='game_details'>";
-                echo "<p>Developer: " . htmlspecialchars($row['developer']) . "</p>";
-                echo "<p>Release Date: " . htmlspecialchars($row['release_date']) . "</p>";
+                echo "<div><p class='game_list_info game_list_cat'>Developer:</p><p class='game_list_info game_list_det'>" . htmlspecialchars($row['developer']) . "</p></div>";
+                echo "<div><p class='game_list_info game_list_cat'>Release Date:</p><p class='game_list_info game_list_det'>" . htmlspecialchars($row['release_date']) . "</p></div>";
                 echo "<ul class='game_mp_features'>";
 
             }
             // always output the current multiplayer feature
-            //echo "<li> <img class='mp_mode_logo' src='./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg' class='platform_info_logo' alt='Multiplayer Mode Logo'>" . htmlspecialchars($row['multiplayer_mode']);
-            echo "<li> <div class=\"mp_mode_logo\" style=\"mask: url(./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg) no-repeat center / contain; -webkit-mask: url(./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg) no-repeat center / contain\"> </div>" . htmlspecialchars($row['multiplayer_mode']);
+            echo "<li> 
+                  <div class=\"mp_mode_logo\" style=\"mask: url(./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg) no-repeat center / contain; -webkit-mask: url(./icons/modes/modes_" . htmlspecialchars($row['multiplayer_mode_short']) . ".svg) no-repeat center / contain\"></div> 
+                  <p class='game_list_info game_list_cat game_list_mode'>" . htmlspecialchars($row['multiplayer_mode']);
 
             // check if any player number 0 -> set to 1
             if ($row['min_players'] == 0) {
@@ -290,10 +296,10 @@ template_header('List Games', 'list');
                 if ($row['min_players'] == 1) {
                     echo "</li>";
                 } else {
-                    echo " (" . htmlspecialchars($row['min_players']) . " players)</li>";
+                    echo "<p class='game_list_info game_list_det'>" . htmlspecialchars($row['min_players']) . " players</p></li>";
                 }
             } else {
-                echo " (" . htmlspecialchars($row['min_players']) . " - " . htmlspecialchars($row['max_players']) . " players)</li>";
+                echo "<p class='game_list_info game_list_det'>" . htmlspecialchars($row['min_players']) . " - " . htmlspecialchars($row['max_players']) . " players</p></li>";
             }
         }
 

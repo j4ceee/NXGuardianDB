@@ -8,7 +8,13 @@
     --ryu-red: #FF5F55FF;
     --ryu-purple: #88418b;
     --ryu-green: #01df4f;
+
     --bright-grey: #6f6f6f;
+    --light-grey: #a2a2a2;
+
+    --win-dark: #393939;
+    --win-border: #5e5e5e;
+    --win-selected: #2d2d2d;
 }
 
 * {
@@ -335,16 +341,16 @@ footer {
 .win_dark_input {
     font-family: sans-serif;
     color: whitesmoke;
-    background-color: #393939;
+    background-color: var(--win-dark);
     border: none;
     border-radius: .3rem;
     padding: .3rem;
-    border-bottom: #5e5e5e 2px solid;
+    border-bottom: var(--win-border) 2px solid;
     transition: .2s;
 }
 
 .win_dark_input:focus-visible {
-    background-color: #2d2d2d;
+    background-color: var(--win-selected);
     border-bottom: var(--ryu-blue) 2px solid;
     outline: none;
     transition: .2s;
@@ -599,7 +605,6 @@ input[type="number"]
     position: absolute;
     opacity: 0;
     visibility: hidden;
-    left: -2rem;
 }
 
 .mp_feature_label {
@@ -610,7 +615,11 @@ input[type="number"]
     cursor: pointer;
     width: fit-content;
     position: relative;
-    margin-left: 2rem;
+}
+
+.mp_feature_label > .mp_mode_logo {
+    background-color: var(--bright-grey);
+    left: 2rem;
 }
 
 .win_dark_check {
@@ -620,20 +629,14 @@ input[type="number"]
     background-color: transparent;
     position: absolute;
     border-radius: 0.5rem;
-    border: #393939 4px solid;
+    border: var(--win-dark) 4px solid;
     transition: .2s;
-    left: -2.4rem;
 }
 
 .mp_feature_label:hover .win_dark_check {
-    background-color: #393939;
+    background-color: var(--win-dark);
     transition: .2s;
 }
-
-.mp_feature_check:checked ~ .win_dark_check {
-
-}
-
 .win_dark_check:after {
     content: "";
     position: absolute;
@@ -661,6 +664,10 @@ input[type="number"]
     transform: rotate(45deg);
 }
 
+.mp_feature_text {
+    margin: 0 0 0 4rem;
+    display: inline-block;
+}
 
 /*--------------------Game List-------------------------*/
 
@@ -751,20 +758,43 @@ input[type="number"]
     margin-left: 4rem;
 }
 
+.game_details > div {
+    display: flex;
+    padding: .3rem 0;
+}
+
 .game_mp_features {
-    align-self: center;
-    padding: 0 1rem 0 1.5rem;
+    padding: 0;
     list-style: none;
 }
 
 .game_mp_features > li {
-    padding: .5rem .3rem;
+    padding: .5rem 0;
     position: relative;
+    display: flex;
+}
+
+.game_list_info {
+    margin: 0;
+    display: inline-block;
+}
+
+.game_list_cat {
+    color: var(--light-grey);
+    flex-basis: 45%;
+}
+
+.game_list_det {
+    padding-left: 1rem;
+    color: whitesmoke;
+}
+
+.game_list_mode {
+    padding-left: 2rem;
 }
 
 .mp_mode_logo {
     position: absolute;
-    left: -1.47rem;
     width: 1.5rem;
     height: 1.5rem;
     background-color: var(--ryu-red);
