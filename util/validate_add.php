@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $storeLink = htmlspecialchars(trim($_POST["store_link_$platformID"]));
                 $platformDetails['store_link'] = empty($storeLink) ? null : $storeLink;
             }
-            if (isset($_POST["release_date_$platformID"])) {
+            if (isset($_POST["release_plat_$platformID"])) {
                 $releaseDate = htmlspecialchars(trim($_POST["release_plat_$platformID"]));
                 $platformDetails['release_date'] = empty($releaseDate) ? null : $releaseDate;
             }

@@ -5,7 +5,7 @@ $errorDict = [
     "400" => "Error! Inputs were not submitted correctly.",
     "404" => "Error! Missing required field: ",
     "405" => "Error! No platforms selected.",
-    "406" => "Error! No multiplayer modes selected.",
+    "406" => "Error! No multiplayer modes selected for a platform.",
     "407" => "Error! Missing player count for one of the selected multiplayer modes."
 ];
 
@@ -54,9 +54,9 @@ function validate_inputs($post): void
 
     validate_basics($post);
 
-    validate_platforms($post);
+    $selectedPlatforms = validate_platforms($post);
 
-    validate_modes($post);
+    validate_modes($post, $selectedPlatforms);
 }
 
 #[NoReturn] function redirectToPreviousPage($msg): void
@@ -75,6 +75,8 @@ function validate_inputs($post): void
 
         // redirect to the previous page
         header('Location: ' . $url);
+
+        //echo "Redirecting to: $url";
     } else { // if there is no previous page
         // redirect to a default page
         header('Location: index.php');
@@ -87,24 +89,28 @@ function validate_basics($post): void
     $requiredFields = ['title', 'developer', 'release', 'imageLink'];
     foreach ($requiredFields as $field) {
         if (empty($post[$field])) {
-            $msg = "404/$field";
-            redirectToPreviousPage($msg);
+            redirectToPreviousPage("404/$field");
         }
     }
 }
 
-function validate_platforms($post): void
+function validate_platforms($post): array
 {
+    $selectedPlatforms = [];
+
     foreach ($post as $key => $value) {
         if (str_starts_with($key, 'platform')) {
-            return;
+            $selectedPlatforms[] = $value; //platform checkboxes are only in §_POST if they are checked, value is the platformID
         }
     }
 
-    redirectToPreviousPage("405");
+    if (empty($selectedPlatforms)) {
+        redirectToPreviousPage("405");
+    }
+    return $selectedPlatforms;
 }
 
-function validate_modes($post): void
+function validate_modes($post, array $selectedPlatforms): void
 {
     // get modeShort from database
     $sql = "SELECT modeShort FROM playermodes";
@@ -113,33 +119,62 @@ function validate_modes($post): void
 
     $modes = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    $selectedModes = [];
+    $selectedPlatformModes = [];
 
-    // the modes in $post look like this local_mp_14, single_05, online_mmo_13, ...
-    // we only need the part before the last underscore
-    foreach ($post as $key => $value) {
+    // print selectedPlatforms
+    /*
+    echo "<pre>";
+    print_r($selectedPlatforms);
+    echo "</pre>";
+    */
+
+    // for each selected platform, check if at least one mode is selected
+    foreach ($selectedPlatforms as $platform) {
+        $selectedPlatformModes[$platform] = []; // assign an empty array to each platform key
         foreach ($modes as $mode) {
-            // check if the post key starts with the current mode & does not contain min or max
-            if (str_starts_with($key, $mode) && !str_contains($key, 'min') && !str_contains($key, 'max')) {
-                $selectedModes[] = $mode;
+            foreach ($post as $key => $value) {
+                if ($key === $mode . "_" . $platform) {
+                    // check if the mode is already in the array
+                    if (!in_array($mode, $selectedPlatformModes[$platform])) {
+                        $selectedPlatformModes[$platform][] = $mode;
+                    }
+                }
             }
         }
     }
+    /*
+    echo "<p>Selected platform modes:</p>";
+    echo "<pre>";
+    print_r($selectedPlatformModes);
+    echo "</pre>";
+    */
 
-    if (empty($selectedModes)) {
-        redirectToPreviousPage("406");
-    } else {
-        validate_players($post, $selectedModes);
+    // if no mode is selected, redirect to previous page
+    foreach ($selectedPlatformModes as $platform => $selectedModes) {
+        if (empty($selectedModes)) {
+            redirectToPreviousPage("406");
+        }
     }
+
+    validate_players($post, $selectedPlatformModes);
 }
 
-function validate_players($post, $modes): void
+function validate_players($post, array $platformModes): void
 {
-    foreach ($post as $key => $value) {
+    // platformModes is an associative array with platformID as key and an array of selected modes as value
+    // for each platformID, check if a min and max player count is set for each mode
+    foreach ($platformModes as $platform => $modes) {
         foreach ($modes as $mode) {
-            if (str_starts_with($key, $mode) && (str_contains($key, 'min') || str_contains($key, 'max'))) {
-                if (empty($value)) {
-                    redirectToPreviousPage("407");
+            $minString = $mode . "_min_" . $platform;
+            $maxString = $mode . "_max_" . $platform;
+
+            foreach ($post as $key => $value) {
+                if ($key === $minString || $key === $maxString) {
+                    echo "Key: $key, Value: $value<br>";
+                    if (empty($value)) {
+                        // echo "Missing player count for $mode on platform $platform";
+                        redirectToPreviousPage("407");
+                    }
                 }
             }
         }
