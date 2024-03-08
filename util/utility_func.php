@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection CssUnknownTarget */
 
 function createGamePlatformSelection(array $platformsByCategory, array $previousPlatforms = null): void
 {
@@ -30,32 +30,44 @@ function createGamePlatformSelection(array $platformsByCategory, array $previous
 }
 
 // generate checkboxes for multiplayer modes
-function generateMPCheckboxes(mixed $row, bool $modifyPlayers = true): void
+function generateMPCheckboxes(mixed $mode, bool $modifyPlayers, string $platID = null, int $maxPlayers = -1, int $minPlayers = -1, string $isChecked = ""): void
 {
-    $suffix = ""; // on search_games.php, we don't need to add the platformID to the input names
-
     if ($modifyPlayers) {
         // if we are editing a game, we need to add the platformID to the input names (e.g. in add_game.php or edit_game.php)
-        $suffix = "_[platID]";
+
+        if ($platID === null) {
+            $platID = "_[platID]"; // if no platformID is given, use a placeholder
+        }
+        else {
+            $platID = "_" . htmlspecialchars($platID); // if a platformID is given, use it
+        }
     }
 
     echo '<div class="mp_feature_check_cont">';
 
-    echo '<label class="mp_feature_label" for="' . htmlspecialchars($row['modeShort']) . $suffix . '">
-          <input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($row['modeShort']) . $suffix . '" id="' . htmlspecialchars($row['modeShort']) . $suffix . '">
+    echo '<label class="mp_feature_label" for="' . htmlspecialchars($mode['modeShort']) . $platID . '">
+          <input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($mode['modeShort']) . $platID . '" id="' . htmlspecialchars($mode['modeShort']) . $platID . '" ' . $isChecked . '>
           <span class="win_dark_check"></span>
-          <div class="mp_mode_logo" style="mask: url(./icons/modes/modes_' . htmlspecialchars($row["modeShort"]) . '.svg) no-repeat center / contain; -webkit-mask: url(./icons/modes/modes_' . htmlspecialchars($row['modeShort']) . '.svg) no-repeat center / contain\"></div>
-          <p class="mp_feature_text">' . htmlspecialchars($row['modeName']) . '</p></label>';
+          <div class="mp_mode_logo" style="mask: url(./icons/modes/modes_' . htmlspecialchars($mode["modeShort"]) . '.svg) no-repeat center / contain; -webkit-mask: url(./icons/modes/modes_' . htmlspecialchars($mode['modeShort']) . '.svg) no-repeat center / contain\"></div>
+          <p class="mp_feature_text">' . htmlspecialchars($mode['modeName']) . '</p></label>';
     echo '</div>';
 
-    if ($row['modeShort'] != 'single') {
+    if ($mode['modeShort'] != 'single') {
         echo '<div class="mp_feature_count_cont">';
         if ($modifyPlayers) {
-                echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_min_[platID]" min="1" max="999" step="1">';
+                echo '<input type="number" class="mp_feature_minPlayers win_dark_input" name="' . htmlspecialchars($mode['modeShort']) . '_min' . $platID . '" id="' . htmlspecialchars($mode['modeShort']) . '_min' . $platID . '" min="1" max="999" step="1"';
+                if ($minPlayers != -1) { // if we are editing a game, we need to add the player count to the input fields
+                    echo ' value="' . htmlspecialchars($minPlayers) . '"';
+                }
+                echo '>';
                 echo "<span>-</span>";
-                echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" id="' . htmlspecialchars($row['modeShort']) . '_max_[platID]" min="1" max="999" step="1">';
+                echo '<input type="number" class="mp_feature_maxPlayers win_dark_input" name="' . htmlspecialchars($mode['modeShort']) . '_max' . $platID . '" id="' . htmlspecialchars($mode['modeShort']) . '_max' . $platID . '" min="1" max="999" step="1"';
+                if ($maxPlayers != -1) { // if we are editing a game, we need to add the previous player count to the input fields
+                    echo ' value="' . htmlspecialchars($maxPlayers) . '"';
+                }
+                echo '>';
         } else { // when searching for games, only display one input field for the player count
-                echo '<input type="number" class="mp_feature_Players win_dark_input" name="' . htmlspecialchars($row['modeShort']) . '_players" id="' . htmlspecialchars($row['modeShort']) . '_players" min="1" max="999" step="1">';
+                echo '<input type="number" class="mp_feature_Players win_dark_input" name="' . htmlspecialchars($mode['modeShort']) . '_players" id="' . htmlspecialchars($mode['modeShort']) . '_players" min="1" max="999" step="1">';
         }
         echo '</div>';
     }

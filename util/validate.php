@@ -2,6 +2,7 @@
 use JetBrains\PhpStorm\NoReturn;
 
 $errorDict = [
+    "400" => "Error! Inputs were not submitted correctly.",
     "404" => "Error! Missing required field: ",
     "405" => "Error! No platforms selected.",
     "406" => "Error! No multiplayer modes selected.",
@@ -61,12 +62,20 @@ function validate_inputs($post): void
 #[NoReturn] function redirectToPreviousPage($msg): void
 {
     if(isset($_SERVER['HTTP_REFERER'])) {
-        // get the URL without any query parameters
-        $url = strtok($_SERVER['HTTP_REFERER'], '?');
+        // get the previous page URL
+        $url = $_SERVER['HTTP_REFERER'];
+        $strippedURL = strtok($_SERVER['HTTP_REFERER'], '?'); // remove query string from URL
+
+        $urlParams = parse_url($url, PHP_URL_QUERY); // get the query string from the URL
+        parse_str($urlParams, $urlParams); // convert the query string to an associative array
+
+        $urlParams['status'] = $msg; // add the error message to the URL parameters / overwrite it if it already exists
+
+        $url = $strippedURL . '?' . http_build_query($urlParams); // rebuild the URL with the new parameters
 
         // redirect to the previous page
-        header('Location: ' . $url . '?status=' . $msg);
-    } else {
+        header('Location: ' . $url);
+    } else { // if there is no previous page
         // redirect to a default page
         header('Location: index.php');
     }

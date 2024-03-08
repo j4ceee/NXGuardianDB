@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection CssUnknownTarget */
 include_once './util/conn_db.php'; // include database connection file
 include_once './util/header_footer.php';
 
@@ -83,6 +83,7 @@ template_header('List Games', 'list');
                 gpl.game_platformID,
                 gpl.platformID,
                 gpl.storeLink AS storeLink,
+                pm.modeID as multiplayer_modeID,
                 pm.modeName AS multiplayer_mode,
                 pm.modeShort AS multiplayer_mode_short,
                 gppl.minPlayers AS min_players,
@@ -191,7 +192,7 @@ template_header('List Games', 'list');
         }
 
         $query .= " WHERE " . implode(' AND ', $conditions);
-        $query .= " ORDER BY g.gameName, p.platformName, pm.modeName DESC";
+        $query .= " ORDER BY g.gameName, p.platformName, pm.modeID ASC";
 
 
         // debug output

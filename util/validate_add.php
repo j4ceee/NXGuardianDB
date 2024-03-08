@@ -11,7 +11,7 @@ if (!checkDBExists()) {
 
 useDB();
 
-ini_set('display_errors', 1);
+ob_start(); // start output buffering
 
 // check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // add developer-------------------------------------------------------------------------------
 
-    // check if developer is set
+    // validate all inputs
     validate_inputs($_POST);
 
     $developerName = trim($_POST['developer']);
@@ -85,11 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // capture platform-specific details if they exist
             if (isset($_POST["store_link_$platformID"])) {
                 $storeLink = htmlspecialchars(trim($_POST["store_link_$platformID"]));
-                $platformDetails['storeLink'] = empty($storeLink) ? null : $storeLink;
+                $platformDetails['store_link'] = empty($storeLink) ? null : $storeLink;
             }
             if (isset($_POST["release_date_$platformID"])) {
                 $releaseDate = htmlspecialchars(trim($_POST["release_plat_$platformID"]));
-                $platformDetails['releaseDate'] = empty($releaseDate) ? null : $releaseDate;
+                $platformDetails['release_date'] = empty($releaseDate) ? null : $releaseDate;
             }
 
             // add to selected platforms array
@@ -187,8 +187,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         if ($modeID !== null) {
                             // get min and max players, else default to 0
-                            $minPlayers = (int)$_POST[$modeShort . '_min_' . $platformDetails['id']] ?? 0;
-                            $maxPlayers = (int)$_POST[$modeShort . '_max_' . $platformDetails['id']] ?? 0;
+                            $minPlayersKey = "{$modeShort}_min_{$platformDetails['id']}";
+                            $maxPlayersKey = "{$modeShort}_max_{$platformDetails['id']}";
+                            $minPlayers = isset($_POST[$minPlayersKey]) ? (int)htmlspecialchars($_POST[$minPlayersKey]) : 0;
+                            $maxPlayers = isset($_POST[$maxPlayersKey]) ? (int)htmlspecialchars($_POST[$maxPlayersKey]) : 0;
 
                             $minPlayers = filter_var($minPlayers, FILTER_SANITIZE_NUMBER_INT);
                             $maxPlayers = filter_var($maxPlayers, FILTER_SANITIZE_NUMBER_INT);
@@ -218,7 +220,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // TODO: success message after redirect
 
     header("Location: ../list_games.php?gameID=$gameID");
+    ob_end_flush(); // end output buffering
+    exit();
 
+} else {
+    // redirect to previous page
+    ob_end_flush(); // end output buffering
+    redirectToPreviousPage("400");
 }
 
 function getModeIDFromModeName($PDO, $modeShort) {

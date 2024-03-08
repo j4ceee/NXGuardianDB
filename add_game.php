@@ -50,7 +50,6 @@ template_header('Add Game', 'add');
 
                 <div class="game_info_empty"></div>
                 <div class="game_info_empty"></div>
-                <div class="game_info_empty"></div>
             </div>
         </fieldset>
 
@@ -87,7 +86,8 @@ template_header('Add Game', 'add');
             <div class="platform_spec_cont">
                 <template id="platform_template">
                     <fieldset class="platform_info info_[platID]">
-                        <legend><img src="./img/platforms/[platID].svg" class="platform_info_logo" alt="Platform Logo"/>[platName]
+                        <legend><!--suppress HtmlUnknownTarget -->
+                            <img src="./img/platforms/[platID].svg" class="platform_info_logo" alt="Platform Logo"/>[platName]
                             Specifications
                         </legend>
 
@@ -113,7 +113,7 @@ template_header('Add Game', 'add');
                             $playermodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             foreach ($playermodes as $row) {
-                                generateMPCheckboxes($row); // line break
+                                generateMPCheckboxes($row, true); // line break
                             }
                             ?>
                         </fieldset>

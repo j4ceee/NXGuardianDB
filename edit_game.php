@@ -1,6 +1,7 @@
 <?php
 include_once './util/conn_db.php'; // include database connection file
 include_once './util/header_footer.php';
+include_once './util/validate.php';
 include_once './util/utility_func.php';
 
 $PDO = getPDO(); // get PDO connection
@@ -67,7 +68,6 @@ template_header('Edit Game', null);
 
                 <div class="game_info_empty"></div>
                 <div class="game_info_empty"></div>
-                <div class="game_info_empty"></div>
             </div>
         </fieldset>
 
@@ -118,7 +118,8 @@ template_header('Edit Game', null);
             <div class="platform_spec_cont">
                 <template id="platform_template">
                     <fieldset class="platform_info info_[platID]">
-                        <legend><img src="./img/platforms/[platID].svg" class="platform_info_logo" alt="Platform Logo"/>[platName]
+                        <legend><!--suppress HtmlUnknownTarget -->
+                            <img src="./img/platforms/[platID].svg" class="platform_info_logo" alt="Platform Logo"/>[platName]
                             Specifications
                         </legend>
 
@@ -142,7 +143,7 @@ template_header('Edit Game', null);
                             $stmt = $PDO->query($sql);
 
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                generateMPCheckboxes($row); // line break
+                                generateMPCheckboxes($row, true); // line break
                             }
                             ?>
                         </fieldset>
@@ -231,10 +232,10 @@ template_header('Edit Game', null);
 
                                 // check if the multiplayer mode exists in the fetched data
                                 $isChecked = $mpData ? 'checked' : '';
-                                $minPlayers = $mpData['minPlayers'] ?? '';
-                                $maxPlayers = $mpData['maxPlayers'] ?? '';
+                                $minPlayers = $mpData['minPlayers'] ?? -1;
+                                $maxPlayers = $mpData['maxPlayers'] ?? -1;
 
-                                generateMPCheckboxes($row);
+                                generateMPCheckboxes($row, true, $platID, $maxPlayers, $minPlayers, $isChecked);
                             }
                     echo <<<EOT
                         </fieldset>
@@ -253,4 +254,7 @@ template_header('Edit Game', null);
         <input type="submit" value="Update game" class="submit_button">
     </form>
 </div>
-<?php template_footer("game_editor.js"); ?>
+<?php template_footer("game_editor.js");
+
+getErrorMsg();
+?>

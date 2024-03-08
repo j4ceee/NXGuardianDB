@@ -1,5 +1,6 @@
 <?php
 include_once './conn_db.php'; // include database connection file
+include_once './validate.php';
 
 $PDO = getPDO(); // get PDO connection
 
@@ -18,6 +19,9 @@ ini_set('display_errors', 1);
 // check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     var_dump($_POST);
+
+    // validate all inputs
+    validate_inputs($_POST);
 
     $gameID = $_POST['gameID'];
     $gameName = trim($_POST['title']);
@@ -95,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<br>";
             echo $key . "<br>";
             echo "different-------------<br>";
-            echo "Old - $value / {$newValues[$key]} - New<br>";
+            echo "Old - $value / $newValues[$key] - New<br>";
             echo "----------------------<br>";
         }
     }
@@ -153,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // initialize array to store platform details
             $platformDetails = [
-                'platformID' => (int)$platformID,
+                'platformID' => $platformID,
                 'storeLink' => null,
                 'releaseDate' => null,
             ];
@@ -210,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "<br>";
                         echo $key . "<br>";
                         echo "different-------------<br>";
-                        echo "Old - $value / {$platformDetails[$key]} - New<br>";
+                        echo "Old - $value / $platformDetails[$key] - New<br>";
                         echo "----------------------<br>";
                     }
                 }
@@ -315,7 +319,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 echo "<br>";
                                 echo $key . "<br>";
                                 echo "different-------------<br>";
-                                echo "Old - $value / {$modeInfoArray[$key]} - New<br>";
+                                echo "Old - $value / $modeInfoArray[$key] - New<br>";
                                 echo "----------------------<br>";
                             }
                         }
@@ -392,6 +396,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $PDO->rollBack();
         // TODO: handle error
     }
+
+    // redirect to list_games.php
+    header("Location: ../list_games.php?gameID=$gameID");
+    ob_end_flush(); // end output buffering
+    exit();
+} else {
+    // redirect to previous page
+    ob_end_flush(); // end output buffering
+    redirectToPreviousPage("400");
 }
 
 function getModeIDFromModeName($PDO, $modeShort)
@@ -401,8 +414,3 @@ function getModeIDFromModeName($PDO, $modeShort)
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['modeID'] : null;
 }
-
-// redirect to list_games.php
-header("Location: ../list_games.php?gameID=$gameID");
-
-ob_end_flush(); // end output buffering
