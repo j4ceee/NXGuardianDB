@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // fetch existing platforms for game
-    $currentPlatformsQuery = $PDO->prepare("SELECT platformID, releaseDate, storeLink FROM game_platform_link WHERE gameID = :gameID");
+    $currentPlatformsQuery = $PDO->prepare("SELECT platformID, releaseDate, storeLink, storeID FROM game_platform_link WHERE gameID = :gameID");
     $currentPlatformsQuery->execute([':gameID' => $gameID]);
     $currentPlatforms = $currentPlatformsQuery->fetchAll(PDO::FETCH_ASSOC);
 
@@ -160,6 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'platformID' => $platformID,
                 'storeLink' => null,
                 'releaseDate' => null,
+                'storeID' => null,
             ];
 
             // capture platform-specific details if they exist
@@ -170,6 +171,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST["release_plat_$platformID"])) {
                 $releaseDate = htmlspecialchars(trim($_POST["release_plat_$platformID"]));
                 $platformDetails['releaseDate'] = empty($releaseDate) ? null : $releaseDate;
+            }
+
+            if (isset($_POST["game_id_$platformID"])) {
+                $storeID = htmlspecialchars(trim($_POST["game_id_$platformID"]));
+                $platformDetails['storeID'] = empty($storeID) ? null : $storeID;
             }
 
             // add to selected platforms array
@@ -219,13 +225,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 }
 
-                if ($platformDetails['storeLink'] !== $currentPlatformsAssoc[$platformID]['storeLink'] || $platformDetails['releaseDate'] !== $currentPlatformsAssoc[$platformID]['releaseDate']) {
-                    $stmt = $PDO->prepare("UPDATE game_platform_link SET releaseDate = :releaseDate, storeLink = :storeLink WHERE gameID = :gameID AND platformID = :platformID");
+                if ($platformDetails['storeLink'] !== $currentPlatformsAssoc[$platformID]['storeLink'] || $platformDetails['releaseDate'] !== $currentPlatformsAssoc[$platformID]['releaseDate'] || $platformDetails['storeID'] !== $currentPlatformsAssoc[$platformID]['storeID']) {
+                    $stmt = $PDO->prepare("UPDATE game_platform_link SET releaseDate = :releaseDate, storeLink = :storeLink, storeID = :storeID WHERE gameID = :gameID AND platformID = :platformID");
                     $stmt->execute([
                         ':gameID' => $gameID,
                         ':platformID' => $platformID,
                         ':releaseDate' => $platformDetails['releaseDate'],
                         ':storeLink' => $platformDetails['storeLink'],
+                        ':storeID' => $platformDetails['storeID'],
                     ]);
                 }
 
@@ -237,17 +244,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Platform ID: $platformID<br>";
                 echo "Release Date: {$platformDetails['releaseDate']}<br>";
                 echo "Store Link: {$platformDetails['storeLink']}<br>";
+                echo "Store ID: {$platformDetails['storeID']}<br>";
                 echo "-----------------------------------<br>";
                 echo "<br>";
 
 
                 // new platform link
-                $stmt = $PDO->prepare("INSERT INTO game_platform_link (gameID, platformID, releaseDate, storeLink) VALUES (:gameID, :platformID, :releaseDate, :storeLink)");
+                $stmt = $PDO->prepare("INSERT INTO game_platform_link (gameID, platformID, releaseDate, storeLink, storeID) VALUES (:gameID, :platformID, :releaseDate, :storeLink, :storeID)");
                 $stmt->execute([
                     ':gameID' => $gameID,
                     ':platformID' => $platformID,
                     ':releaseDate' => $platformDetails['releaseDate'],
                     ':storeLink' => $platformDetails['storeLink'],
+                    ':storeID' => $platformDetails['storeID'],
                 ]);
             }
         }

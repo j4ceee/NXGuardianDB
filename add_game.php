@@ -98,6 +98,12 @@ template_header('Add Game', 'add');
                         </div>
 
                         <div class="platform_info_field">
+                            <label for="game_id_[platID]">Game ID:</label>
+                            <input type="text" class="win_dark_input" name="game_id_[platID]"
+                                   id="game_id_[platID]">
+                        </div>
+
+                        <div class="platform_info_field">
                             <label for="release_plat_[platID]">Release Date:</label>
                             <input type="date" class="win_dark_input" name="release_plat_[platID]"
                                    id="release_plat_[platID]">

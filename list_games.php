@@ -24,6 +24,7 @@ template_header('List Games', 'list');
         // collect search criteria from form sent via POST
         $title = isset($_POST['title']) ? trim($_POST['title']) : null;
         $developer = isset($_POST['developer']) ? trim($_POST['developer']) : null;
+        $storeID = isset($_POST['game_id']) ? trim($_POST['game_id']) : null;
 
         // collect platforms based on dynamic keys
         $platforms = [];
@@ -62,6 +63,7 @@ template_header('List Games', 'list');
         echo "<p>Search Criteria:</p>";
         echo "<p>Title: " . htmlspecialchars($title) . "</p>";
         echo "<p>Developer: " . htmlspecialchars($developer) . "</p>";
+        echo "<p>Store ID: " . htmlspecialchars($storeID) . "</p>";
         echo "<p>Platforms: " . htmlspecialchars(implode(', ', $platforms)) . "</p>";
 
         // output multiplayer modes with player counts
@@ -83,6 +85,7 @@ template_header('List Games', 'list');
                 gpl.game_platformID,
                 gpl.platformID,
                 gpl.storeLink AS storeLink,
+                gpl.storeID AS storeID,
                 pm.modeID as multiplayer_modeID,
                 pm.modeName AS multiplayer_mode,
                 pm.modeShort AS multiplayer_mode_short,
@@ -128,6 +131,12 @@ template_header('List Games', 'list');
                 $params[':developer'] = "%" . $developer . "%";
                 //$conditions[] = "MATCH(d.devName) AGAINST (:developer IN BOOLEAN MODE)"; //
                 //$params[':developer'] = $developer . "*";
+            }
+
+            // check if storeID is set and not empty -> add to query and parameters
+            if ($storeID !== null && $storeID !== '') {
+                $conditions[] = "gpl.storeID = :storeID"; // = -> exact match
+                $params[':storeID'] = $storeID;
             }
 
             // check if platforms is not empty ->
@@ -236,15 +245,17 @@ template_header('List Games', 'list');
                 // delete buttons
                 echo "<div class='game_delete'>";
                 // button to delete game_platform entry
+                /*
                 echo "<a href='./util/delete_game.php?game_platformID=" . htmlspecialchars($row['game_platformID']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['platform']) . " version'>
                         <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['platform']) . " version'>
                         <img class='trash_gpl_icon' src='./img/platforms/" . htmlspecialchars($row['platformID']) . ".svg' class='trash_game_icon' alt='Platform Logo'/>
                       </a>";
+                */
                 // button to delete game
                 echo "<a href='./util/delete_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['game_name']) . "'>
-                        <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['game_name']) . "'>
-                        <img class='trash_game_icon' src='" . htmlspecialchars($row['imageLink']) . "' alt='Game Image'/>
-                      </a>";
+                      <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['game_name']) . "'>";
+                // echo "<img class='trash_game_icon' src='" . htmlspecialchars($row['imageLink']) . "' alt='Game Image'/>";
+                echo "</a>";
                 echo "</div>";
 
                 // if store link is set, create a link to the store
@@ -275,6 +286,10 @@ template_header('List Games', 'list');
                 echo "<div class='game_details'>";
                 echo "<div><p class='game_list_info game_list_cat'>Developer:</p><p class='game_list_info game_list_det'>" . htmlspecialchars($row['developer']) . "</p></div>";
                 echo "<div><p class='game_list_info game_list_cat'>Release Date:</p><p class='game_list_info game_list_det'>" . htmlspecialchars($row['release_date']) . "</p></div>";
+                // game id of platform release
+                if ($row['storeID'] !== null) {
+                    echo "<div><p class='game_list_info game_list_cat'>Game ID:</p><p class='game_list_info game_list_det game_list_cat'>" . htmlspecialchars($row['storeID']) . "</p></div>";
+                }
                 echo "<ul class='game_mp_features'>";
 
             }
