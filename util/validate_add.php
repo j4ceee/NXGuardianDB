@@ -29,17 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // check if developer exists in database
-    $stmt = $PDO->prepare("SELECT devID FROM developers WHERE devName = :devName");
-    $stmt->execute(['devName' => $developerName]);
-    $dev = $stmt->fetch(PDO::FETCH_ASSOC);
+    $dev = validate_dev_exists($developerName);
 
-    if (!$dev) {
+    if ($dev == null) {
         // insert new developer
         $stmt = $PDO->prepare("INSERT INTO developers (devName) VALUES (:devName)");
         $stmt->execute(['devName' => $developerName]);
         $devID = $PDO->lastInsertId();
     } else {
-        $devID = $dev['devID'];
+        $devID = $dev;
     }
 
     // add game-----------------------------------------------------------------------------------
@@ -228,7 +226,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // TODO: success message after redirect
 
-    header("Location: ../list_games.php?gameID=$gameID");
+    // header("Location: ../list_games.php?gameID=$gameID");
+    echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
     ob_end_flush(); // end output buffering
     exit();
 

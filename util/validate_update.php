@@ -63,12 +63,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':release', $gameRelease);
     $stmt->bindParam(':imageLink', $imageLink);
 
+    // TODO: when updating the developer, check if the developer already exists in the database
+    // TODO: if the developer already exists, change the current devID of the game to the existing devID
+    // TODO: unhandled exception: if the developer name is changed to an existing developer name -> SQL error since devName is unique
     // update developer info
     $sql2 = "UPDATE developers SET devName = :devName WHERE devID = :devID";
     $stmt2 = $PDO->prepare($sql2);
     $stmt2->bindParam(':devID', $currentDevID, PDO::PARAM_INT);
     $stmt2->bindParam(':devName', $devName);
-    $stmt2->execute();
 
 
     // debug -> echo changes TODO: remove after testing
@@ -108,6 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //var_dump($stmt2);
     // execute the statement
     $stmt->execute();
+    $stmt2->execute();
 
     echo "<br>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------<br>";
 
@@ -408,6 +411,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // redirect to list_games.php
     header("Location: ../list_games.php?gameID=$gameID");
+    // echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
     ob_end_flush(); // end output buffering
     exit();
 } else {

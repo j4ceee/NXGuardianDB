@@ -1,11 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Feb 09, 2024 at 05:22 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -17,9 +9,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `jaceedb`
---
+
 USE `jaceedb`;
 
 --
@@ -54,7 +44,7 @@ INSERT INTO `games` (`gameID`, `gameName`, `gameRelease`, `devID`, `steamgridID`
 (7, 'The Legend of Zelda: Tears of the Kingdom', '2023-05-12', 1, 1234, 'https://img-eshop.cdn.nintendo.net/i/4b53da7ca4b118fe37c8b8040609b84dc63214d6131c51592486de9bf29ef29c.jpg'),
 (8, 'Pokémon Brilliant Diamond', '2021-11-19', 4, 1234, 'https://img-eshop.cdn.nintendo.net/i/e4d86911bdcfa69882f399c7c4e2fb590e3c3629882f01d85af3241207623696.jpg'),
 (9, 'Pokémon Scarlet', '2022-11-18', 5, 1234, 'https://img-eshop.cdn.nintendo.net/i/fa0f7bba88e0bc9b24cb0a2d1707990a6bc2c59480d22b821114d1a57762fafc.jpg'),
-(10, 'Spyro Reignited Trilogy', '2018-11-13', 6, 1234, 'https://cdn2.steamgriddb.com/thumb/f036e60d7c7777393aa8713b501a3530.png'),
+(10, 'Spyro Reignited Trilogy', '2018-11-13', 6, 1234, 'https://img-eshop.cdn.nintendo.net/i/9725c173ddb9a6323eaefb39086aaaf5151e97c1e6474237459083dfbc07a8fd.jpg'),
 (11, 'Pokémon Battle Revolution', '2006-12-14', 7, 1234, 'https://cdn2.steamgriddb.com/thumb/af9d8b8c1db81c9fc16c6e899386cba5.png'),
 (12, 'Lethal Company', '2023-10-23', 8, 1234, 'https://cdn2.steamgriddb.com/thumb/a8fba7232b85ea00244c2de3c29135a7.jpg'),
 (13, 'Need for Speed Rivals', '2013-11-15', 9, 1234, 'https://cdn2.steamgriddb.com/thumb/370c95248c885439aba89c390b949c41.jpg'),
@@ -73,7 +63,7 @@ INSERT INTO `game_platform_link` (`game_platformID`, `gameID`, `platformID`, `re
 (4, 2, 12, NULL, 'https://www.xbox.com/en-US/games/store/palworld-game-preview/9NKV34XDW014', NULL),
 (5, 3, 14, NULL, 'https://www.smashbros.com/en_US/', '01006A800016E000'),
 (6, 4, 14, NULL, 'https://splatoon.nintendo.com/', NULL),
-(7, 5, 1, '2015-04-02', 'https://store.steampowered.com/app/359320/Elite_Dangerous/', NULL),
+(7, 5, 1, '2015-04-02', 'https://store.steampowered.com/app/359320/Elite_Dangerous/', '359320'),
 (8, 5, 7, '2017-06-27', 'https://store.playstation.com/de-de/product/EP2377-CUSA05308_00-EDBASEGAME000000', NULL),
 (9, 5, 8, '2017-06-27', 'https://store.playstation.com/de-de/product/EP2377-CUSA05308_00-EDBASEGAME000000', NULL),
 (10, 5, 11, '2015-10-06', 'https://www.xbox.com/en-US/games/store/elite-dangerous-standard-edition/C3LW50BQJ878', NULL),
@@ -82,8 +72,8 @@ INSERT INTO `game_platform_link` (`game_platformID`, `gameID`, `platformID`, `re
 (13, 7, 14, NULL, 'https://zelda.nintendo.com/tears-of-the-kingdom/', '0100F2C0115B6000'),
 (14, 8, 14, NULL, 'https://diamondpearl.pokemon.com/en-us/', NULL),
 (15, 9, 14, NULL, 'https://scarletviolet.pokemon.com/en-us/', NULL),
-(16, 10, 14, NULL, 'https://www.nintendo.com/us/store/products/spyro-reignited-trilogy-switch/', NULL),
-(17, 10, 1, NULL, 'https://store.steampowered.com/app/996580/Spyro_Reignited_Trilogy/', NULL),
+(16, 10, 14, NULL, 'https://www.nintendo.com/us/store/products/spyro-reignited-trilogy-switch/', '010077B00E046000'),
+(17, 10, 1, NULL, 'https://store.steampowered.com/app/996580/Spyro_Reignited_Trilogy/', '996580'),
 (18, 10, 7, NULL, 'https://store.playstation.com/en-us/product/UP0002-CUSA12125_00-SPYROTRILOGY0001', NULL),
 (19, 10, 8, NULL, 'https://store.playstation.com/en-us/product/UP0002-CUSA12125_00-SPYROTRILOGY0001', NULL),
 (20, 10, 11, NULL, 'https://www.xbox.com/en-US/games/store/spyro-reignited-trilogy/BWHFZNSL0PB5', NULL),
@@ -99,22 +89,22 @@ INSERT INTO `game_platform_link` (`game_platformID`, `gameID`, `platformID`, `re
 (30, 13, 12, '2013-11-22', 'https://www.xbox.com/en-US/games/store/need-for-speed-rivals/C3VM0TMWNZ5M', NULL),
 (31, 13, 13, '2013-11-19', 'https://marketplace.xbox.com/en-US/Product/Need-for-Speed-Rivals/66acd000-77fe-1000-9115-d802454109c6?cid=majornelson', NULL),
 (38, 5, 2, '2015-04-02', 'https://store.epicgames.com/en-US/p/elite-dangerous', NULL),
-(40, 14, 14, NULL, 'https://www.nintendo.com/us/store/products/minecraft-switch/', NULL),
-(41, 14, 3, NULL, 'https://www.xbox.com/en-us/games/store/minecraft-fur-windows/9nblggh2jhxj?rtc=2&activetab=pivot:overviewtab', NULL),
+(40, 14, 14, NULL, 'https://www.nintendo.com/us/store/products/minecraft-switch/', '0100D71004694000'),
+(41, 14, 3, NULL, 'https://www.xbox.com/en-us/games/store/minecraft-fur-windows/9nblggh2jhxj', NULL),
 (42, 14, 7, NULL, 'https://www.playstation.com/en-us/games/minecraft/', NULL),
 (43, 14, 8, NULL, 'https://www.playstation.com/en-us/games/minecraft/', NULL),
 (44, 14, 11, NULL, 'https://www.xbox.com/en-us/games/store/minecraft/9mvxmvt8zkwc', NULL),
 (45, 14, 12, NULL, 'https://www.xbox.com/en-us/games/store/minecraft/9mvxmvt8zkwc', NULL),
 (46, 15, 14, NULL, 'https://www.ea.com/en-gb/games/it-takes-two/buy/nintendo-switch', NULL),
-(47, 15, 1, NULL, 'https://store.steampowered.com/app/1426210/It_Takes_Two/', NULL),
+(47, 15, 1, NULL, 'https://store.steampowered.com/app/1426210/It_Takes_Two/', '1426210'),
 (48, 15, 4, NULL, 'https://www.ea.com/en-gb/games/it-takes-two', NULL),
 (49, 15, 7, NULL, 'https://lnk.to/it-takes-two-sony-ps5', NULL),
 (50, 15, 8, NULL, 'https://lnk.to/it-takes-two-sony-ps5', NULL),
 (51, 15, 11, NULL, 'https://www.microsoft.com/p/It-Takes-Two/9NKJ0VZQ4N0L', NULL),
 (52, 15, 12, NULL, 'https://www.microsoft.com/p/It-Takes-Two/9NKJ0VZQ4N0L', NULL),
-(53, 16, 1, NULL, NULL, NULL),
-(54, 16, 3, NULL, NULL, NULL),
-(55, 16, 11, NULL, NULL, NULL);
+(53, 16, 1, NULL, 'https://store.steampowered.com/app/1716740/Starfield/', '1716740'),
+(54, 16, 3, NULL, 'https://www.xbox.com/en-us/games/store/starfield/9ncjsxwztp88', NULL),
+(55, 16, 11, NULL, 'https://www.xbox.com/en-us/games/store/starfield/9ncjsxwztp88', NULL);
 
 --
 -- Dumping data for table `game_platform_player_link`
@@ -233,7 +223,6 @@ INSERT INTO `game_platform_player_link` (`game_platform_playerID`, `game_platfor
 (113, 53, 1, 0, 0),
 (114, 54, 1, 0, 0),
 (115, 55, 1, 0, 0);
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
