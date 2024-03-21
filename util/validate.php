@@ -1,12 +1,25 @@
 <?php
+
 use JetBrains\PhpStorm\NoReturn;
 
+/*
+ * ERROR MESSAGES
+ */
+
+
 $errorDict = [
+    // missing inputs errors
     "400" => "Error! Inputs were not submitted correctly.",
     "404" => "Error! Missing required field: ",
     "405" => "Error! No platforms selected.",
     "406" => "Error! No multiplayer modes selected for a platform.",
-    "407" => "Error! Missing player count for one of the selected multiplayer modes."
+    "407" => "Error! Missing player count for one of the selected multiplayer modes.",
+
+    // input format errors
+    "500" => "Error! Invalid input format for field: ",
+    "501" => "Error! Input too long for field: ",
+    "502" => "Error! Game ID already exists for the selected platform: ",
+    "503" => "Error! Game already exists in the database: "
 ];
 
 function getErrorMsg(): void
@@ -86,11 +99,28 @@ function validate_inputs($post): void
 
 function validate_basics($post): void
 {
+    // check if required fields are set
     $requiredFields = ['title', 'developer', 'release', 'imageLink'];
     foreach ($requiredFields as $field) {
         if (empty($post[$field])) {
             redirectToPreviousPage("404/$field");
         }
+    }
+
+    // validate input format
+    validate_title($post['title']);
+    validate_developer($post['developer']);
+    validate_release($post['release']);
+    validate_url($post['imageLink']);
+
+    // when updating a game, the gameID is sent with the POST request in a hidden input field
+    $gameID = $post['gameID'] ?? null;
+
+    // check if the game already exists in the database
+    $duplicate = check_duplicate_game_entry($post['title'], $post['developer'], $post['release'], $gameID);
+    
+    if ($duplicate !== false) {
+        redirectToPreviousPage($duplicate);
     }
 }
 
@@ -168,15 +198,214 @@ function validate_players($post, array $platformModes): void
             $minString = $mode . "_min_" . $platform;
             $maxString = $mode . "_max_" . $platform;
 
+            $maxStringFound = false;
+            $minStringFound = false;
+
             foreach ($post as $key => $value) {
                 if ($key === $minString || $key === $maxString) {
-                    echo "Key: $key, Value: $value<br>";
+                    if ($key === $minString) {
+                        $minStringFound = true;
+                    }
+                    if ($key === $maxString) {
+                        $maxStringFound = true;
+                    }
+
+                    // check if the player count is set
                     if (empty($value)) {
-                        // echo "Missing player count for $mode on platform $platform";
                         redirectToPreviousPage("407");
+                    }
+
+                    /*
+                    * VALIDATION FUNCTIONS - INPUT FORMAT
+                    */
+
+                    /*
+                     * check if:
+                     * - the player count is a number
+                     * - the player count is not negative
+                     * - the max player count is not smaller than the min player count
+                     */
+                    else if (!is_numeric($value) || $value < 0) { // if the player count is not a number
+                        redirectToPreviousPage("500/playerCount");
+                    }
+                    else if ($key === $maxString) {
+                        $min = $post[$minString];
+                        if ($value < $min) {
+                            redirectToPreviousPage("500/minPlayerCount");
+                        }
                     }
                 }
             }
+            if ($mode != "single" && (!$minStringFound || !$maxStringFound)) {
+                redirectToPreviousPage("404/playerCount");
+            }
         }
+    }
+}
+
+function validate_plat_input($post): void
+{
+    // validate platform specific game info
+    foreach ($post as $key => $value) {
+        if (!empty($value) || $value != "") { // only validate non-empty values
+            // validate store links
+            if (str_starts_with($key, 'store_link_')) {
+                validate_url($value);
+            }
+            // validate release dates
+            if (str_starts_with($key, 'release_plat_')) {
+                validate_release($value);
+            }
+            // validate game ids
+            if (str_starts_with($key, 'game_id_')) {
+                // get the platformID from the key
+                $platformID = explode("_", $key)[2]; // key is in the format "game_id_platformID"
+
+                $gameID = $post['gameID'] ?? null;
+
+                validate_store_id($value, $platformID, $gameID);
+            }
+        }
+    }
+}
+
+function validate_title($title): void
+{
+    if (strlen($title) > 176) {
+        redirectToPreviousPage("501/title");
+    }
+}
+
+function validate_developer($developer): void
+{
+    if (strlen($developer) > 30) {
+        redirectToPreviousPage("501/developer");
+    }
+}
+
+function validate_release($release): void
+{
+    echo "<p>Validating release date: $release<br></p>";
+
+    if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $release)) {
+        redirectToPreviousPage("500/release");
+    }
+}
+
+function validate_url($url): void
+{
+    echo "<p>Validating URL: $url<br></p>";
+
+    // check URL length
+    if (strlen($url) > 150) {
+        redirectToPreviousPage("501/url");
+    }
+    // check URL format
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        redirectToPreviousPage("500/url");
+    }
+}
+
+function validate_store_id($storeID, $platformID, $gameID): void
+{
+    echo "<p>Validating game ID: $storeID for platform $platformID<br></p>";
+
+    // check gameID length
+    if (strlen($storeID) > 30) {
+        redirectToPreviousPage("501/gameID");
+    }
+    // check gameID format
+    if (!preg_match("/^[a-zA-Z0-9]+$/", $storeID)) { // only allow alphanumeric characters
+        redirectToPreviousPage("500/gameID");
+    }
+
+    // check if store id / game id is already in the database for the selected platform
+    $sql = "SELECT 
+                *
+            FROM 
+                game_platform_link 
+            WHERE 
+                storeID = :storeID AND 
+                platformID = :platformID";
+    $stmt = $GLOBALS['PDO']->prepare($sql);
+    $stmt->bindParam(':storeID', $storeID);
+    $stmt->bindParam(':platformID', $platformID);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!empty($result)) {
+        foreach ($result as $row) {
+            if ($row['gameID'] != $gameID) {
+                redirectToPreviousPage("502/$storeID");
+            }
+        }
+    }
+}
+
+/*
+ * VALIDATION FUNCTIONS - GENERAL
+ *
+ * modular -> can be used outside validate_inputs() context
+*/
+
+// check if the game already exists in the database
+function check_duplicate_game_entry($title, $developer, $release, $gameID): string|bool
+{
+    echo "<p>Checking for duplicate game entry: $title by $developer, released on $release<br></p>";
+
+    // get all games with the same title and developer
+    $sql = "SELECT 
+                *
+            FROM 
+                games
+            JOIN 
+                developers ON games.devID = developers.devID
+            WHERE 
+                gameName = :title AND 
+                devName = :developer";
+    $stmt = $GLOBALS['PDO']->prepare($sql);
+    $stmt->bindParam(':title', $title);
+    $stmt->bindParam(':developer', $developer);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // if there are games with the same title and developer...
+    if (!empty($result)) {
+        foreach ($result as $row) {
+            // ...check if the gameID is different
+            // if same gameID -> the game is being updated, no need to check for duplicates
+            // if yes / null -> check if the release year is the same
+            if ($gameID != $row['gameID']) {
+                if (date('Y', strtotime($row['gameRelease'])) === date('Y', strtotime($release))) {
+                    // if the release year is the same, return an error
+                    // if not -> the game is not a duplicate -> e.g. Need for Speed: Most Wanted (2005) and Need for Speed: Most Wanted (2012)
+                    return "503/$title";
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+// check if developer exists in the database
+function validate_dev_exists(string $devName): int|null
+{
+    $sql = "SELECT 
+                devID 
+            FROM 
+                developers 
+            WHERE 
+                devName = :devName";
+    $stmt = $GLOBALS['PDO']->prepare($sql);
+    $stmt->bindParam(':devName', $devName);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // return developer ID if it exists, else return null
+    if (empty($result)) {
+        return null;
+    } else {
+        return $result[0]['devID'];
     }
 }

@@ -752,7 +752,7 @@ input[type="number"]
 
 .game_details {
     display: block;
-    flex-direction: row;
+    padding: .3rem 0;
     width: 26rem;
     height: 100%;
     margin-left: 4rem;
@@ -786,7 +786,6 @@ input[type="number"]
 
 .game_list_det {
     padding-left: 1rem;
-    color: whitesmoke;
 }
 
 .game_list_mode {

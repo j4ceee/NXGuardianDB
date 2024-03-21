@@ -130,6 +130,12 @@ template_header('Edit Game', null);
                         </div>
 
                         <div class="platform_info_field">
+                            <label for="game_id_[platID]">Game ID:</label>
+                            <input type="text" class="win_dark_input" name="game_id_[platID]"
+                                   id="game_id_[platID]">
+                        </div>
+
+                        <div class="platform_info_field">
                             <label for="release_plat_[platID]">Release Date:</label>
                             <input type="date" class="win_dark_input" name="release_plat_[platID]"
                                    id="release_plat_[platID]">
@@ -157,6 +163,7 @@ template_header('Edit Game', null);
                         gpl.platformID AS platformID,
                         gpl.storeLink AS storeLink,
                         gpl.releaseDate AS platform_release_date,
+                        gpl.storeID AS storeID,
                         p.platformName AS platformName
                     FROM
                         game_platform_link gpl
@@ -176,6 +183,7 @@ template_header('Edit Game', null);
                     $platID = $platform['platformID'];
                     $platName = $platform['platformName'];
                     $platStoreLink = $platform['storeLink'];
+                    $platStoreID = $platform['storeID'];
                     $platReleaseDate = $platform['platform_release_date'];
                     echo <<<EOT
                         <fieldset class="platform_info info_$platID">
@@ -186,6 +194,11 @@ template_header('Edit Game', null);
                         <div class="platform_info_field">
                             <label for="store_link_$platID">Store Link:</label>
                             <input type="url" class="win_dark_input" name="store_link_$platID" id="store_link_$platID" value="$platStoreLink">
+                        </div>
+                        
+                        <div class="platform_info_field">
+                            <label for="game_id_$platID">Game ID:</label>
+                            <input type="text" class="win_dark_input" name="game_id_$platID" id="game_id_$platID" value="$platStoreID">
                         </div>
 
                         <div class="platform_info_field">

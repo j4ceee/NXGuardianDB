@@ -29,6 +29,11 @@ template_header('Search Game', 'search');
                             <label for="developer">Developer:</label>
                             <input list="developers" class="win_dark_input" name="developer" id="developer">
                         </div>
+
+                        <div class="game_info_field">
+                            <label for="game_id">Game ID:</label>
+                            <input type="text" class="win_dark_input" name="game_id" id="game_id">
+                        </div>
                     </div>
                 </fieldset>
 

@@ -29,17 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // check if developer exists in database
-    $stmt = $PDO->prepare("SELECT devID FROM developers WHERE devName = :devName");
-    $stmt->execute(['devName' => $developerName]);
-    $dev = $stmt->fetch(PDO::FETCH_ASSOC);
+    $dev = validate_dev_exists($developerName);
 
-    if (!$dev) {
+    if ($dev == null) {
         // insert new developer
         $stmt = $PDO->prepare("INSERT INTO developers (devName) VALUES (:devName)");
         $stmt->execute(['devName' => $developerName]);
         $devID = $PDO->lastInsertId();
     } else {
-        $devID = $dev['devID'];
+        $devID = $dev;
     }
 
     // add game-----------------------------------------------------------------------------------
@@ -80,6 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'id' => $platformID,
                 'store_link' => null,
                 'release_date' => null,
+                'store_id' => null,
             ];
 
             // capture platform-specific details if they exist
@@ -90,6 +89,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST["release_plat_$platformID"])) {
                 $releaseDate = htmlspecialchars(trim($_POST["release_plat_$platformID"]));
                 $platformDetails['release_date'] = empty($releaseDate) ? null : $releaseDate;
+            }
+            if (isset($_POST["game_id_$platformID"])) {
+                $storeID = htmlspecialchars(trim($_POST["game_id_$platformID"]));
+                $platformDetails['store_id'] = empty($storeID) ? null : $storeID;
             }
 
             // add to selected platforms array
@@ -103,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         [id] => 1
                         [store_link] => https://store.steampowered.com/app/123456/Example_Game/
                         [release_date] => 2022-12-31
+                        [store_id] => 123456
                     )
 
                 [1]
@@ -110,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         [id] => 2
                         [store_link] =>
                         [release_date] => 2022-12-31
+                        [store_id] => 123456
                     )
 
             )
@@ -134,15 +139,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Platform ID: {$platformDetails['id']}\n";
         echo "Release Date: {$platformDetails['release_date']}\n";
         echo "Store Link: {$platformDetails['store_link']}\n";
+        echo "Store ID: {$platformDetails['store_id']}\n";
         */
 
 
-        $stmt = $PDO->prepare("INSERT INTO game_platform_link (gameID, platformID, releaseDate, storeLink) VALUES (:gameID, :platformID, :releaseDate, :storeLink)");
+        $stmt = $PDO->prepare("INSERT INTO game_platform_link (gameID, platformID, releaseDate, storeLink, storeID) VALUES (:gameID, :platformID, :releaseDate, :storeLink , :storeID)");
         $stmt->execute([
             ':gameID' => $gameID, // use the game ID from the previous insert
             ':platformID' => $platformDetails['id'],
             ':releaseDate' => $platformDetails['release_date'],
             ':storeLink' => $platformDetails['store_link'],
+            ':storeID' => $platformDetails['store_id'],
         ]);
 
 
@@ -219,7 +226,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // TODO: success message after redirect
 
-    header("Location: ../list_games.php?gameID=$gameID");
+    // header("Location: ../list_games.php?gameID=$gameID");
+    echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
     ob_end_flush(); // end output buffering
     exit();
 

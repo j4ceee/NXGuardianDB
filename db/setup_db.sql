@@ -78,11 +78,13 @@ CREATE TABLE game_platform_link
     `gameID`          int(11) NOT NULL,                -- foreign key to games table
     `platformID`      int(11) NOT NULL,                -- foreign key to platforms table
     `releaseDate`     date NULL,                       -- release date of game on platform, can be Null if released on platforms at same time
-    `storeLink`       varchar(150) NULL,           -- link to store page for game on platform
+    `storeLink`       varchar(150) NULL,               -- link to store page for game on platform
+    `storeID`         varchar(30) NULL,                -- store ID for game on platform
 
     PRIMARY KEY (`game_platformID`),
     FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE CASCADE,
-    FOREIGN KEY (`platformID`) REFERENCES `platforms` (`platformID`)
+    FOREIGN KEY (`platformID`) REFERENCES `platforms` (`platformID`),
+    UNIQUE (`storeID`) -- every game should have a unique store ID on a platform (no duplicates)
 
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
