@@ -4,13 +4,13 @@ include_once './util/header_footer.php';
 include_once './util/validate.php';
 include_once './util/utility_func.php';
 
-$PDO = getPDO(); // get PDO connection
+$dbConnection = new DBConnection();
+$PDO = $dbConnection->useDB();
 
-if (!checkDBExists()) {
-    header("Location: ./index.php");
+if ($PDO === null || !$dbConnection->checkDBSchema()) {
+    header("Location: ../index.php");
     exit();
 }
-useDB();
 
 template_header('Add Game', 'add');
 ?>

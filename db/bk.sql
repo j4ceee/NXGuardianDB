@@ -10,8 +10,6 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 
-USE `jaceedb`;
-
 --
 -- Dumping data for table `developers`
 --

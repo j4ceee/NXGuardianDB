@@ -2,13 +2,13 @@
 include_once './util/conn_db.php'; // include database connection file
 include_once './util/header_footer.php';
 
-$PDO = getPDO(); // get PDO connection
+$dbConnection = new DBConnection();
+$PDO = $dbConnection->useDB();
 
-if (!checkDBExists()) {
-    header("Location: ./index.php");
+if ($PDO === null || !$dbConnection->checkDBSchema()) {
+    header("Location: ../index.php");
     exit();
 }
-useDB();
 
 template_header('List Games', 'list');
 ?>

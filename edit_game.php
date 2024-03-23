@@ -4,13 +4,13 @@ include_once './util/header_footer.php';
 include_once './util/validate.php';
 include_once './util/utility_func.php';
 
-$PDO = getPDO(); // get PDO connection
+$dbConnection = new DBConnection();
+$PDO = $dbConnection->useDB();
 
-if (!checkDBExists() || !isset($_GET['gameID'])) {
-    header("Location: ./index.php");
+if ($PDO === null || !$dbConnection->checkDBSchema()) {
+    header("Location: ../index.php");
     exit();
 }
-useDB();
 
 // get gameID via URL
 $gameID = (int)$_GET['gameID'];

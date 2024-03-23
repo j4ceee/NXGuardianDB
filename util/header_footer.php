@@ -3,6 +3,8 @@ include_once './util/conn_db.php'; // include database connection file
 
 function template_header($title, $active): void
 {
+    $dbConnection = new DBConnection();
+
     $index = '';
     $search = '';
     $list = '';
@@ -42,7 +44,7 @@ function template_header($title, $active): void
             <nav class="navbar">
                 <a href="./index.php" $index>Start</a>
     EOT;
-    if (checkDBExists()) {
+    if ($dbConnection->checkDBSchema()) {
         echo <<<EOT
             <a href="./search_games.php" $search>Search Games</a>
             <a href="./list_games.php" $list>List Games</a>
@@ -101,6 +103,8 @@ EOT;
 
 function template_footer($script = null): void
 {
+    $dbConnection = new DBConnection();
+
     $script_string = '';
 
     if ($script !== null) {
@@ -115,7 +119,7 @@ function template_footer($script = null): void
             <a href="./index.php">Start</a>
             <a href="./index.php">Disclaimer</a>
     EOT;
-    if (checkDBExists()) {
+    if ($dbConnection->checkDBSchema()) {
         echo <<<EOT
             <a href="./search_games.php">Search Games</a>
             <a href="./list_games.php">List Games</a>

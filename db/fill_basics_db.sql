@@ -8,10 +8,6 @@ time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
--- create database if not exists
-USE
-`jaceedb`;
-
 INSERT INTO `platforms` (`platformID`, `platformName`, `platformCategory`)
 VALUES (1, 'Steam', 'PC'),
        (2, 'Epic Games', 'PC'),
