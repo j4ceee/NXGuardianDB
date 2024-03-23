@@ -20,7 +20,7 @@ class DBConnection {
 
             $this->connection = new PDO("mysql:host=$servername", $username, $password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $e) {
+        } catch(PDOException) {
             $this->connection = null;
         }
     }
@@ -72,7 +72,7 @@ class DBConnection {
             $stmt = $this->connection->prepare("SHOW TABLES FROM " . $this->dbname); // prepare statement to check if database schema exists
             $stmt->execute(); // execute statement
             $result = $stmt->fetchAll(); // fetch all results and store in $result
-        } catch (PDOException $e) {
+        } catch (PDOException) {
             return false;
         }
 
@@ -98,10 +98,9 @@ class DBConnection {
         }
         try {
             $this->connection->exec("USE " . $this->dbname); // use database
-        } catch (PDOException $e) {
+        } catch (PDOException) {
             return null;
         }
         return $this->connection;
     }
 }
-?>

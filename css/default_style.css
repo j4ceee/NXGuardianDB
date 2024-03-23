@@ -175,9 +175,7 @@ footer {
 
 /*--------------------Start page-------------------------*/
 
-.db-status,
-.db-restore {
-    position: absolute;
+.db-status-msg {
     right: 1rem;
     padding: 1rem 1.5rem;
     background-color: var(--ryu-dark);
@@ -189,17 +187,64 @@ footer {
     z-index: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: row;
+    text-decoration: none;
+    overflow: hidden;
 }
 
 .db-status {
+    position: absolute;
     top: 6rem;
 }
 
-.db-restore {
+.db-backup {
+    position: absolute;
     bottom: 8rem;
-    text-decoration: none;
+    right: 1rem;
+    width: fit-content;
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.db-bk-restore {
+    flex-direction: column;
+    align-items: flex-start;
+
+    div {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.db-bk-restore .bk-list {
+    opacity: 0;
+    visibility: hidden;
+    max-height: 0;
+    margin: 0 0 0 2.3rem;
+    transition: .4s;
+}
+
+.db-bk-restore:hover .bk-list {
+    opacity: 100%;
+    visibility: visible;
+    max-height: 4rem;
+    margin: .2rem 0 0 2.3rem;
+    transition: .4s;
+}
+
+.bk-list {
+    padding: 0;
+
+    li {
+        padding: .5rem 0 0 0;
+    }
+
+    a {
+        text-decoration: none;
+        color: whitesmoke;
+    }
 }
 
 .status-symbol {
@@ -718,9 +763,8 @@ input[type="number"]
 }
 
 .game_prev > h2 {
-    margin: 0;
     font-size: 1rem;
-    margin-top: 1rem;
+    margin: 1rem 0 0; /* top - left & right - bottom */
     width: 100%;
     max-width: 100%;
     overflow-wrap: break-word;

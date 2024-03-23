@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 671 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<svg width="100%" height="100%" viewBox="0 0 671 140" version="1.1" xmlns="http://www.w3.org/2000/svg"
+     xml:space="preserve"
+     style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="PS4">
         <g transform="matrix(1.33333,0,0,1.33333,0,0)">
             <path d="M496.613,82.577L496.613,88.467L495.632,88.467L495.632,81.218L496.984,81.218L499.085,87.409L501.119,81.218L502.3,81.218L502.3,88.467L501.49,88.467L501.49,82.577L499.537,88.467L498.566,88.467L496.613,82.577ZM491.427,88.467L491.427,82.049L489.103,82.049L489.103,81.218L494.73,81.218L494.73,82.049L492.408,82.049L492.408,88.467L491.427,88.467Z" style="fill:rgb(111,111,111);"/>
