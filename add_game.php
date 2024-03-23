@@ -131,7 +131,21 @@ template_header('Add Game', 'add');
         <input type="submit" value="Add game" class="submit_button">
     </form>
 </div>
-<?php template_footer("game_editor.js");
+<?php
+// check if url contains titledb mode (?mode=ns...) & game index (?index=0)
+$titleDBMode = $_GET['mode'] ?? '';
+$gameIndex = $_GET['index'] ?? '';
+
+//filter mode to only allow a - z & game index to only allow numbers
+$titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
+$gameIndex = preg_replace("/[^0-9]/", "", $gameIndex);
+
+if (($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') && $gameIndex !== '') {
+    // nsall = all games, nsfp = first party games from Nintendo Switch title database
+    template_footer("game_editor.js", "load_titledb.js");
+} else {
+    template_footer("game_editor.js");
+}
 
 getErrorMsg();
 ?>

@@ -30,7 +30,7 @@ function getErrorMsg(): void
         $status = $_GET['status'];
 
         // sanitize status (remove all characters except numbers & unicode letters)
-        $status = preg_replace('/[^a-zA-Z0-9éÉ]/', '', $status); // TODO: better sanitization
+        $status = preg_replace('/[^a-zA-Z0-9éÉ :-]/', '', $status); // TODO: better sanitization
         // echo "<p>Status: $status</p>";
 
         // first 3 characters of status are the error code

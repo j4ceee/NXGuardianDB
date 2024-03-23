@@ -101,14 +101,18 @@ function template_header($title, $active): void
 EOT;
 }
 
-function template_footer($script = null): void
+function template_footer($script1 = null, $script2 = null): void
 {
     $dbConnection = new DBConnection();
 
-    $script_string = '';
+    $script1_string = '';
+    $script2_string = '';
 
-    if ($script !== null) {
-        $script_string = '<script src="./js/' . $script . '"></script>';
+    if ($script1 !== null) {
+        $script1_string = '<script src="./js/' . $script1 . '"></script>';
+    }
+    if ($script2 !== null) {
+        $script2_string = '<script src="./js/' . $script2 . '"></script>';
     }
 
     echo <<<EOT
@@ -131,7 +135,8 @@ function template_footer($script = null): void
         </nav>
     </footer>
 </div>
-$script_string
+$script1_string
+$script2_string
 </body>
 </html>
 EOT;

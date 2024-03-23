@@ -62,6 +62,9 @@ template_header("Start", "index");
                     echo '</ul></div>';
                 }
                 echo '</div>';
+
+                echo '<a class="db-status-msg db-titledb" href="./add_game.php?mode=nsall&index=0"><p class="status-text">Import all Switch games</p></a>';
+
             } else {
                 // Database doesn't exist / not set up correctly, display cross SVG and message
                 echo '<a href="./util/setup_db.php"><div class="db-status-msg db-status">

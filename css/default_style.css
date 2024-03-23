@@ -176,7 +176,6 @@ footer {
 /*--------------------Start page-------------------------*/
 
 .db-status-msg {
-    right: 1rem;
     padding: 1rem 1.5rem;
     background-color: var(--ryu-dark);
     color: whitesmoke;
@@ -195,6 +194,7 @@ footer {
 .db-status {
     position: absolute;
     top: 6rem;
+    right: 1rem;
 }
 
 .db-backup {
@@ -245,6 +245,12 @@ footer {
         text-decoration: none;
         color: whitesmoke;
     }
+}
+
+.db-titledb {
+    position: absolute;
+    bottom: 8rem;
+    left: 1rem;
 }
 
 .status-symbol {
