@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
+/** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
+/** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
 include_once './conn_db.php'; // include database connection file
 include_once './validate.php';
 

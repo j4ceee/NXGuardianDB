@@ -67,6 +67,8 @@ function validate_inputs($post): void
 
     validate_basics($post);
 
+    validate_plat_input($post);
+
     $selectedPlatforms = validate_platforms($post);
 
     validate_modes($post, $selectedPlatforms);
@@ -180,7 +182,7 @@ function validate_modes($post, array $selectedPlatforms): void
     */
 
     // if no mode is selected, redirect to previous page
-    foreach ($selectedPlatformModes as $platform => $selectedModes) {
+    foreach ($selectedPlatformModes as $selectedModes) {
         if (empty($selectedModes)) {
             redirectToPreviousPage("406");
         }
@@ -215,9 +217,9 @@ function validate_players($post, array $platformModes): void
                         redirectToPreviousPage("407");
                     }
 
-                    /*
-                    * VALIDATION FUNCTIONS - INPUT FORMAT
-                    */
+/*
+* VALIDATION FUNCTIONS - INPUT FORMAT
+*/
 
                     /*
                      * check if:

@@ -32,4 +32,3 @@ if ($PDO !== null) {
 header("Location: ../index.php");
 exit();
 
-?>
