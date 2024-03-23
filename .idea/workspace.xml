@@ -4,69 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="234769a6-8e5f-43f4-9bbc-d2d73eb89d8b" name="Changes" comment="Minor Code Cleanup">
-      <change afterPath="$PROJECT_DIR$/.idea/copilot/chatSessions/00000000000.xd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot/chatSessions/blobs/version" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/default_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/default_style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/bk.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/bk/bk.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/modes/modes_local_mp.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/modes/modes_local_mp.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/modes/modes_local_wir.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/modes/modes_local_wir.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/modes/modes_single.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/modes/modes_single.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/nav_ico.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/nav_ico.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/noun-edit-1047822-grey.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/noun-edit-1047822-grey.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/noun-restore-3574347-grey.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/noun-restore-3574347-grey.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/noun-tick-162332-green.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/noun-tick-162332-green.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/noun-trash-2025467-grey.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/noun-trash-2025467-grey.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/noun-x-1741935-red.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/noun-x-1741935-red.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/icons/nxguardian.svg" beforeDir="false" afterPath="$PROJECT_DIR$/icons/nxguardian.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/1.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/1.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/10.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/10.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/11.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/11.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/12.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/12.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/12_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/12_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/13.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/13.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/13_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/13_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/14.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/14.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/14_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/14_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/15.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/15.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/15_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/15_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/16.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/16.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/17.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/17.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/17_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/17_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/18.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/18.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/18_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/18_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/2.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/2.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/3.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/3.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/3_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/3_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/4.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/4.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/4_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/4_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/5.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/5.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/5_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/5_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/6.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/6.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/6_col.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/6_col.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/7.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/7.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/8.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/8.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/platforms/9.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/platforms/9.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/bk_create.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/bk_create.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/bk_restore.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/bk_restore.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/conn_db.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/conn_db.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/delete_game.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/delete_game.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/setup_db.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/setup_db.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/validate.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/validate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/validate_update.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/validate_update.php" afterDir="false" />
+    <list default="true" id="234769a6-8e5f-43f4-9bbc-d2d73eb89d8b" name="Changes" comment="Integrated Backup Functionality&#10;&#10;- allows creating &amp; restoring from 3 backups">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot/chatSessions/00000000000.xd" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copilot/chatSessions/00000000000.xd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,27 +37,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "G:/My Drive/02_Schule/00_HS Ansbach/Cedric Zusammenfassungen/05_WS23/Client-Server/StA/Game Info DB/db",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/My Drive/02_Schule/00_HS Ansbach/Cedric Zusammenfassungen/05_WS23/Client-Server/StA/Game Info DB/db&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\My Drive\02_Schule\00_HS Ansbach\Cedric Zusammenfassungen\05_WS23\Client-Server\StA\Game Info DB\db" />
@@ -139,8 +81,34 @@
       <workItem from="1711204736811" duration="2404000" />
       <workItem from="1711207226884" duration="3132000" />
       <workItem from="1711210578048" duration="3603000" />
-      <workItem from="1711214383116" duration="885000" />
+      <workItem from="1711214383116" duration="1087000" />
+      <workItem from="1711215490746" duration="352000" />
     </task>
+    <task id="LOCAL-00001" summary="Minor Code Cleanup">
+      <option name="closed" value="true" />
+      <created>1711215322040</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1711215322040</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Minor Code Cleanup">
+      <option name="closed" value="true" />
+      <created>1711215375990</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1711215375990</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Integrated Backup Functionality&#10;&#10;- allows creating &amp; restoring from 3 backups">
+      <option name="closed" value="true" />
+      <created>1711215428531</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1711215428531</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,6 +116,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Minor Code Cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor Code Cleanup" />
+    <MESSAGE value="Integrated Backup Functionality&#10;&#10;- allows creating &amp; restoring from 3 backups" />
+    <option name="LAST_COMMIT_MESSAGE" value="Integrated Backup Functionality&#10;&#10;- allows creating &amp; restoring from 3 backups" />
   </component>
 </project>
