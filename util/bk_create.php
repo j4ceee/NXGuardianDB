@@ -48,7 +48,7 @@ if ($dbConnection->getPassword() != null) {
     $cmd .= '-p' . escapeshellarg($dbConnection->getPassword() . ' ');
 }
 
-$cmd .= sprintf('%s developers games game_platform_link game_platform_player_link --no-create-info --compact > %s',
+$cmd .= sprintf('%s developers games game_platform_link game_platform_player_link --no-create-info --compact --default-character-set=utf8mb4 > %s',
     escapeshellarg($dbConnection->getDBName()), // database name
     escapeshellarg('../db/bk/bk_' . date("U") . '.sql') // backup file name
 );

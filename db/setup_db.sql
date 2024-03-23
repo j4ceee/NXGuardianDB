@@ -27,7 +27,7 @@ CREATE TABLE `games`
     `gameName`    varchar(176) NOT NULL,           -- name of game
     `gameRelease` date         NOT NULL,           -- release date of game
     `devID`       int(11) NOT NULL,                -- foreign key to developers table
-    `steamgridID` int(12) NOT NULL,                -- SteamGridDB ID --TODO: implement SteamGridDB feature
+    -- `steamgridID` int(12) NULL,                 -- SteamGridDB ID --TODO: implement SteamGridDB feature
     `imageLink` varchar(150) NOT NULL,             -- Link to image of game
 
     PRIMARY KEY (`gameID`),

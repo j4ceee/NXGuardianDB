@@ -4,11 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="234769a6-8e5f-43f4-9bbc-d2d73eb89d8b" name="Changes" comment="Integrated Backup Functionality&#10;&#10;- allows creating &amp; restoring from 3 backups">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="234769a6-8e5f-43f4-9bbc-d2d73eb89d8b" name="Changes" comment=".idea ignore changes">
       <change beforePath="$PROJECT_DIR$/.idea/copilot/chatSessions/00000000000.xd" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copilot/chatSessions/00000000000.xd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d6867bf7-24ea-49bf-ba51-3e32bd0ea457.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/bk/bk.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/bk/bk.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/setup_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/setup_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/edit_game.php" beforeDir="false" afterPath="$PROJECT_DIR$/edit_game.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/list_games.php" beforeDir="false" afterPath="$PROJECT_DIR$/list_games.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/bk_create.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/bk_create.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/bk_restore.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/bk_restore.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/delete_game.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/delete_game.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/validate.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/validate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/validate_add.php" beforeDir="false" afterPath="$PROJECT_DIR$/util/validate_add.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +76,13 @@
       <recent name="G:\My Drive\02_Schule\00_HS Ansbach\Cedric Zusammenfassungen\05_WS23\Client-Server\StA\Game Info DB\db" />
     </key>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-php-predefined-ba97393d7c68-6f8e3395a2b4-com.jetbrains.php.sharedIndexes-PS-233.15026.12" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -83,6 +99,7 @@
       <workItem from="1711210578048" duration="3603000" />
       <workItem from="1711214383116" duration="1087000" />
       <workItem from="1711215490746" duration="352000" />
+      <workItem from="1711217770126" duration="5925000" />
     </task>
     <task id="LOCAL-00001" summary="Minor Code Cleanup">
       <option name="closed" value="true" />

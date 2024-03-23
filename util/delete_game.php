@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SqlWithoutWhere */
 include_once './conn_db.php'; // include database connection file
 
 $dbConnection = new DBConnection();
@@ -15,12 +15,17 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
 $msg = '';
 
 if (isset($_GET['gameID'])) {
+
+    // sanitize gameID
+    $gameID = filter_input(INPUT_GET, 'gameID', FILTER_VALIDATE_INT);
+
     // get devID
-    $devID = getDevID($PDO, $_GET['gameID']);
+    $devID = getDevID($PDO, $gameID);
 
     // prepare SQL to delete the game entry
     $stmt = $PDO->prepare('DELETE FROM games WHERE gameID = ?');
-    $stmt->execute([$_GET['gameID']]);
+    $stmt->bindParam(1, $gameID, PDO::PARAM_INT);
+    $stmt->execute();
 
     // check if the game was the last game for the developer
     // if so, delete the developer
@@ -42,7 +47,8 @@ if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) {
 function getDevID($PDO, $gameID): int
 {
     $stmt = $PDO->prepare('SELECT devID FROM games WHERE gameID = ?');
-    $stmt->execute([$gameID]);
+    $stmt->bindParam(1, $gameID, PDO::PARAM_INT);
+    $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC)['devID'];
 }
 
