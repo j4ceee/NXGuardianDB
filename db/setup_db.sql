@@ -8,12 +8,6 @@ time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
--- create database if not exists
-CREATE
-DATABASE IF NOT EXISTS `jaceedb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE
-`jaceedb`;
-
 -- create table developers
 CREATE TABLE `developers`
 (
@@ -72,7 +66,7 @@ CREATE TABLE `playermodes`
 
 -- create table game_platform_link
 -- links games to platforms
-CREATE TABLE game_platform_link
+CREATE TABLE `game_platform_link`
 (
     `game_platformID` int(11) NOT NULL AUTO_INCREMENT, -- primary key
     `gameID`          int(11) NOT NULL,                -- foreign key to games table
@@ -92,7 +86,7 @@ CREATE TABLE game_platform_link
 
 -- create table game_platform_player_link
 -- links games to platforms to player modes
-CREATE TABLE game_platform_player_link
+CREATE TABLE `game_platform_player_link`
 (
     `game_platform_playerID` int(11) NOT NULL AUTO_INCREMENT, -- primary key
     `game_platformID` int(11) NOT NULL,                                                -- foreign key to game_platform_link table

@@ -1,14 +1,16 @@
 <?php
 include_once './conn_db.php'; // include database connection file
 
-$PDO = getPDO(); // get PDO connection
+$dbConnection = new DBConnection();
+$PDO = $dbConnection->getConnection();
 
-if (!checkDBExists()) {
+$dbConnection = new DBConnection();
+$PDO = $dbConnection->useDB();
+
+if ($PDO === null || !$dbConnection->checkDBSchema()) {
     header("Location: ../index.php");
     exit();
 }
-
-useDB();
 
 $msg = '';
 

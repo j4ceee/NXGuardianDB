@@ -2,14 +2,13 @@
 include_once './conn_db.php'; // include database connection file
 include_once './validate.php';
 
-$PDO = getPDO(); // get PDO connection
+$dbConnection = new DBConnection();
+$PDO = $dbConnection->useDB();
 
-if (!checkDBExists()) {
-    header("Location: ./index.php");
+if ($PDO === null || !$dbConnection->checkDBSchema()) {
+    header("Location: ../index.php");
     exit();
 }
-
-useDB();
 
 ob_start(); // start output buffering
 
