@@ -50,12 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $imageLink = filter_var($imageLink, FILTER_SANITIZE_URL);
 
 
-    $stmt = $PDO->prepare("INSERT INTO games (gameName, gameRelease, devID, steamgridID, imageLink) VALUES (:gameName, :gameRelease, :devID, :steamgridID, :imageLink)");
+    $stmt = $PDO->prepare("INSERT INTO games (gameName, gameRelease, devID, imageLink) VALUES (:gameName, :gameRelease, :devID, :imageLink)");
     $stmt->execute([
         'gameName' => $gameName,
         'gameRelease' => $gameRelease,
         'devID' => $devID,
-        'steamgridID' => 1234, // TODO: handle optional field
         'imageLink' => $imageLink // TODO: handle as link in frontend & database
     ]);
     $gameID = $PDO->lastInsertId();
@@ -225,8 +224,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // TODO: success message after redirect
 
-    // header("Location: ../list_games.php?gameID=$gameID");
-    echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
+    header("Location: ../list_games.php?gameID=$gameID");
+    // echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
     ob_end_flush(); // end output buffering
     exit();
 

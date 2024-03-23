@@ -14,6 +14,7 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
 
 // get gameID via URL
 $gameID = (int)$_GET['gameID'];
+$gameID = filter_input(INPUT_GET, 'gameID', FILTER_VALIDATE_INT);
 
 $query = "
             SELECT 
@@ -31,7 +32,7 @@ $query = "
             ";
 
 $stmt = $PDO->prepare($query);
-$stmt->bindParam(':gameID', $gameID);
+$stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
 $stmt->execute();
 $game = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -101,7 +102,7 @@ template_header('Edit Game', null);
                 ";
 
                 $stmt = $PDO->prepare($query);
-                $stmt->bindParam(':gameID', $gameID);
+                $stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
                 $stmt->execute();
                 $platforms = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
@@ -173,7 +174,7 @@ template_header('Edit Game', null);
                         gpl.gameID = :gameID";
 
                 $stmt = $PDO->prepare($query);
-                $stmt->bindParam(':gameID', $gameID);
+                $stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
                 $stmt->execute();
                 $platforms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -237,9 +238,9 @@ template_header('Edit Game', null);
                                                 modeID = :modeID";
 
                                 $stmt = $PDO->prepare($query);
-                                $stmt->bindParam(':gameID', $gameID);
-                                $stmt->bindParam(':platformID', $platID);
-                                $stmt->bindParam(':modeID', $row['modeID']);
+                                $stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
+                                $stmt->bindParam(':platformID', $platID, PDO::PARAM_INT);
+                                $stmt->bindParam(':modeID', $row['modeID'], PDO::PARAM_INT);
                                 $stmt->execute();
                                 $mpData = $stmt->fetch(PDO::FETCH_ASSOC);
 

@@ -14,24 +14,17 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
 
 if (isset($_GET['file'])) {
     $file = $_GET['file'];
+    $file = preg_replace('/[^a-zA-Z0-9_]/', '', $file); // remove all characters except letters, numbers and underscores
+    $file .= '.sql'; // add .sql extension
 
-    $file .= '.sql';
-
+    // get all backup files from db/bk/
     $sql_files = glob('../db/bk/bk*.sql');
-
+    // get only the filenames of the backup files
     $sql_files = array_map('basename', $sql_files);
 
-    echo "<pre>";
-    print_r($sql_files);
-    echo "</pre>";
-
-    if (in_array($file, $sql_files)) {
-
-        echo "File " . $file . " found";
+    if (in_array($file, $sql_files)) { // check if the file exists in the backup folder
 
         if (file_exists('../db/bk/' . $file)) {
-
-            echo "File " . $file . " still exists";
 
             // delete all games & developers first
             deleteAllGames($PDO);
@@ -48,7 +41,7 @@ if (isset($_GET['file'])) {
                 $cmd .= '-p' . escapeshellarg($dbConnection->getPassword() . ' ');
             }
 
-            $cmd .= sprintf('%s < %s',
+            $cmd .= sprintf('%s --default-character-set=utf8mb4 < %s',
                 escapeshellarg($dbConnection->getDBName()), // database name
                 escapeshellarg('../db/bk/' . $file) // backup file name
             );

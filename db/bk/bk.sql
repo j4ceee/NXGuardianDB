@@ -32,23 +32,23 @@ INSERT INTO `developers` (`devID`, `devName`) VALUES
 -- Dumping data for table `games`
 --
 
-INSERT INTO `games` (`gameID`, `gameName`, `gameRelease`, `devID`, `steamgridID`, `imageLink`) VALUES
-(1, 'Mario Kart 8 Deluxe', '2017-04-27', 1, 1234, 'https://img-eshop.cdn.nintendo.net/i/55e0720b1a064e28b5df173d30b343ecd91287dc86942f833ffbf979a7a66ec9.jpg'),
-(2, 'Palworld', '2024-01-24', 2, 1234, 'https://cdn2.steamgriddb.com/thumb/c7442a22ca020c53aefeb2e1fbec4bc2.jpg'),
-(3, 'Super Smash Bros. Ultimate', '2018-12-07', 1, 1234, 'https://img-eshop.cdn.nintendo.net/i/08af58551a19df2a73ccb36f720388434a1965776b34675c6f69af3f93280330.jpg'),
-(4, 'Splatoon 3', '2022-09-09', 1, 1234, 'https://img-eshop.cdn.nintendo.net/i/1a9980faeec7c32f7e3458ad2785e46ceb0324e0325a63ac4499d7d3958abcec.jpg'),
-(5, 'Elite Dangerous', '2014-12-16', 3, 1234, 'https://cdn2.steamgriddb.com/thumb/26b48e46bf3f22ac4a843de3ef54bd78.jpg'),
-(6, 'The Legend of Zelda: Breath of the Wild', '2017-03-03', 1, 1234, 'https://img-eshop.cdn.nintendo.net/i/16259342084f704aa52da956cf1b1a9c2ad1f88b3de6c3e263c350813e7ccd1f.jpg'),
-(7, 'The Legend of Zelda: Tears of the Kingdom', '2023-05-12', 1, 1234, 'https://img-eshop.cdn.nintendo.net/i/4b53da7ca4b118fe37c8b8040609b84dc63214d6131c51592486de9bf29ef29c.jpg'),
-(8, 'Pokémon Brilliant Diamond', '2021-11-19', 4, 1234, 'https://img-eshop.cdn.nintendo.net/i/e4d86911bdcfa69882f399c7c4e2fb590e3c3629882f01d85af3241207623696.jpg'),
-(9, 'Pokémon Scarlet', '2022-11-18', 5, 1234, 'https://img-eshop.cdn.nintendo.net/i/fa0f7bba88e0bc9b24cb0a2d1707990a6bc2c59480d22b821114d1a57762fafc.jpg'),
-(10, 'Spyro Reignited Trilogy', '2018-11-13', 6, 1234, 'https://img-eshop.cdn.nintendo.net/i/9725c173ddb9a6323eaefb39086aaaf5151e97c1e6474237459083dfbc07a8fd.jpg'),
-(11, 'Pokémon Battle Revolution', '2006-12-14', 7, 1234, 'https://cdn2.steamgriddb.com/thumb/af9d8b8c1db81c9fc16c6e899386cba5.png'),
-(12, 'Lethal Company', '2023-10-23', 8, 1234, 'https://cdn2.steamgriddb.com/thumb/a8fba7232b85ea00244c2de3c29135a7.jpg'),
-(13, 'Need for Speed Rivals', '2013-11-15', 9, 1234, 'https://cdn2.steamgriddb.com/thumb/370c95248c885439aba89c390b949c41.jpg'),
-(14, 'Minecraft', '2011-08-16', 10, 1234, 'https://cdn2.steamgriddb.com/thumb/a488ceea8a1f5aed84cb4cda6aaffa89.jpg'),
-(15, 'It Takes Two', '2021-03-26', 11, 1234, 'https://cdn2.steamgriddb.com/thumb/6d6ed2ea29b0d5ce5338b24ec32b871f.jpg'),
-(16, 'Starfield', '2023-09-06', 12, 1234, 'https://store-images.s-microsoft.com/image/apps.1647.14419706211314168.b0f9d237-3727-4f27-a56e-60574c628757.ef6e6b86-ef7d-4357-9dbf-1d0766fdc93a');
+INSERT INTO `games` (`gameID`, `gameName`, `gameRelease`, `devID`, `imageLink`) VALUES
+(1, 'Mario Kart 8 Deluxe', '2017-04-27', 1, 'https://img-eshop.cdn.nintendo.net/i/55e0720b1a064e28b5df173d30b343ecd91287dc86942f833ffbf979a7a66ec9.jpg'),
+(2, 'Palworld', '2024-01-24', 2, 'https://cdn2.steamgriddb.com/thumb/c7442a22ca020c53aefeb2e1fbec4bc2.jpg'),
+(3, 'Super Smash Bros. Ultimate', '2018-12-07', 1, 'https://img-eshop.cdn.nintendo.net/i/08af58551a19df2a73ccb36f720388434a1965776b34675c6f69af3f93280330.jpg'),
+(4, 'Splatoon 3', '2022-09-09', 1, 'https://img-eshop.cdn.nintendo.net/i/1a9980faeec7c32f7e3458ad2785e46ceb0324e0325a63ac4499d7d3958abcec.jpg'),
+(5, 'Elite Dangerous', '2014-12-16', 3, 'https://cdn2.steamgriddb.com/thumb/26b48e46bf3f22ac4a843de3ef54bd78.jpg'),
+(6, 'The Legend of Zelda: Breath of the Wild', '2017-03-03', 1, 'https://img-eshop.cdn.nintendo.net/i/16259342084f704aa52da956cf1b1a9c2ad1f88b3de6c3e263c350813e7ccd1f.jpg'),
+(7, 'The Legend of Zelda: Tears of the Kingdom', '2023-05-12', 1, 'https://img-eshop.cdn.nintendo.net/i/4b53da7ca4b118fe37c8b8040609b84dc63214d6131c51592486de9bf29ef29c.jpg'),
+(8, 'Pokémon Brilliant Diamond', '2021-11-19', 4, 'https://img-eshop.cdn.nintendo.net/i/e4d86911bdcfa69882f399c7c4e2fb590e3c3629882f01d85af3241207623696.jpg'),
+(9, 'Pokémon Scarlet', '2022-11-18', 5, 'https://img-eshop.cdn.nintendo.net/i/fa0f7bba88e0bc9b24cb0a2d1707990a6bc2c59480d22b821114d1a57762fafc.jpg'),
+(10, 'Spyro Reignited Trilogy', '2018-11-13', 6, 'https://img-eshop.cdn.nintendo.net/i/9725c173ddb9a6323eaefb39086aaaf5151e97c1e6474237459083dfbc07a8fd.jpg'),
+(11, 'Pokémon Battle Revolution', '2006-12-14', 7, 'https://cdn2.steamgriddb.com/thumb/af9d8b8c1db81c9fc16c6e899386cba5.png'),
+(12, 'Lethal Company', '2023-10-23', 8, 'https://cdn2.steamgriddb.com/thumb/a8fba7232b85ea00244c2de3c29135a7.jpg'),
+(13, 'Need for Speed Rivals', '2013-11-15', 9, 'https://cdn2.steamgriddb.com/thumb/370c95248c885439aba89c390b949c41.jpg'),
+(14, 'Minecraft', '2011-08-16', 10, 'https://cdn2.steamgriddb.com/thumb/a488ceea8a1f5aed84cb4cda6aaffa89.jpg'),
+(15, 'It Takes Two', '2021-03-26', 11, 'https://cdn2.steamgriddb.com/thumb/6d6ed2ea29b0d5ce5338b24ec32b871f.jpg'),
+(16, 'Starfield', '2023-09-06', 12, 'https://store-images.s-microsoft.com/image/apps.1647.14419706211314168.b0f9d237-3727-4f27-a56e-60574c628757.ef6e6b86-ef7d-4357-9dbf-1d0766fdc93a');
 
 --
 -- Dumping data for table `game_platform_link`

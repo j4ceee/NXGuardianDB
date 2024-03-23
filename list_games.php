@@ -19,7 +19,12 @@ template_header('List Games', 'list');
         // TODO: add search function directly in the page
 
         // get gameID via URL
-        $gameID = isset($_GET['gameID']) ? (int)$_GET['gameID'] : null;
+        if (isset($_GET['gameID'])) {
+            $gameID = (int)$_GET['gameID'];
+            $gameID = filter_input(INPUT_GET, 'gameID', FILTER_VALIDATE_INT);
+        } else {
+            $gameID = null;
+        }
 
         // collect search criteria from form sent via POST
         $title = isset($_POST['title']) ? trim($_POST['title']) : null;
@@ -112,8 +117,11 @@ template_header('List Games', 'list');
 
         // check if gameID is set -> add to query and parameters
         if ($gameID !== null) {
-            $conditions[] = "g.gameID = :gameID";
-            $params[':gameID'] = $gameID;
+            // sanitize as int
+            if (filter_var($gameID, FILTER_VALIDATE_INT)) {
+                $conditions[] = "g.gameID = :gameID";
+                $params[':gameID'] = $gameID;
+            }
         }
         else {
 
@@ -121,22 +129,20 @@ template_header('List Games', 'list');
             if ($title !== null && $title !== '') {
                 $conditions[] = "g.gameName LIKE :title"; // LIKE -> search for partial matches
                 $params[':title'] = "%" . $title . "%";
-                //$conditions[] = "MATCH(g.gameName) AGAINST (:title IN BOOLEAN MODE)"; // LIKE -> search for partial matches
-                //$params[':title'] = $title . "*";
             }
 
             // check if developer is set and not empty -> add to query and parameters
             if ($developer !== null && $developer !== '') {
                 $conditions[] = "d.devName LIKE :developer"; // = -> exact match
                 $params[':developer'] = "%" . $developer . "%";
-                //$conditions[] = "MATCH(d.devName) AGAINST (:developer IN BOOLEAN MODE)"; //
-                //$params[':developer'] = $developer . "*";
             }
 
             // check if storeID is set and not empty -> add to query and parameters
             if ($storeID !== null && $storeID !== '') {
-                $conditions[] = "gpl.storeID = :storeID"; // = -> exact match
-                $params[':storeID'] = $storeID;
+                if (filter_var($storeID, FILTER_VALIDATE_INT)) {
+                    $conditions[] = "gpl.storeID = :storeID"; // = -> exact match
+                    $params[':storeID'] = $storeID;
+                }
             }
 
             // check if platforms is not empty ->
@@ -182,7 +188,7 @@ template_header('List Games', 'list');
                                                 // check if player count is within the range of the mode, so:
                                                 // minPlayers <= players <= maxPlayers
                     } else {
-                        // create subquerry for each mode without player counts and add to array
+                        // create subquery for each mode without player counts and add to array
                         $modeSubqueries[] = "EXISTS (
                                                     SELECT 1
                                                     FROM game_platform_player_link gppl
@@ -214,7 +220,7 @@ template_header('List Games', 'list');
 
         $stmt = $PDO->prepare($query);
 
-        // Binding parameters
+        // binding parameters
         foreach ($params as $key => $val) {
             $stmt->bindValue($key, $val);
         }

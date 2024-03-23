@@ -19,7 +19,9 @@ $errorDict = [
     "500" => "Error! Invalid input format for field: ",
     "501" => "Error! Input too long for field: ",
     "502" => "Error! Game ID already exists for the selected platform: ",
-    "503" => "Error! Game already exists in the database: "
+    "503" => "Error! Game already exists in the database: ",
+    "504" => "Error! The image link is not a valid image file.",
+    "505" => "Error! The image is not square."
 ];
 
 function getErrorMsg(): void
@@ -27,11 +29,15 @@ function getErrorMsg(): void
     if (isset($_GET['status'])) {
         $status = $_GET['status'];
 
+        // sanitize status (remove all characters except numbers & unicode letters)
+        $status = preg_replace('/[^a-zA-Z0-9éÉ]/', '', $status); // TODO: better sanitization
+        // echo "<p>Status: $status</p>";
+
         // first 3 characters of status are the error code
         $code = substr($status, 0, 3);
 
         // everything after / is the error message
-        $info = substr($status, 4);
+        $info = substr($status, 3);
 
         // separate camelCase words with spaces
         $info = preg_replace('/(?<! )[A-Z]/', ' $0', $info);
@@ -114,6 +120,7 @@ function validate_basics($post): void
     validate_developer($post['developer']);
     validate_release($post['release']);
     validate_url($post['imageLink']);
+    validate_image($post['imageLink']);
 
     // when updating a game, the gameID is sent with the POST request in a hidden input field
     $gameID = $post['gameID'] ?? null;
@@ -305,6 +312,29 @@ function validate_url($url): void
     // check URL format
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
         redirectToPreviousPage("500/url");
+    }
+}
+
+function validate_image($url): void
+{
+    $context = stream_context_create(
+        array(
+            'http' => array(
+                'timeout' => 5  // timeout in seconds
+            )
+        )
+    );
+
+    // check if it's a valid link to an image - https://stackoverflow.com/a/40694740
+    $headers = get_headers($url, 1, $context); // get the headers of the URL
+    if (str_contains($headers['Content-Type'], 'image/')) {
+        list($width, $height) = getimagesize($url);
+        // check if the image is a square
+        if ($width != $height) {
+            redirectToPreviousPage("505");
+        }
+    } else {
+        redirectToPreviousPage("504");
     }
 }
 
