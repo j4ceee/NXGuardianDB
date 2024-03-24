@@ -1,4 +1,4 @@
-let titles = {};
+let titledb_titles = {};
 let keys = [];
 
 // list of all input elements that will be filled with data from the title database and their corresponding title database keys
@@ -23,26 +23,78 @@ const removeString = ['\u00AE', '\u2120', '\u00A9', '\u2122', '\u00AE', '\u2120'
 
 window.onload = function() {
 
-    fetch('https://raw.githubusercontent.com/blawar/titledb/master/GB.en.json')
-        .then(response => response.json())
-        .then(data => {
-            titles = data;
+    if (window.localStorage && localStorage.getItem('gameData')) {
+        titledb_titles = JSON.parse(localStorage.getItem('gameData'));
+        keys = Object.keys(titledb_titles);
 
-            // convert object keys to array
-            keys = Object.keys(data);
+        //print amount of games in the database
+        console.log('Amount of games in the database: ' + keys.length);
 
-            // get ?index from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const gameIndex = parseInt(urlParams.get('index'), 10); // Convert to integer
+        // get ?index from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameIndex = parseInt(urlParams.get('index'), 10); // convert to integer
+
+        if (window.location.href.includes('nsall')) {
+            displayGameForm(gameIndex);
+        } else if (window.location.href.includes('nsfp')) {
+            // TODO: implement filtering for first-party games
+        }
+    } else {
+        fetch('https://raw.githubusercontent.com/blawar/titledb/master/GB.en.json')
+            .then(response => response.json())
+            .then(data => {
+                // titledb_titles = data;
+                // for each object in the data object dict, only keep:
+                /*
+                 * - iconUrl
+                 * - id
+                 * - name
+                 * - numberOfPlayers
+                 * - publisher
+                 * - releaseDate
+                 *
+                 */
+
+                for (let key in data) {
+                    let entry = data[key];
+
+                    if (entry['iconUrl'] !== null) { // only keep entries with an iconUrl
+                        titledb_titles[key] = {
+                            'iconUrl': entry['iconUrl'],
+                            'id': entry['id'],
+                            'name': entry['name'],
+                            'numberOfPlayers': entry['numberOfPlayers'],
+                            'publisher': entry['publisher'],
+                            'releaseDate': entry['releaseDate']
+                        };
+                    }
+                }
+
+                // download the titledb_titles as a JSON file to the user's local storage
 
 
-            if (window.location.href.includes('nsall')) {
-                displayGameForm(gameIndex);
-            }
-            else if (window.location.href.includes('nsfp')) {
+                if (window.localStorage) {
+                    localStorage.setItem('gameData', JSON.stringify(titledb_titles));
+                }
 
-            }
-        });
+                // convert object keys to array
+                keys = Object.keys(titledb_titles);
+
+                //print amount of games in the database
+                console.log('Amount of games in the database: ' + keys.length);
+
+                // get ?index from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const gameIndex = parseInt(urlParams.get('index'), 10); // Convert to integer
+
+
+                if (window.location.href.includes('nsall')) {
+                    displayGameForm(gameIndex);
+                } else if (window.location.href.includes('nsfp')) {
+                    // TODO: implement filtering for first-party games
+                }
+            });
+    }
 };
 
 function displayGameForm(gameIndex) {
@@ -51,18 +103,12 @@ function displayGameForm(gameIndex) {
         return; // Exit the function if gameIndex is invalid
     }
 
-    let titledb_entry = titles[keys[gameIndex]];
+    let titledb_entry = titledb_titles[keys[gameIndex]];
 
     if (!titledb_entry) {
         console.error('Game not found.');
         return; // Additional check for safety
     }
-
-    // check Nintendo Switch platform (platform ID 14)
-    let platformCheckbox = document.getElementById(checkboxElements[0]);
-    // check it & trigger the change event
-    platformCheckbox.checked = true;
-    platformCheckbox.dispatchEvent(new Event('change'));
 
     // if titledb_entry['numberOfPlayers'] is >1, check the multiplayer checkbox
     let singlePlayerCheckbox = document.getElementById(checkboxElements[1]);

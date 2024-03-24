@@ -12,6 +12,16 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
     exit();
 }
 
+// check if url contains titledb mode (?mode=ns...) & game index (?index=0)
+$titleDBMode = $_GET['mode'] ?? '';
+$gameIndex = $_GET['index'] ?? '';
+
+//filter mode to only allow a - z & game index to only allow numbers
+$titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
+$gameIndex = preg_replace("/[^0-9]/", "", $gameIndex);
+
+$nsPlatID = 14; // Nintendo Switch platform ID
+
 template_header('Add Game', 'add');
 ?>
 <div class="manage_game_container">
@@ -75,7 +85,12 @@ template_header('Add Game', 'add');
 
                 // loop through each category in $platformsByCategory
                 // $category is the key, $platforms is the value
-                createGamePlatformSelection($platformsByCategory);
+                if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
+                    $previousPlatforms = [$nsPlatID];
+                } else {
+                    $previousPlatforms = null;
+                }
+                createGamePlatformSelection($platformsByCategory, $previousPlatforms);
                 ?>
             </div>
         </fieldset>
@@ -125,6 +140,49 @@ template_header('Add Game', 'add');
                         </fieldset>
                     </fieldset>
                 </template>
+
+                <?php
+                if (($titleDBMode === 'nsall' || $titleDBMode === 'nsfp')) {
+                    echo '<fieldset class="platform_info info_' . $nsPlatID . '">
+                        <legend><!--suppress HtmlUnknownTarget -->
+                            <img src="./img/platforms/' . $nsPlatID . '.svg" class="platform_info_logo" alt="Platform Logo"/>Nintendo Switch
+                        </legend>
+
+                        <div class="platform_info_field">
+                            <label for="store_link_' . $nsPlatID . '">Store Link:</label>
+                            <input type="url" class="win_dark_input" name="store_link_' . $nsPlatID . '"
+                                   id="store_link_' . $nsPlatID . '">
+                        </div>
+
+                        <div class="platform_info_field">
+                            <label for="game_id_' . $nsPlatID . '">Game ID:</label>
+                            <input type="text" class="win_dark_input" name="game_id_' . $nsPlatID . '"
+                                   id="game_id_' . $nsPlatID . '">
+                        </div>
+
+                        <div class="platform_info_field">
+                            <label for="release_plat_' . $nsPlatID . '">Release Date:</label>
+                            <input type="date" class="win_dark_input" name="release_plat_' . $nsPlatID . '"
+                                   id="release_plat_' . $nsPlatID . '">
+                        </div>
+
+                        <fieldset class="multiplayer_info mp_info_' . $nsPlatID . '">
+                            <legend>Multiplayer Functionality</legend>';
+
+                            $query = "SELECT * FROM playermodes ORDER BY modeID"; // SQL statement to select all platforms
+                            $stmt = $PDO->prepare($query);
+                            $stmt->execute();
+                            $playermodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                            foreach ($playermodes as $row) {
+                                generateMPCheckboxes($row, true, $nsPlatID); // line break
+                            }
+                            echo '
+                        </fieldset>
+                    </fieldset>';
+                }
+                ?>
+
             </div>
         </fieldset>
 
@@ -132,13 +190,7 @@ template_header('Add Game', 'add');
     </form>
 </div>
 <?php
-// check if url contains titledb mode (?mode=ns...) & game index (?index=0)
-$titleDBMode = $_GET['mode'] ?? '';
-$gameIndex = $_GET['index'] ?? '';
 
-//filter mode to only allow a - z & game index to only allow numbers
-$titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
-$gameIndex = preg_replace("/[^0-9]/", "", $gameIndex);
 
 if (($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') && $gameIndex !== '') {
     // nsall = all games, nsfp = first party games from Nintendo Switch title database
