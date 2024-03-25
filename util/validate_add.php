@@ -227,8 +227,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //-------------------- TitleDB mode --------------------
 
     // check if url contains titledb mode (?mode=ns...) & game index (?index=0)
-    $titleDBMode = $_GET['mode'] ?? '';
-    $gameIndex = (int)$_GET['index'] ?? '';
+    $titleDBMode = isset($_GET['mode']) ? $_GET['mode'] : '';
+    $gameIndex = isset($_GET['index']) ? $_GET['index'] : '';
 
     //filter mode to only allow a - z & game index to only allow numbers
     $titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);

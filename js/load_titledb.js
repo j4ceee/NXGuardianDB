@@ -1,3 +1,5 @@
+import { hideSpinner } from './loading_spinner.js';
+
 let titledb_titles = {};
 let keys = [];
 
@@ -190,4 +192,7 @@ function displayGameForm(gameIndex) {
             }
         }
     }
+
+    // hide the loading spinner
+    hideSpinner();
 }

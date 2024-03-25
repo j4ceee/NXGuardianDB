@@ -15,8 +15,8 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
 //-------------------- TitleDB mode --------------------
 
 // check if url contains titledb mode (?mode=ns...) & game index (?index=0)
-$titleDBMode = $_GET['mode'] ?? '';
-$gameIndex = (int)$_GET['index'] ?? '';
+$titleDBMode = isset($_GET['mode']) ? $_GET['mode'] : '';
+$gameIndex = isset($_GET['index']) ? $_GET['index'] : '';
 
 //filter mode to only allow a - z & game index to only allow numbers
 $titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
@@ -32,7 +32,7 @@ $nsPlatID = 14; // Nintendo Switch platform ID
 
 //---------------- TitleDB mode end --------------------
 
-template_header('Add Game', 'add');
+template_header('Add Game', 'add', true);
 ?>
 <div class="manage_game_container">
     <?php
@@ -205,17 +205,21 @@ template_header('Add Game', 'add');
 
     <div class="add_game_form_control">
     <?php
+    echo '<div class="control_btn_cont ctrl_btn_cont_left">';
     if ($titleDBenabled) {
         if ($gameIndex > 0) {
-            echo '<div class="control_btn_cont ctrl_btn_cont_left"><a class="control_btn" href="./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex - 1) . '">< PREV</a></div>';
+            echo '<a class="control_btn" href="./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex - 1) . '">< PREV</a>';
         }
     }
+    echo '</div>';
     ?>
         <input type="submit" value="Add game" class="submit_button">
     <?php
+    echo '<div class="control_btn_cont ctrl_btn_cont_right">';
     if ($titleDBenabled) {
-        echo '<div class="control_btn_cont ctrl_btn_cont_right"><a class="control_btn" href="./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1) . '">NEXT ></a></div>';
+        echo '<a class="control_btn" href="./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1) . '">NEXT ></a>';
     }
+    echo '</div>';
     ?>
     </div>
 
@@ -226,9 +230,9 @@ template_header('Add Game', 'add');
 
 if ($titleDBenabled && $gameIndex !== '') {
     // nsall = all games, nsfp = first party games from Nintendo Switch title database
-    template_footer("game_editor.js", "load_titledb.js");
+    template_footer(["game_editor.js", "load_titledb.js"]);
 } else {
-    template_footer("game_editor.js");
+    template_footer(["game_editor.js"]);
 }
 
 getErrorMsg();

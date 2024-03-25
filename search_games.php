@@ -90,4 +90,4 @@ template_header('Search Game', 'search');
                 <input type="submit" value="Search games" class="submit_button">
             </form>
         </div>
-<?php template_footer("search_games.js"); ?>
+<?php template_footer(["search_games.js"]); ?>

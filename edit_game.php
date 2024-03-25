@@ -268,7 +268,7 @@ template_header('Edit Game', null);
         <input type="submit" value="Update game" class="submit_button">
     </form>
 </div>
-<?php template_footer("game_editor.js");
+<?php template_footer(["game_editor.js"]);
 
 getErrorMsg();
 ?>
