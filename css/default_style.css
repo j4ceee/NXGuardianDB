@@ -339,7 +339,17 @@ footer {
     align-items: center;
 }
 
-.submit_button {
+.add_game_form_control {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.submit_button,
+.control_btn {
     background-color: transparent;
     border: var(--ryu-green) solid 3px;
     border-radius: .6rem;
@@ -353,10 +363,40 @@ footer {
     transition: .2s;
 }
 
-.submit_button:hover {
+.submit_button:hover,
+.control_btn:hover {
     background-color: var(--ryu-green);
     color: var(--ryu-dark);
     transition: .2s;
+}
+
+.control_btn_cont {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.control_btn {
+    border: var(--ryu-blue) solid 2px;
+    color: var(--ryu-blue);
+    text-transform: lowercase;
+    padding: .3rem 1rem;
+    text-decoration: none;
+}
+
+.ctrl_btn_cont_left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.ctrl_btn_cont_right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.control_btn:hover {
+    background-color: var(--ryu-blue);
 }
 
 .manage_game_container {

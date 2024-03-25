@@ -23,9 +23,22 @@ const removeString = ['\u00AE', '\u2120', '\u00A9', '\u2122', '\u00AE', '\u2120'
 
 window.onload = function() {
 
-    if (window.localStorage && localStorage.getItem('gameData')) {
-        titledb_titles = JSON.parse(localStorage.getItem('gameData'));
-        keys = Object.keys(titledb_titles);
+    let localStorageName = '';
+
+    const ls_all = 'nx_nsall';
+    const ls_fp = 'nx_nsfp';
+
+    if (window.location.href.includes('nsall')) {
+        localStorageName = ls_all;
+    } else if (window.location.href.includes('nsfp')) {
+        localStorageName = ls_fp;
+    }
+
+    if (window.localStorage && localStorageName !== '' && localStorage.getItem(localStorageName)) { // check if localStorage is available and if the gameData key exists
+        console.log('Fetching data from local storage...');
+
+        titledb_titles = JSON.parse(localStorage.getItem(localStorageName)); // get the nx_nsall or nx_nsfp key from local storage
+        keys = Object.keys(titledb_titles); // convert object keys to array
 
         //print amount of games in the database
         console.log('Amount of games in the database: ' + keys.length);
@@ -34,12 +47,11 @@ window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         const gameIndex = parseInt(urlParams.get('index'), 10); // convert to integer
 
-        if (window.location.href.includes('nsall')) {
-            displayGameForm(gameIndex);
-        } else if (window.location.href.includes('nsfp')) {
-            // TODO: implement filtering for first-party games
-        }
+        displayGameForm(gameIndex);
+
     } else {
+        console.log('Fetching data from the title database...');
+
         fetch('https://raw.githubusercontent.com/blawar/titledb/master/GB.en.json')
             .then(response => response.json())
             .then(data => {
@@ -56,10 +68,17 @@ window.onload = function() {
                  */
 
                 for (let key in data) {
-                    let entry = data[key];
+                    let entry = data[key]; // get the entry object
 
                     if (entry['iconUrl'] !== null) { // only keep entries with an iconUrl
-                        titledb_titles[key] = {
+
+                        if (localStorageName === ls_fp) {
+                            if (entry['publisher'] !== 'Nintendo') {
+                                continue; // skip the entry if the publisher is not Nintendo
+                            }
+                        }
+
+                        titledb_titles[key] = { // add the entry to the titledb_titles object
                             'iconUrl': entry['iconUrl'],
                             'id': entry['id'],
                             'name': entry['name'],
@@ -74,7 +93,18 @@ window.onload = function() {
 
 
                 if (window.localStorage) {
-                    localStorage.setItem('gameData', JSON.stringify(titledb_titles));
+                    console.log("Previous local storage: " + getLocalStorageSize() + " MB");
+
+                    // clear local storage -> nx_nsall or nx_nsfp -> the one that is not the current one
+                    if (localStorageName === ls_all) {
+                        localStorage.removeItem(ls_fp);
+                    }
+                    if (localStorageName === ls_fp) {
+                        localStorage.removeItem(ls_all);
+                    }
+                    localStorage.setItem(localStorageName, JSON.stringify(titledb_titles));
+
+                    console.log("Current local storage: " + getLocalStorageSize() + " MB");
                 }
 
                 // convert object keys to array
@@ -87,15 +117,22 @@ window.onload = function() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const gameIndex = parseInt(urlParams.get('index'), 10); // Convert to integer
 
+                displayGameForm(gameIndex);
 
-                if (window.location.href.includes('nsall')) {
-                    displayGameForm(gameIndex);
-                } else if (window.location.href.includes('nsfp')) {
-                    // TODO: implement filtering for first-party games
-                }
             });
     }
 };
+
+function getLocalStorageSize() {
+    let total = 0;
+    for(let x in localStorage) {
+        let amount = (localStorage[x].length * 2) / 1024 / 1024;
+        if (!isNaN(amount) && localStorage.hasOwnProperty(x)) {
+            total += amount;
+        }
+    }
+    return total.toFixed(2);
+}
 
 function displayGameForm(gameIndex) {
     if (gameIndex < 0 || gameIndex >= keys.length) {

@@ -12,20 +12,38 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
     exit();
 }
 
+//-------------------- TitleDB mode --------------------
+
 // check if url contains titledb mode (?mode=ns...) & game index (?index=0)
 $titleDBMode = $_GET['mode'] ?? '';
-$gameIndex = $_GET['index'] ?? '';
+$gameIndex = (int)$_GET['index'] ?? '';
 
 //filter mode to only allow a - z & game index to only allow numbers
 $titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
 $gameIndex = preg_replace("/[^0-9]/", "", $gameIndex);
 
+$titleDBenabled = false;
+
+if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
+    $titleDBenabled = true;
+}
+
 $nsPlatID = 14; // Nintendo Switch platform ID
+
+//---------------- TitleDB mode end --------------------
 
 template_header('Add Game', 'add');
 ?>
 <div class="manage_game_container">
-    <form class="add_game_form" action="./util/validate_add.php" method="post">
+    <?php
+    if ($titleDBenabled) {
+        // load next game from Nintendo Switch title database when submitting the form
+        echo '<form class="add_game_form" action="./util/validate_add.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1) . '" method="post">'; // form to add a game in TitleDB mode
+        // TODO: prevent form from loading next game when the end of the list is reached (-> in JS)
+    } else {
+        echo '<form class="add_game_form" action="./util/validate_add.php" method="post">'; // form to add a game in normal mode
+    }
+    ?>
         <fieldset class="basic_info_form">
             <legend>Game Information</legend>
 
@@ -83,13 +101,12 @@ template_header('Add Game', 'add');
                     // [] appends $row to the sub-array of the category
                 }
 
-                // loop through each category in $platformsByCategory
-                // $category is the key, $platforms is the value
-                if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
+                if ($titleDBenabled) {
                     $previousPlatforms = [$nsPlatID];
                 } else {
                     $previousPlatforms = null;
                 }
+                // generate checkboxes for platforms -> check all platforms that are already selected (array $previousPlatforms)
                 createGamePlatformSelection($platformsByCategory, $previousPlatforms);
                 ?>
             </div>
@@ -142,7 +159,7 @@ template_header('Add Game', 'add');
                 </template>
 
                 <?php
-                if (($titleDBMode === 'nsall' || $titleDBMode === 'nsfp')) {
+                if ($titleDBenabled) {
                     echo '<fieldset class="platform_info info_' . $nsPlatID . '">
                         <legend><!--suppress HtmlUnknownTarget -->
                             <img src="./img/platforms/' . $nsPlatID . '.svg" class="platform_info_logo" alt="Platform Logo"/>Nintendo Switch
@@ -186,13 +203,28 @@ template_header('Add Game', 'add');
             </div>
         </fieldset>
 
+    <div class="add_game_form_control">
+    <?php
+    if ($titleDBenabled) {
+        if ($gameIndex > 0) {
+            echo '<div class="control_btn_cont ctrl_btn_cont_left"><a class="control_btn" href="./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex - 1) . '">< PREV</a></div>';
+        }
+    }
+    ?>
         <input type="submit" value="Add game" class="submit_button">
+    <?php
+    if ($titleDBenabled) {
+        echo '<div class="control_btn_cont ctrl_btn_cont_right"><a class="control_btn" href="./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1) . '">NEXT ></a></div>';
+    }
+    ?>
+    </div>
+
     </form>
 </div>
 <?php
 
 
-if (($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') && $gameIndex !== '') {
+if ($titleDBenabled && $gameIndex !== '') {
     // nsall = all games, nsfp = first party games from Nintendo Switch title database
     template_footer("game_editor.js", "load_titledb.js");
 } else {

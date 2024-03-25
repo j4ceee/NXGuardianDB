@@ -224,7 +224,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // TODO: success message after redirect
 
-    header("Location: ../list_games.php?gameID=$gameID");
+    //-------------------- TitleDB mode --------------------
+
+    // check if url contains titledb mode (?mode=ns...) & game index (?index=0)
+    $titleDBMode = $_GET['mode'] ?? '';
+    $gameIndex = (int)$_GET['index'] ?? '';
+
+    //filter mode to only allow a - z & game index to only allow numbers
+    $titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
+    $gameIndex = preg_replace("/[^0-9]/", "", $gameIndex);
+
+    $titleDBenabled = false;
+
+    if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
+        $titleDBenabled = true;
+    }
+
+    //---------------- TitleDB mode end --------------------
+
+    if ($titleDBenabled) {
+        header("Location: ../add_game.php?mode=$titleDBMode&index=$gameIndex");
+    } else {
+        header("Location: ../list_games.php?gameID=$gameID");
+    }
+
+
     // echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
     ob_end_flush(); // end output buffering
     exit();
