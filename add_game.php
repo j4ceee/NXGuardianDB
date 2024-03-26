@@ -60,11 +60,18 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
     // check if game is already in database
     $isGameInDB = check_duplicate_game_entry($currentGame['title'], $currentGame['publisher'], $currentGame['releaseDate']);
 
-    if ($isGameInDB !== false) {
-        // load next game index
-        if ($dir === 0) {
-            header('Location: ./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex - 1));
-        } else {
+    if ($isGameInDB !== false) { // if game is already in database, redirect to next game
+
+        if ($dir === 0) { // if direction is backwards (& game is already in database)
+            if ($gameIndex > 0) {
+                // while not the first game, go backwards
+                header('Location: ./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex - 1) . '&dir=0');
+            } else {
+                // if first game, stay at current game & remove backwards direction (dir=0)
+                header('Location: ./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex));
+            }
+        } else { // if direction is forwards (& game is already in database)
+            // go to next game
             header('Location: ./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1));
         }
     }
