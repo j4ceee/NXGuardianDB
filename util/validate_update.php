@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // sanitize input
     $gameID = filter_var($gameID, FILTER_SANITIZE_NUMBER_INT);
-    $gameName = htmlspecialchars($gameName);
     $devName = htmlspecialchars($devName);
     $gameRelease = htmlspecialchars($gameRelease);
     $imageLink = filter_var($imageLink, FILTER_SANITIZE_URL);

@@ -30,13 +30,19 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
 
     $titleDBenabled = true;
 
-    $titleDBgames = array();
+    $titleDBgames = null;
     $lastGame = false;
 
     if ($titleDBMode === 'nsall') {
         $titleDBgames = json_decode(file_get_contents('./titledb/nx_titledb_all.json'), true); // load all games from Nintendo Switch title database
     } else {
         $titleDBgames = json_decode(file_get_contents('./titledb/nx_titledb_fp.json'), true); // load first-party games from Nintendo Switch title database
+    }
+
+    // if file not found, redirect to fetch_titledb.php
+    if ($titleDBgames === null) {
+        header('Location: ./util/fetch_titledb.php?mode=' . htmlspecialchars($titleDBMode));
+        exit();
     }
 
     // check if game index is within bounds
@@ -247,6 +253,8 @@ template_header('Add Game', 'add');
                                 } else if ($row['modeShort'] === 'online_mp') { // if modeID is 5 (Online Multiplayer)
                                     if ($currentGame['numberOfPlayers'] > 1) {
                                         generateMPCheckboxes($row, true, $nsPlatID, $currentGame['numberOfPlayers'], 1, true);
+                                    } else {
+                                        generateMPCheckboxes($row, true, $nsPlatID);
                                     }
                                 } else {
                                     generateMPCheckboxes($row, true, $nsPlatID);
