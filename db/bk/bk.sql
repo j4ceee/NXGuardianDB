@@ -48,7 +48,21 @@ INSERT INTO `games` (`gameID`, `gameName`, `gameRelease`, `devID`, `imageLink`) 
 (13, 'Need for Speed Rivals', '2013-11-15', 9, 'https://cdn2.steamgriddb.com/thumb/370c95248c885439aba89c390b949c41.jpg'),
 (14, 'Minecraft', '2011-08-16', 10, 'https://cdn2.steamgriddb.com/thumb/a488ceea8a1f5aed84cb4cda6aaffa89.jpg'),
 (15, 'It Takes Two', '2021-03-26', 11, 'https://cdn2.steamgriddb.com/thumb/6d6ed2ea29b0d5ce5338b24ec32b871f.jpg'),
-(16, 'Starfield', '2023-09-06', 12, 'https://store-images.s-microsoft.com/image/apps.1647.14419706211314168.b0f9d237-3727-4f27-a56e-60574c628757.ef6e6b86-ef7d-4357-9dbf-1d0766fdc93a');
+(16, 'Starfield', '2023-09-06', 12, 'https://store-images.s-microsoft.com/image/apps.1647.14419706211314168.b0f9d237-3727-4f27-a56e-60574c628757.ef6e6b86-ef7d-4357-9dbf-1d0766fdc93a'),
+(21, 'Super Mario Odyssey', '2017-10-27', 1, 'https://img-eshop.cdn.nintendo.net/i/ad4d31f664a1ce704f0219da2805f8459595bc3c01c3f04df2e32ba34a05b8c6.jpg'),
+(22, 'Splatoon 2', '2017-07-21', 1, 'https://img-eshop.cdn.nintendo.net/i/a0af3e5f59b543af010e54c664c53fa17f66c37098418ba73b45aa6b43ac6f0d.jpg'),
+(23, 'Pokémon: Let\'s Go, Pikachu!', '2018-11-16', 1, 'https://img-eshop.cdn.nintendo.net/i/68319146899bcac903887a25ff13c361b86c2980f5fb3231cc7863188ffce251.jpg'),
+(24, 'Pokémon: Let\'s Go, Eevee!', '2018-11-16', 1, 'https://img-eshop.cdn.nintendo.net/i/cf0dbdcad11b124c3a3090f7cf331fd484e1260efd91cf7208edfc9b621b3bdf.jpg'),
+(25, 'Xenoblade Chronicles 2', '2017-12-01', 1, 'https://img-eshop.cdn.nintendo.net/i/0edb5a2abf375dfb0d29cf9e7c723450a93bf4d66f090dde4f3bdb68c4698ed9.jpg'),
+(26, 'Yoshi\'s Crafted World', '2019-03-29', 1, 'https://img-eshop.cdn.nintendo.net/i/eb4db2538ac3d439fce167fe2c23d2a58b09a80fdf1a8d00d1cbae50481f374f.jpg'),
+(27, 'Pokkén Tournament DX', '2017-09-22', 1, 'https://img-eshop.cdn.nintendo.net/i/12623dc3cb41523591f122ee7fc83f8030b6aece8c690979c8239498df78b58b.jpg'),
+(28, 'Luigi\'s Mansion 3', '2019-10-31', 1, 'https://img-eshop.cdn.nintendo.net/i/60601a0a7cd4f96b7b736dd4fe6da14bcefc9f1d3b649084302dcd409618f23f.jpg'),
+(29, 'Pokémon Quest', '2018-05-30', 1, 'https://img-eshop.cdn.nintendo.net/i/4bbdd3ca2f33b56cbf2e2475f855a19dbc24a0476faefdf797b5440dde7fa3d5.jpg'),
+(30, 'Pokémon Shield', '2019-11-15', 1, 'https://img-eshop.cdn.nintendo.net/i/959762efe1ebe8eb3e3eae454f7c6ee307df06446885dbab62f8bec7e2b4d91b.jpg'),
+(31, 'Pokémon Sword', '2019-11-15', 1, 'https://img-eshop.cdn.nintendo.net/i/0bf4bca3b619ae6ef04ca08214df7b2a438a8fec8616934b03ae73de839bd518.jpg'),
+(32, 'Pokémon Mystery Dungeon: Rescue Team DX', '2020-03-06', 1, 'https://img-eshop.cdn.nintendo.net/i/01bdf842194256f9948bf5ff6fb7b77bacc6905adfede8b7d69cd4ca70c5a216.jpg'),
+(33, 'The Legend of Zelda: Link\'s Awakening', '2019-09-20', 1, 'https://img-eshop.cdn.nintendo.net/i/b0b0b2d150830b70b5bb259cdabefe21d2009b55cbd58854cf6a897587249054.jpg'),
+(34, 'Hyrule Warriors: Age of Calamity', '2020-11-20', 1, 'https://img-eshop.cdn.nintendo.net/i/9eb5a62527c0783cf7cf72b7144f6abe53c2c25264a5a62258e21650830d8b40.jpg');
 
 --
 -- Dumping data for table `game_platform_link`
@@ -102,7 +116,21 @@ INSERT INTO `game_platform_link` (`game_platformID`, `gameID`, `platformID`, `re
 (52, 15, 12, NULL, 'https://www.microsoft.com/p/It-Takes-Two/9NKJ0VZQ4N0L', NULL),
 (53, 16, 1, NULL, 'https://store.steampowered.com/app/1716740/Starfield/', '1716740'),
 (54, 16, 3, NULL, 'https://www.xbox.com/en-us/games/store/starfield/9ncjsxwztp88', NULL),
-(55, 16, 11, NULL, 'https://www.xbox.com/en-us/games/store/starfield/9ncjsxwztp88', NULL);
+(55, 16, 11, NULL, 'https://www.xbox.com/en-us/games/store/starfield/9ncjsxwztp88', NULL),
+(60, 21, 14, NULL, 'https://www.nintendo.com/us/store/products/super-mario-odyssey-switch/', '0100000000010000'),
+(61, 22, 14, NULL, 'https://www.nintendo.com/us/store/products/splatoon-2-switch/', '0100F8F0000A2000'),
+(62, 23, 14, NULL, 'https://pokemonletsgo.pokemon.com/en-us/', '010003F003A34000'),
+(63, 24, 14, NULL, 'https://pokemonletsgo.pokemon.com/en-us/', '0100187003A36000'),
+(64, 25, 14, NULL, 'https://www.nintendo.com.au/games/nintendo-switch/xenoblade-chronicles-2', '0100E95004038000'),
+(65, 26, 14, NULL, 'https://yoshiscraftedworld.nintendo.com/', '01006000040C2000'),
+(66, 27, 14, NULL, 'https://www.pokkentournament.com/dx/en-us/', '0100B3F000BE2000'),
+(67, 28, 14, NULL, 'https://luigismansion.nintendo.com/', '0100DCA0064A6000'),
+(68, 29, 14, NULL, 'https://pokemonquest.pokemon.com/en-us/', '01005D100807A000'),
+(69, 30, 14, NULL, 'https://swordshield.pokemon.com/en-us/', '01008DB008C2C000'),
+(70, 31, 14, NULL, 'https://swordshield.pokemon.com/en-us/', '0100ABF008968000'),
+(71, 32, 14, NULL, 'https://mysterydungeon.pokemon.com/en-us/', '01003D200BAA2000'),
+(72, 33, 14, NULL, 'https://zelda.nintendo.com/links-awakening/', '01006BB00C6F0000'),
+(73, 34, 14, NULL, 'https://zelda.nintendo.com/hyrule-warriors/', '01002B00111A2000');
 
 --
 -- Dumping data for table `game_platform_player_link`
@@ -220,7 +248,46 @@ INSERT INTO `game_platform_player_link` (`game_platform_playerID`, `game_platfor
 (112, 52, 5, 2, 2),
 (113, 53, 1, 0, 0),
 (114, 54, 1, 0, 0),
-(115, 55, 1, 0, 0);
+(115, 55, 1, 0, 0),
+(122, 60, 1, 0, 0),
+(123, 60, 2, 1, 2),
+(124, 61, 1, 0, 0),
+(125, 61, 3, 2, 10),
+(126, 61, 4, 2, 8),
+(127, 61, 5, 2, 10),
+(128, 62, 1, 0, 0),
+(129, 62, 2, 1, 2),
+(130, 62, 4, 2, 2),
+(131, 62, 5, 2, 2),
+(132, 63, 1, 0, 0),
+(133, 63, 2, 1, 2),
+(134, 63, 4, 2, 2),
+(135, 63, 5, 2, 2),
+(136, 64, 1, 0, 0),
+(137, 65, 1, 0, 0),
+(138, 65, 2, 1, 2),
+(139, 66, 1, 0, 0),
+(140, 66, 2, 1, 2),
+(141, 66, 3, 1, 2),
+(142, 66, 4, 1, 2),
+(143, 66, 5, 1, 2),
+(144, 67, 1, 0, 0),
+(145, 67, 2, 1, 8),
+(146, 67, 4, 1, 8),
+(147, 67, 5, 1, 8),
+(148, 68, 1, 0, 0),
+(149, 69, 1, 0, 0),
+(150, 69, 3, 1, 4),
+(151, 69, 4, 1, 4),
+(152, 69, 5, 1, 4),
+(153, 70, 1, 0, 0),
+(154, 70, 3, 1, 4),
+(155, 70, 4, 1, 4),
+(156, 70, 5, 1, 4),
+(157, 71, 1, 0, 0),
+(158, 72, 1, 0, 0),
+(159, 73, 1, 0, 0),
+(160, 73, 2, 1, 2);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

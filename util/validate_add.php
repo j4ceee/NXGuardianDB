@@ -45,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $imageLink = trim($_POST['imageLink']);
 
     // sanitize input
-    $gameName = htmlspecialchars($gameName);
     $gameRelease = htmlspecialchars($gameRelease);
     $imageLink = filter_var($imageLink, FILTER_SANITIZE_URL);
 

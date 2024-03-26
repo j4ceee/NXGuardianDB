@@ -70,6 +70,8 @@ function fetchTitleDB($titleDBurl): void
         '(?<=\b.)Pack', // ignore 'Pack' if it's not at the beginning of the string
         'Early Release',
         'Additional',
+        'Tool',
+        'Membership',
 
         // all kinds of passes
         'Season Pass',
@@ -81,6 +83,7 @@ function fetchTitleDB($titleDBurl): void
         'Year \d+ Pass',
         'Year Pass',
         '\d+ Month(s)? Pass',
+        'Month(s)? \d+ ',
         'Character(s)? Pass',
         'Pass Vol',
         "Friend's Pass",
