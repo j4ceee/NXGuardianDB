@@ -47,7 +47,7 @@ function template_header($title, $active, bool $showSpinner = false): void
     if ($dbConnection->checkDBSchema()) {
         echo <<<EOT
             <a href="./search_games.php" $search>Search Games</a>
-            <a href="./list_games.php" $list>List Games</a>
+            <a href="./list_games.php" $list onclick="showSpinner()">List Games</a>
             <a href="./add_game.php" $add>Add Game</a>
         EOT;
     }
@@ -101,8 +101,13 @@ function template_header($title, $active, bool $showSpinner = false): void
 EOT;
 
     if ($showSpinner) {
-        echo <<<EOT
-        <div class="loading_overlay" id="loading_overlay" style="display: flex">
+        $displaySpinner = 'display: flex';
+    } else {
+        $displaySpinner = 'display: none';
+    }
+
+        echo '<div class="loading_overlay" id="loading_overlay" style="'. $displaySpinner .'">';
+    echo <<<EOT
             <div class="loading_container">
                 <svg class="loading_spinner" width="1200pt" height="1200pt" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
                      <path class="loading_spinner_path" d="m550 150c0-27.613 22.387-50 50-50 276.14 0 500 223.86 500 500 0 135.88-54.266 259.18-142.19 349.25-19.289 19.758-50.945 20.145-70.703 0.85547-19.762-19.293-20.145-50.953-0.85547-70.707 70.43-72.148 113.75-170.66 113.75-279.39 0-220.91-179.09-400-400-400-27.613 0-50-22.387-50-50z" fill-rule="evenodd"/>
@@ -110,11 +115,14 @@ EOT;
             </div>
         </div>  
         EOT;
-    }
+
 }
 
 function template_footer(array $scripts = null): void
 {
+    // add loading_spinner.js to scripts array
+    $scripts[] = 'loading_spinner.js';
+
     $dbConnection = new DBConnection();
 
     echo <<<EOT
@@ -128,7 +136,7 @@ function template_footer(array $scripts = null): void
     if ($dbConnection->checkDBSchema()) {
         echo <<<EOT
             <a href="./search_games.php">Search Games</a>
-            <a href="./list_games.php">List Games</a>
+            <a href="./list_games.php" onclick="showSpinner()">List Games</a>
             <a href="./add_game.php">Add Game</a>
         EOT;
 
@@ -140,7 +148,7 @@ function template_footer(array $scripts = null): void
 EOT;
     if ($scripts !== null) {
         for ($i = 0; $i < count($scripts); $i++) {
-            echo '<script type="module" src="./js/' . $scripts[$i] . '"></script>';
+            echo '<script src="./js/' . $scripts[$i] . '"></script>';
         };
     }
     echo <<<EOT

@@ -1,10 +1,8 @@
 
-
-
-export function showSpinner() {
+function showSpinner() {
     document.getElementById('loading_overlay').style.display = 'flex';
 }
 
-export function hideSpinner() {
+function hideSpinner() {
     document.getElementById('loading_overlay').style.display = 'none';
 }

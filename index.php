@@ -21,7 +21,7 @@ template_header("Start", "index");
                 <p class="status-text">Database is set up & running</p></div>';
 
                 echo '<div class="db-backup">';
-                echo '<a href="util/bk_create.php" class="db-status-msg db-bk-create">
+                echo '<a href="util/bk_create.php" class="db-status-msg db-bk-create" onclick="showSpinner()">
                             <svg class="status-symbol" width="100%" height="100%" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"  style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                                 <g transform="matrix(0.926266,0,0,0.926266,44.2428,44.2417)">
                                     <path d="M1129.4,811.77C1109.92,811.77 1094.11,827.547 1094.11,847.063L1094.11,988.243C1094.11,1046.62 1046.6,1094.12 988.227,1094.12L211.827,1094.12C153.452,1094.12 105.947,1046.62 105.947,988.243L105.947,847.063C105.947,827.543 90.135,811.77 70.654,811.77C51.173,811.77 35.361,827.547 35.361,847.063L35.361,988.243C35.361,1085.55 114.525,1164.71 211.831,1164.71L988.231,1164.71C1085.54,1164.71 1164.7,1085.55 1164.7,988.243L1164.7,847.063C1164.7,827.547 1148.89,811.77 1129.41,811.77L1129.4,811.77Z" style="fill:rgb(111,111,111);fill-rule:nonzero;stroke:rgb(111,111,111);stroke-width:37.88px;"/>
@@ -52,22 +52,21 @@ template_header("Start", "index");
 
                             $dateTimestamp = date("Y-m-d H:i" ,filemtime($file));
 
-                            echo '<li><a href="util/bk_restore.php?file=' . $fileName . '">' . $dateTimestamp . '</a></li>';
+                            echo '<li><a href="util/bk_restore.php?file=' . $fileName . '" onclick="showSpinner()">' . $dateTimestamp . '</a></li>';
                         }
                     }
                     if (file_exists('./db/bk/bk.sql')) {
-                        echo '<li><a href="util/bk_restore.php?file=bk">manual backup</a></li>';
+                        echo '<li><a href="util/bk_restore.php?file=bk" onclick="showSpinner()">manual backup</a></li>';
                     }
 
                     echo '</ul></div>';
                 }
                 echo '</div>';
 
-                echo '<div class="db-status-msg db-titledb"><p class="status-text">Fetch Nintendo Switch Games:</p><a class="status-text" href="./util/fetch_titledb.php?mode=nsall">ALL</a><a class="status-text" href="./util/fetch_titledb.php?mode=nsfp&index=0">FP</a></div>';
-
+                echo '<div class="db-status-msg db-titledb"><p class="status-text">Fetch Nintendo Switch Games:</p><a class="status-text" href="./util/fetch_titledb.php?mode=nsall" onclick="showSpinner()">ALL</a><a class="status-text" href="./util/fetch_titledb.php?mode=nsfp" onclick="showSpinner()">FP</a></div>';
             } else {
                 // Database doesn't exist / not set up correctly, display cross SVG and message
-                echo '<a href="./util/setup_db.php"><div class="db-status-msg db-status">
+                echo '<a href="./util/setup_db.php"><div class="db-status-msg db-status" onclick="showSpinner()">
                 <svg class="status-symbol" width="100%" height="100%" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" >     
                     <g transform="matrix(0.813183,0,0,0.813183,114.261,114.269)">
                         <path d="M1194.6,0C1167.57,-27.027 902.71,189.19 600.01,486.49C291.9,189.19 32.44,-27.02 0.01,0C-27.017,32.434 189.2,291.89 486.5,600C189.2,902.7 -27.01,1167.57 0.01,1194.59C32.444,1221.62 291.9,1010.8 600.01,708.1C902.71,1010.8 1167.58,1221.61 1194.6,1194.59C1221.63,1167.56 1010.81,902.7 708.11,600C1010.81,291.89 1221.62,32.43 1194.6,0Z" style="fill:rgb(255,95,84);"/>
