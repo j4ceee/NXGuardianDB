@@ -8,7 +8,7 @@ $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: ./index.php");
     exit();
 }
 
@@ -245,7 +245,7 @@ template_header('Edit Game', null);
                                 $mpData = $stmt->fetch(PDO::FETCH_ASSOC);
 
                                 // check if the multiplayer mode exists in the fetched data
-                                $isChecked = $mpData ? 'checked' : '';
+                                $isChecked = (bool)$mpData;
                                 $minPlayers = $mpData['minPlayers'] ?? -1;
                                 $maxPlayers = $mpData['maxPlayers'] ?? -1;
 
@@ -268,7 +268,7 @@ template_header('Edit Game', null);
         <input type="submit" value="Update game" class="submit_button">
     </form>
 </div>
-<?php template_footer("game_editor.js");
+<?php template_footer(["game_editor.js"]);
 
 getErrorMsg();
 ?>

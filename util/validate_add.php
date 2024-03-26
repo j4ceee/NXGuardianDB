@@ -45,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $imageLink = trim($_POST['imageLink']);
 
     // sanitize input
-    $gameName = htmlspecialchars($gameName);
     $gameRelease = htmlspecialchars($gameRelease);
     $imageLink = filter_var($imageLink, FILTER_SANITIZE_URL);
 
@@ -224,7 +223,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // TODO: success message after redirect
 
-    header("Location: ../list_games.php?gameID=$gameID");
+    //-------------------- TitleDB mode --------------------
+
+    // check if url contains titledb mode (?mode=ns...) & game index (?index=0)
+    $titleDBMode = isset($_GET['mode']) ? $_GET['mode'] : '';
+    $gameIndex = isset($_GET['index']) ? $_GET['index'] : '';
+
+    //filter mode to only allow a - z & game index to only allow numbers
+    $titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
+    $gameIndex = (int)preg_replace("/[^0-9]/", "", $gameIndex);
+
+    $titleDBenabled = false;
+
+    if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
+        $titleDBenabled = true;
+
+        // if game index is empty, set it to 0
+        if ($gameIndex === '') {
+            $gameIndex = 0;
+        }
+    }
+
+    //---------------- TitleDB mode end --------------------
+
+    if ($titleDBenabled) {
+        header("Location: ../add_game.php?mode=$titleDBMode&index=$gameIndex");
+    } else {
+        header("Location: ../list_games.php?gameID=$gameID");
+    }
+
+
     // echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
     ob_end_flush(); // end output buffering
     exit();

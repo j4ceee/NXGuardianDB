@@ -7,7 +7,7 @@ $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: ./index.php");
     exit();
 }
 
@@ -87,7 +87,7 @@ template_header('Search Game', 'search');
                     </div>
                 </fieldset>
 
-                <input type="submit" value="Search games" class="submit_button">
+                <input type="submit" value="Search games" class="submit_button" onclick="showSpinner()">
             </form>
         </div>
-<?php template_footer("search_games.js"); ?>
+<?php template_footer(["search_games.js"]); ?>

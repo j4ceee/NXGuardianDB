@@ -6,15 +6,12 @@ $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: ./index.php");
     exit();
 }
 
 template_header('List Games', 'list');
 ?>
-    <h1 class="page_h1">Games</h1>
-
-    <div class="game-list">
         <?php
         // TODO: add search function directly in the page
 
@@ -226,11 +223,17 @@ template_header('List Games', 'list');
         }
 
 
-
-
-
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // ----------------- Construct the HTML output -----------------
+
+        // output the page title + number of games (count number of different game_platformIDs)
+        $gameCount = count(array_unique(array_column($results, 'game_platformID')));
+
+        echo '<h1 class="page_h1">Games ('. $gameCount .')</h1>';
+
+        echo '<div class="game-list">';
 
         $lastGamePlatformID = null;
         foreach ($results as $row) {

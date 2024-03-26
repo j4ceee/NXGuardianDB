@@ -30,7 +30,7 @@ function createGamePlatformSelection(array $platformsByCategory, array $previous
 }
 
 // generate checkboxes for multiplayer modes
-function generateMPCheckboxes(mixed $mode, bool $modifyPlayers, string $platID = null, int $maxPlayers = -1, int $minPlayers = -1, string $isChecked = ""): void
+function generateMPCheckboxes(mixed $mode, bool $modifyPlayers, string $platID = null, int $maxPlayers = -1, int $minPlayers = -1, bool $isChecked = false): void
 {
     if ($modifyPlayers) {
         // if we are editing a game, we need to add the platformID to the input names (e.g. in add_game.php or edit_game.php)
@@ -44,6 +44,12 @@ function generateMPCheckboxes(mixed $mode, bool $modifyPlayers, string $platID =
     }
 
     echo '<div class="mp_feature_check_cont">';
+
+    if ($isChecked) {
+        $isChecked = 'checked';
+    } else {
+        $isChecked = '';
+    }
 
     echo '<label class="mp_feature_label" for="' . htmlspecialchars($mode['modeShort']) . $platID . '">
           <input type="checkbox" class="mp_feature_check" name="' . htmlspecialchars($mode['modeShort']) . $platID . '" id="' . htmlspecialchars($mode['modeShort']) . $platID . '" ' . $isChecked . '>
