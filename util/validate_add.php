@@ -232,12 +232,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //filter mode to only allow a - z & game index to only allow numbers
     $titleDBMode = preg_replace("/[^a-z]/", "", $titleDBMode);
-    $gameIndex = preg_replace("/[^0-9]/", "", $gameIndex);
+    $gameIndex = (int)preg_replace("/[^0-9]/", "", $gameIndex);
 
     $titleDBenabled = false;
 
     if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
         $titleDBenabled = true;
+
+        // if game index is empty, set it to 0
+        if ($gameIndex === '') {
+            $gameIndex = 0;
+        }
     }
 
     //---------------- TitleDB mode end --------------------

@@ -381,9 +381,9 @@ function validate_store_id($storeID, $platformID, $gameID): void
 */
 
 // check if the game already exists in the database
-function check_duplicate_game_entry($title, $developer, $release, $gameID): string|bool
+function check_duplicate_game_entry($title, $developer, $release, int $gameID = null): string|bool
 {
-    echo "<p>Checking for duplicate game entry: $title by $developer, released on $release<br></p>";
+    // echo "<p>Checking for duplicate game entry: $title by $developer, released on $release<br></p>";
 
     // get all games with the same title and developer
     $sql = "SELECT 
@@ -416,6 +416,7 @@ function check_duplicate_game_entry($title, $developer, $release, $gameID): stri
             }
         }
     }
+    // if the game is not a duplicate, return false
     return false;
 }
 

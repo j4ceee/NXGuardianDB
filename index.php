@@ -63,7 +63,7 @@ template_header("Start", "index");
                 }
                 echo '</div>';
 
-                echo '<div class="db-status-msg db-titledb"><p class="status-text">Fetch Nintendo Switch Games:</p><a class="status-text" href="./add_game.php?mode=nsall&index=0">ALL</a><a class="status-text" href="./add_game.php?mode=nsfp&index=0">FP</a></div>';
+                echo '<div class="db-status-msg db-titledb"><p class="status-text">Fetch Nintendo Switch Games:</p><a class="status-text" href="./util/fetch_titledb.php?mode=nsall">ALL</a><a class="status-text" href="./util/fetch_titledb.php?mode=nsfp&index=0">FP</a></div>';
 
             } else {
                 // Database doesn't exist / not set up correctly, display cross SVG and message

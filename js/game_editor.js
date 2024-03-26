@@ -1,6 +1,6 @@
 window.onload = function() {
     // only continue if no gameID is present in the URL
-    if (!window.location.href.includes('gameID')) {
+    if (!window.location.href.includes('gameID') && !window.location.href.includes('nsall') && !window.location.href.includes('nsfp')) {
 
         // get all input elements
         const inputs = document.querySelectorAll('input');

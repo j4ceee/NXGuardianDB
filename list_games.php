@@ -6,7 +6,7 @@ $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: ./index.php");
     exit();
 }
 
