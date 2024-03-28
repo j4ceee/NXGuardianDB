@@ -889,13 +889,22 @@ input[type="number"]
 }
 
 .game_image {
+    width: 12rem;
+    height: 12rem;
     position: relative;
+    background-color: var(--ryu-bg);
+    border-radius: 1rem;
 }
 
 .game_image > img {
+    position: relative;
     width: 12rem;
-    height: auto;
+    height: 12rem;
     border-radius: 1rem;
+}
+
+.game_image > img::before {
+    display: none;
 }
 
 .game_image > .platform_info_logo {
@@ -905,7 +914,7 @@ input[type="number"]
     max-height: 2.5rem;
     background-color: var(--ryu-dark);
     border-radius: 0 1rem 0 0;
-    padding: .5rem .5rem;
+    padding: .5rem .5rem .2rem;
     width: auto;
     max-width: 6rem;
     height: auto;

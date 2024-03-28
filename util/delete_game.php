@@ -1,5 +1,5 @@
 <?php /** @noinspection SqlWithoutWhere */
-include_once './conn_db.php'; // include database connection file
+require_once(dirname(__DIR__) . '/util/conn_db.php'); // include database connection file
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->getConnection();
@@ -8,7 +8,7 @@ $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
     exit();
 }
 
@@ -39,7 +39,7 @@ else {
 // redirect to list_games.php
 // TODO: add a message to the URL
 if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) {
-    header("Location: ../list_games.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/list_games.php");
     exit();
 }
 

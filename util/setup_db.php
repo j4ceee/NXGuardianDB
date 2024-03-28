@@ -1,5 +1,5 @@
 <?php
-include_once './conn_db.php'; // include database connection file
+require_once(dirname(__DIR__) . '/util/conn_db.php'); // include database connection file
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->getConnection();
@@ -20,15 +20,15 @@ if ($PDO !== null) {
 
     if ($PDO !== null) {
         // execute SQL scripts
-        $sql = file_get_contents('../db/setup_db.sql');
+        $sql = file_get_contents(dirname(__DIR__) . '/db/setup_db.sql');
         $PDO->exec($sql);
 
-        $sql = file_get_contents('../db/fill_basics_db.sql');
+        $sql = file_get_contents(dirname(__DIR__) . '/db/fill_basics_db.sql');
         $PDO->exec($sql);
     }
 }
 
 // redirect back to index.php
-header("Location: ../index.php");
+header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
 exit();
 

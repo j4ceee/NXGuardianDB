@@ -1,12 +1,12 @@
 <?php
-include_once './conn_db.php'; // include database connection file
-include_once './validate.php';
+require_once(dirname(__DIR__) . '/util/conn_db.php'); // include database connection file
+include_once (dirname(__DIR__) . '/util/validate.php');
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
     exit();
 }
 
@@ -247,9 +247,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //---------------- TitleDB mode end --------------------
 
     if ($titleDBenabled) {
-        header("Location: ../add_game.php?mode=$titleDBMode&index=$gameIndex");
+        header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/add_game.php?mode=$titleDBMode&index=$gameIndex");
     } else {
-        header("Location: ../list_games.php?gameID=$gameID");
+        header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/list_games.php?gameID=$gameID");
     }
 
 

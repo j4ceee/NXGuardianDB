@@ -1,9 +1,13 @@
 <?php
-include_once './util/conn_db.php'; // include database connection file
+require_once(dirname(__DIR__) . '\util\conn_db.php'); // include database connection file
 
 function template_header($title, $active, bool $showSpinner = false): void
 {
     $dbConnection = new DBConnection();
+
+    $rootURL = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2);
+    // remove last slash
+    $rootURL = rtrim($rootURL, '/');
 
     $index = '';
     $search = '';

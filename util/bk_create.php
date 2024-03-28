@@ -7,17 +7,17 @@ set_time_limit(300); // 5 minutes
 // store the last 2 backups
 // redirects to index.php
 
-include_once './conn_db.php'; // include database connection file
+require_once(dirname(__DIR__) . '/util/conn_db.php'); // include database connection file
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
     exit();
 }
 
-$files = glob('../db/bk/bk_*.sql'); // Get all file names
+$files = glob(dirname(__DIR__) . '/db/bk/bk_*.sql'); // Get all file names
 
 // check if there are 2 or more files -> delete the oldest ones & keep newest
 do {
@@ -33,12 +33,12 @@ do {
     }
 
     unlink($oldestFile);
-    $files = glob('../db/bk/bk_*.sql');
+    $files = glob(dirname(__DIR__) . '/db/bk/bk_*.sql');
 } while (count($files) > 1);
 
 
 $cmd = sprintf('%s -h %s -u %s ',
-    '"C:\\Users\\jance\\Documents\\XAMPP\\mysql\\bin\\mysqldump"', // path to mysqldump
+    '"C:\\Users\\jance\\Documents\\XAMPP\\mysql\\bin\\mysqldump"', // path to mysqldump //TODO: change path
     escapeshellarg($dbConnection->getServername()), // host name
     escapeshellarg($dbConnection->getUsername()) // MySQL username
 );
@@ -50,10 +50,10 @@ if ($dbConnection->getPassword() != null) {
 
 $cmd .= sprintf('%s developers games game_platform_link game_platform_player_link --no-create-info --compact --default-character-set=utf8mb4 > %s',
     escapeshellarg($dbConnection->getDBName()), // database name
-    escapeshellarg('../db/bk/bk_' . date("U") . '.sql') // backup file name
+    escapeshellarg(dirname(__DIR__) . '/db/bk/bk_' . date("U") . '.sql') // backup file name
 );
 
 exec($cmd);
 
-header("Location: ../index.php");
+header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
 exit();

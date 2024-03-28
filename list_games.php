@@ -1,12 +1,12 @@
 <?php /** @noinspection CssUnknownTarget */
-include_once './util/conn_db.php'; // include database connection file
-include_once './util/header_footer.php';
+require_once(__DIR__ . '/util/conn_db.php'); // include database connection file
+require_once(__DIR__ . '/util/header_footer.php');
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ./index.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/index.php");
     exit();
 }
 
@@ -276,7 +276,7 @@ template_header('List Games', 'list');
                 }
 
                 echo "<div class='game_image'>";
-                echo "<img src='" . htmlspecialchars($row['imageLink']) . "' alt='Game Image'>";
+                echo "<img src='" . htmlspecialchars($row['imageLink']) . "' alt='". htmlspecialchars($row['game_name']) ." Title Image'>";
 
                 // show platform icon (in colour if available, else b/w)
                 echo "<img src='./img/platforms/" . htmlspecialchars($row['platformID']) . "_col.svg' class='platform_info_logo' alt='Platform Logo' onerror=\"this.onerror=null; this.src='./img/platforms/" . htmlspecialchars($row['platformID']) . ".svg'\"/>";

@@ -1,14 +1,14 @@
 <?php /** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
 /** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
 /** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
-include_once './conn_db.php'; // include database connection file
-include_once './validate.php';
+require_once(dirname(__DIR__) . '/util/conn_db.php'); // include database connection file
+include_once (dirname(__DIR__) . '/util/validate.php');
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ../index.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
     exit();
 }
 
@@ -410,7 +410,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // redirect to list_games.php
-    header("Location: ../list_games.php?gameID=$gameID");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/list_games.php?gameID=$gameID");
     // echo '<a href="../list_games.php?gameID=' . $gameID . '">View Game</a>';
     ob_end_flush(); // end output buffering
     exit();

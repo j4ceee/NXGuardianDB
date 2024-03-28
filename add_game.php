@@ -1,16 +1,17 @@
 <?php
-include_once './util/conn_db.php'; // include database connection file
-include_once './util/header_footer.php';
-include_once './util/validate.php';
-include_once './util/utility_func.php';
+require_once(__DIR__ . '/util/conn_db.php'); // include database connection file
+require_once(__DIR__ . '/util/header_footer.php');
+require_once(__DIR__ . '/util/validate.php');
+require_once(__DIR__ . '/util/utility_func.php');
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ./index.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/index.php");
     exit();
 }
+
 
 //-------------------- TitleDB mode --------------------
 
@@ -34,20 +35,20 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
     $lastGame = false;
 
     if ($titleDBMode === 'nsall') {
-        $titleDBgames = json_decode(file_get_contents('./titledb/nx_titledb_all.json'), true); // load all games from Nintendo Switch title database
+        $titleDBgames = json_decode(file_get_contents(__DIR__ . '/titledb/nx_titledb_all.json'), true); // load all games from Nintendo Switch title database
     } else {
-        $titleDBgames = json_decode(file_get_contents('./titledb/nx_titledb_fp.json'), true); // load first-party games from Nintendo Switch title database
+        $titleDBgames = json_decode(file_get_contents(__DIR__ . '/titledb/nx_titledb_fp.json'), true); // load first-party games from Nintendo Switch title database
     }
 
     // if file not found, redirect to fetch_titledb.php
     if ($titleDBgames === null) {
-        header('Location: ./util/fetch_titledb.php?mode=' . htmlspecialchars($titleDBMode));
+        header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/util/fetch_titledb.php?mode=' . htmlspecialchars($titleDBMode));
         exit();
     }
 
     // check if game index is within bounds
     if ($gameIndex >= count($titleDBgames)) {
-        header('Location: ./index.php');
+        header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/index.php');
         exit();
     }
     // check if game index is the last game
@@ -65,21 +66,19 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
         if ($dir === 0) { // if direction is backwards (& game is already in database)
             if ($gameIndex > 0) {
                 // while not the first game, go backwards
-                header('Location: ./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex - 1) . '&dir=0');
+                header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex - 1) . '&dir=0');
             } else {
                 // if first game, stay at current game & remove backwards direction (dir=0)
-                header('Location: ./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex));
+                header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex));
             }
         } else { // if direction is forwards (& game is already in database)
             // go to next game
-            header('Location: ./add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1));
+            header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/add_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1));
         }
     }
 
     $nsPlatID = 14; // Nintendo Switch platform ID
 }
-
-
 
 //---------------- TitleDB mode end --------------------
 

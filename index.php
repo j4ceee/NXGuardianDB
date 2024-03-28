@@ -1,6 +1,6 @@
 <?php
-include_once './util/conn_db.php'; // include database connection file
-include './util/header_footer.php';
+require_once(__DIR__ . '/util/conn_db.php'); // include database connection file
+require_once(__DIR__ . '/util/header_footer.php');
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->getConnection();
@@ -29,7 +29,7 @@ template_header("Start", "index");
                                 </g>
                             </svg>
                             <p class="status-text">Create backup</p></a>';
-                if (glob('./db/bk/bk*.sql') != null) {
+                if (glob(__DIR__ . '/db/bk/bk*.sql') != null) {
                     echo '<div class="db-status-msg db-bk-restore">
                             <div>
                             <svg class="status-symbol" width="100%" height="100%" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"  style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
@@ -39,8 +39,8 @@ template_header("Start", "index");
                             </svg>
                             <p class="status-text">Restore from backup</p></div><ul class="bk-list">';
 
-                    if (glob('./db/bk/bk_*.sql') != null) {
-                        $files = glob('./db/bk/bk_*.sql'); // get all file names
+                    if (glob(__DIR__ . '/db/bk/bk_*.sql') != null) {
+                        $files = glob(__DIR__ . '/db/bk/bk_*.sql'); // get all file names
 
                         // sort the files by date
                         usort($files, function($a, $b) {
@@ -55,7 +55,7 @@ template_header("Start", "index");
                             echo '<li><a href="util/bk_restore.php?file=' . $fileName . '" onclick="showSpinner()">' . $dateTimestamp . '</a></li>';
                         }
                     }
-                    if (file_exists('./db/bk/bk.sql')) {
+                    if (file_exists(__DIR__ . '/db/bk/bk.sql')) {
                         echo '<li><a href="util/bk_restore.php?file=bk" onclick="showSpinner()">manual backup</a></li>';
                     }
 
