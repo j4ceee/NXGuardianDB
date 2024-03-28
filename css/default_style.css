@@ -405,13 +405,13 @@ footer {
 
 /*-------------------------------Manage Game Page-------------------------------------------*/
 
-.add_game_form {
+.manage_game_form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.add_game_form_control {
+.manage_game_form_control {
     display: flex;
     flex-direction: row;
     justify-content: space-between;

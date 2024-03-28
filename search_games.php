@@ -14,7 +14,7 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
 template_header('Search Game', 'search');
 ?>
         <div class="manage_game_container">
-            <form class="add_game_form" action="./list_games.php" method="post">
+            <form class="manage_game_form" action="./list_games.php" method="post">
                 <fieldset class="basic_info_form">
                     <legend>Game Information</legend>
 

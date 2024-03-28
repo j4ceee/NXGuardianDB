@@ -32,7 +32,7 @@ function createGamePlatformSelection(array $platformsByCategory, array $previous
 function generateMPCheckboxes(mixed $mode, bool $modifyPlayers, string $platID = null, int $maxPlayers = -1, int $minPlayers = -1, bool $isChecked = false): void
 {
     if ($modifyPlayers) {
-        // if we are editing a game, we need to add the platformID to the input names (e.g. in add_game.php or edit_game.php)
+        // if we are editing a game, we need to add the platformID to the input names (e.g. in manage_game.php)
 
         if ($platID === null) {
             $platID = "_[platID]"; // if no platformID is given, use a placeholder

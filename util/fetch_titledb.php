@@ -37,7 +37,7 @@ if ($titleDBenabled) {
             fetchTitleDB($titleDBurl);
         }
     }
-    header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . '/add_game.php?mode=' . $titleDBMode . '&index=' . $gameIndex);
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . '/manage_game.php?mode=' . $titleDBMode . '&index=' . $gameIndex);
     exit();
 } else {
     // redirect to index.php

@@ -247,7 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //---------------- TitleDB mode end --------------------
 
     if ($titleDBenabled) {
-        header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/add_game.php?mode=$titleDBMode&index=$gameIndex");
+        header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/manage_game.php?mode=$titleDBMode&index=$gameIndex");
     } else {
         header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/list_games.php?gameID=$gameID");
     }

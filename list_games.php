@@ -247,7 +247,7 @@ template_header('List Games', 'list');
                 echo "<div class='game game_platform_" . htmlspecialchars($row['game_platformID']) . "' tabindex='0'>";
 
                 // edit button
-                echo "<a href='./edit_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='edit_button' title='Edit " . htmlspecialchars($row['game_name']) . "'>
+                echo "<a href='./manage_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='edit_button' title='Edit " . htmlspecialchars($row['game_name']) . "'>
                         <img class='edit_icon' src='./icons/noun-edit-1047822-grey.svg' alt='Edit " . htmlspecialchars($row['game_name']) . "'>
                       </a>";
 
