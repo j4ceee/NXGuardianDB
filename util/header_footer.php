@@ -1,9 +1,13 @@
 <?php
-include_once './util/conn_db.php'; // include database connection file
+require_once(dirname(__DIR__) . '\util\conn_db.php'); // include database connection file
 
 function template_header($title, $active, bool $showSpinner = false): void
 {
     $dbConnection = new DBConnection();
+
+    $rootURL = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2);
+    // remove last slash
+    $rootURL = rtrim($rootURL, '/');
 
     $index = '';
     $search = '';
@@ -48,7 +52,7 @@ function template_header($title, $active, bool $showSpinner = false): void
         echo <<<EOT
             <a href="./search_games.php" $search>Search Games</a>
             <a href="./list_games.php" $list onclick="showSpinner()">List Games</a>
-            <a href="./add_game.php" $add>Add Game</a>
+            <a href="./manage_game.php" $add>Add Game</a>
         EOT;
     }
 
@@ -60,7 +64,6 @@ function template_header($title, $active, bool $showSpinner = false): void
             <a href="./index.php">
 
                 <svg class="logo" width="100%" height="100%" viewBox="0 0 622 650" xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink"
                      style="fill-rule:evenodd;clip-rule:evenodd;stroke-miterlimit:10;">
                     <g>
                         <g transform="matrix(1.00595,0,0,1.00595,-1.85001,-1.99511)">
@@ -137,7 +140,7 @@ function template_footer(array $scripts = null): void
         echo <<<EOT
             <a href="./search_games.php">Search Games</a>
             <a href="./list_games.php" onclick="showSpinner()">List Games</a>
-            <a href="./add_game.php">Add Game</a>
+            <a href="./manage_game.php">Add Game</a>
         EOT;
 
     }

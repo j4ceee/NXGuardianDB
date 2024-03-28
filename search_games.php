@@ -1,20 +1,20 @@
 <?php
-include_once './util/conn_db.php'; // include database connection file
-include_once './util/header_footer.php';
-include_once './util/utility_func.php';
+require_once(__DIR__ . '/util/conn_db.php'); // include database connection file
+require_once(__DIR__ . '/util/header_footer.php');
+require_once(__DIR__ . '/util/utility_func.php');
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
 if ($PDO === null || !$dbConnection->checkDBSchema()) {
-    header("Location: ./index.php");
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/index.php");
     exit();
 }
 
 template_header('Search Game', 'search');
 ?>
         <div class="manage_game_container">
-            <form class="add_game_form" action="./list_games.php" method="post">
+            <form class="manage_game_form" action="./list_games.php" method="post">
                 <fieldset class="basic_info_form">
                     <legend>Game Information</legend>
 

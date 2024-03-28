@@ -1,5 +1,5 @@
 <?php
-require_once("../libs/json-machine/json_loader.php");
+require_once(dirname(__DIR__) . "/libs/json-machine/json_loader.php");
 use \JsonMachine\Items;
 
 //-------------------- TitleDB mode --------------------
@@ -24,12 +24,12 @@ $titleDBurl = 'https://raw.githubusercontent.com/blawar/titledb/master/GB.en.jso
 
 if ($titleDBenabled) {
     // check if titledb json files exist
-    if (!file_exists('../titledb/nx_titledb_all.json') || !file_exists('../titledb/nx_titledb_fp.json')) {
+    if (!file_exists(dirname(__DIR__) . '/titledb/nx_titledb_all.json') || !file_exists(dirname(__DIR__) . '/titledb/nx_titledb_fp.json')) {
         // if json files don't exist, fetch new data
         fetchTitleDB($titleDBurl);
     } else {
         // if json files exist, check last modified date of json ALL -> if older than 1 week, fetch new data
-        $fileCreationTime = filemtime('../titledb/nx_titledb_all.json');
+        $fileCreationTime = filemtime(dirname(__DIR__) . '/titledb/nx_titledb_all.json');
         $currentTime = time();
         $timeDiff = $currentTime - $fileCreationTime;
 
@@ -37,15 +37,15 @@ if ($titleDBenabled) {
             fetchTitleDB($titleDBurl);
         }
     }
-    header('Location: ../add_game.php?mode=' . $titleDBMode . '&index=' . $gameIndex);
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . '/manage_game.php?mode=' . $titleDBMode . '&index=' . $gameIndex);
     exit();
 } else {
     // redirect to index.php
-    header('Location: ../index.php');
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
     exit();
 }
 
-function fetchTitleDB($titleDBurl): void
+function fetchTitleDB(string $titleDBurl): void
 {
     $titleDB = '';
 
@@ -121,11 +121,15 @@ function fetchTitleDB($titleDBurl): void
         $titleDB = curl_exec($ch); // execute curl
         curl_close($ch); // close curl
 
+        if ($titleDB === FALSE) {
+            throw new Exception('Curl error: ' . curl_error($ch));
+        }
+
         // convert json string to object
         $titleDB = Items::fromString($titleDB);
 
-        $title_json_all = fopen('../titledb/nx_titledb_all.json', 'w');
-        $title_json_fp = fopen('../titledb/nx_titledb_fp.json', 'w');
+        $title_json_all = fopen(dirname(__DIR__) . '/titledb/nx_titledb_all.json', 'w');
+        $title_json_fp = fopen(dirname(__DIR__) . '/titledb/nx_titledb_fp.json', 'w');
 
         if ($title_json_all === FALSE || $title_json_fp === FALSE) {
             $error = error_get_last();
@@ -137,11 +141,13 @@ function fetchTitleDB($titleDBurl): void
 
     } catch (Exception $e) {
         echo 'Caught exception: ', $e->getMessage(), "\n";
+        // redirect to index.php
+        header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
+        exit();
     }
 
     if ($titleDB === '') {
         echo 'Error: TitleDB is empty';
-        exit();
     }
 
     foreach ($titleDB as $id => $data) {
@@ -180,6 +186,9 @@ function fetchTitleDB($titleDBurl): void
         // remove strings from title
         $gameName = str_replace($removeString, '', $data->name);
 
+        // remove strings from developer
+        $developer = str_replace($removeString, '', $data->publisher);
+
         // format date: 20200320 -> 2020-03-20
         $releaseDate = $data->releaseDate;
         if ($releaseDate !== null && $releaseDate !== '') {
@@ -196,7 +205,7 @@ function fetchTitleDB($titleDBurl): void
             'storeID' => $data->id,
             'title' => $gameName,
             'numberOfPlayers' => $data->numberOfPlayers,
-            'publisher' => $data->publisher,
+            'publisher' => $developer,
             'releaseDate' => $releaseDate
         );
 
@@ -220,6 +229,10 @@ function fetchTitleDB($titleDBurl): void
             }
         } catch (Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
+
+            // redirect to index.php
+            header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
+            exit();
         }
     }
 
@@ -231,6 +244,10 @@ function fetchTitleDB($titleDBurl): void
         fclose($title_json_fp);
     } catch (Exception $e) {
         echo 'Caught exception: ', $e->getMessage(), "\n";
+
+        // redirect to index.php
+        header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
+        exit();
     }
 
     $titleDB = null; // free memory
