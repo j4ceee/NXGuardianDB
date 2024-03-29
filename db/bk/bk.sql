@@ -15,6 +15,7 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO `developers` (`devID`, `devName`) VALUES
+(13, 'Avalanche Studios Group'),
 (12, 'Bethesda Game Studios'),
 (3, 'Frontier Developments'),
 (5, 'Game Freak'),
@@ -62,7 +63,8 @@ INSERT INTO `games` (`gameID`, `gameName`, `gameRelease`, `devID`, `imageLink`) 
 (31, 'Pokémon Sword', '2019-11-15', 1, 'https://img-eshop.cdn.nintendo.net/i/0bf4bca3b619ae6ef04ca08214df7b2a438a8fec8616934b03ae73de839bd518.jpg'),
 (32, 'Pokémon Mystery Dungeon: Rescue Team DX', '2020-03-06', 1, 'https://img-eshop.cdn.nintendo.net/i/01bdf842194256f9948bf5ff6fb7b77bacc6905adfede8b7d69cd4ca70c5a216.jpg'),
 (33, 'The Legend of Zelda: Link\'s Awakening', '2019-09-20', 1, 'https://img-eshop.cdn.nintendo.net/i/b0b0b2d150830b70b5bb259cdabefe21d2009b55cbd58854cf6a897587249054.jpg'),
-(34, 'Hyrule Warriors: Age of Calamity', '2020-11-20', 1, 'https://img-eshop.cdn.nintendo.net/i/9eb5a62527c0783cf7cf72b7144f6abe53c2c25264a5a62258e21650830d8b40.jpg');
+(34, 'Hyrule Warriors: Age of Calamity', '2020-11-20', 1, 'https://img-eshop.cdn.nintendo.net/i/9eb5a62527c0783cf7cf72b7144f6abe53c2c25264a5a62258e21650830d8b40.jpg'),
+(35, 'Generation Zero', '2019-03-26', 13, 'https://cdn2.steamgriddb.com/thumb/85a58f7d90ff516e29e0360454eb5599.png');
 
 --
 -- Dumping data for table `game_platform_link`
@@ -130,7 +132,13 @@ INSERT INTO `game_platform_link` (`game_platformID`, `gameID`, `platformID`, `re
 (70, 31, 14, NULL, 'https://swordshield.pokemon.com/en-us/', '0100ABF008968000'),
 (71, 32, 14, NULL, 'https://mysterydungeon.pokemon.com/en-us/', '01003D200BAA2000'),
 (72, 33, 14, NULL, 'https://zelda.nintendo.com/links-awakening/', '01006BB00C6F0000'),
-(73, 34, 14, NULL, 'https://zelda.nintendo.com/hyrule-warriors/', '01002B00111A2000');
+(73, 34, 14, NULL, 'https://zelda.nintendo.com/hyrule-warriors/', '01002B00111A2000'),
+(74, 35, 1, NULL, 'https://store.steampowered.com/app/704270/Generation_Zero/', '704270'),
+(75, 35, 3, NULL, 'https://www.xbox.com/en-US/games/store/generation-zero/C20WW4W29FQ1', NULL),
+(76, 35, 7, NULL, 'https://www.playstation.com/en-us/games/generation-zero/', NULL),
+(77, 35, 8, NULL, 'https://www.playstation.com/en-us/games/generation-zero/', NULL),
+(78, 35, 11, NULL, 'https://www.xbox.com/en-US/games/store/generation-zero/C20WW4W29FQ1', NULL),
+(79, 35, 12, NULL, 'https://www.xbox.com/en-US/games/store/generation-zero/C20WW4W29FQ1', NULL);
 
 --
 -- Dumping data for table `game_platform_player_link`
@@ -287,7 +295,19 @@ INSERT INTO `game_platform_player_link` (`game_platform_playerID`, `game_platfor
 (157, 71, 1, 0, 0),
 (158, 72, 1, 0, 0),
 (159, 73, 1, 0, 0),
-(160, 73, 2, 1, 2);
+(160, 73, 2, 1, 2),
+(161, 74, 1, 0, 0),
+(162, 74, 5, 1, 4),
+(163, 75, 1, 0, 0),
+(164, 75, 5, 1, 4),
+(165, 76, 1, 0, 0),
+(166, 76, 5, 1, 4),
+(167, 77, 1, 0, 0),
+(168, 77, 5, 1, 4),
+(169, 78, 1, 0, 0),
+(170, 78, 5, 1, 4),
+(171, 79, 1, 0, 0),
+(172, 79, 5, 1, 4);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

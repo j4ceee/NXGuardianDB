@@ -36,18 +36,19 @@ do {
     $files = glob(dirname(__DIR__) . '/db/bk/bk_*.sql');
 } while (count($files) > 1);
 
-
+// create backup with mysqldump with command line
 $cmd = sprintf('%s -h %s -u %s ',
     '"C:\\Users\\jance\\Documents\\XAMPP\\mysql\\bin\\mysqldump"', // path to mysqldump //TODO: change path
     escapeshellarg($dbConnection->getServername()), // host name
     escapeshellarg($dbConnection->getUsername()) // MySQL username
 );
 
-// add password
+// append password if one is set
 if ($dbConnection->getPassword() != null) {
     $cmd .= '-p' . escapeshellarg($dbConnection->getPassword() . ' ');
 }
 
+// append database name and backup file name
 $cmd .= sprintf('%s developers games game_platform_link game_platform_player_link --no-create-info --compact --default-character-set=utf8mb4 > %s',
     escapeshellarg($dbConnection->getDBName()), // database name
     escapeshellarg(dirname(__DIR__) . '/db/bk/bk_' . date("U") . '.sql') // backup file name

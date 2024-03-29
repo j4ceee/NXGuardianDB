@@ -56,7 +56,8 @@ class DBConnection {
             return false;
         }
         $stmt = $this->connection->prepare("SHOW DATABASES LIKE :dbname"); // prepare statement to check if database exists, :dbname is a placeholder
-        $stmt->execute(['dbname' => $this->dbname]); // execute statement with database name
+        $stmt->bindParam(':dbname', $this->dbname); // bind parameter :dbname to $this->dbname
+        $stmt->execute(); // execute statement
         $result = $stmt->fetchAll(); // fetch all results and store in $result
         return count($result) > 0; // return true if database exists, false otherwise
     }
@@ -97,7 +98,9 @@ class DBConnection {
             return null;
         }
         try {
-            $this->connection->exec("USE " . $this->dbname); // use database
+            $dbname = $this->dbname;
+            $stmt = $this->connection->prepare("USE $dbname"); // use database
+            $stmt->execute(); // execute statement
         } catch (PDOException) {
             return null;
         }
