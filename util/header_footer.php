@@ -5,10 +5,6 @@ function template_header($title, $active, bool $showSpinner = false): void
 {
     $dbConnection = new DBConnection();
 
-    $rootURL = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2);
-    // remove last slash
-    $rootURL = rtrim($rootURL, '/');
-
     $index = '';
     $search = '';
     $list = '';

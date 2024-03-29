@@ -10,7 +10,7 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
     exit();
 }
 
-// script gets called with ?file=filename.sql
+// script gets called with ?file=filename
 
 if (isset($_GET['file'])) {
     $file = $_GET['file'];
@@ -23,24 +23,23 @@ if (isset($_GET['file'])) {
     $sql_files = array_map('basename', $sql_files);
 
     if (in_array($file, $sql_files)) { // check if the file exists in the backup folder
-
-        if (file_exists(dirname(__DIR__) . '/db/bk/' . $file)) {
-
             // delete all games & developers first
             deleteAllGames($PDO);
             deleteAllDevelopers($PDO);
 
+            // restore the database from the backup file
             $cmd = sprintf('%s -h %s -u %s ',
                 '"C:\\Users\\jance\\Documents\\XAMPP\\mysql\\bin\\mysql"', // path to mysql //TODO: change path
                 escapeshellarg($dbConnection->getServername()), // host name
                 escapeshellarg($dbConnection->getUsername()) // MySQL username
             );
 
-            // add password
+            // append password if it is set
             if ($dbConnection->getPassword() != null) {
                 $cmd .= '-p' . escapeshellarg($dbConnection->getPassword() . ' ');
             }
 
+            // append database name and backup file
             $cmd .= sprintf('%s --default-character-set=utf8mb4 < %s',
                 escapeshellarg($dbConnection->getDBName()), // database name
                 escapeshellarg(dirname(__DIR__) . '/db/bk/' . $file) // backup file name
@@ -50,8 +49,6 @@ if (isset($_GET['file'])) {
 
             header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/list_games.php");
             exit();
-
-        }
     }
 }
 

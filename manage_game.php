@@ -70,7 +70,13 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
             }
         } else { // if direction is forwards (& game is already in database)
             // go to next game
-            header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/manage_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1));
+            if (!$lastGame) {
+                // while not the last game, go forwards
+                header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/manage_game.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1));
+            } else {
+                // if last game, redirect to game list
+                header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/list_games.php');
+            }
         }
     }
 
@@ -132,20 +138,21 @@ if ($editMode) {
 ?>
 <div class="manage_game_container">
     <?php
+    $action = "./util/validate_add.php"; // default action for form submission
+
     if ($titleDBenabled) {
         // load next game from Nintendo Switch title database when submitting the form, if there are more games
         if (!$lastGame) {
-            echo '<form class="manage_game_form" action="./util/validate_add.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1) . '" method="post">'; // form to add a game in TitleDB mode
-        } else {
-            echo '<form class="manage_game_form" action="./util/validate_add.php" method="post">'; // form to add last game in TitleDB mode -> no next game
+            $action = "./util/validate_add.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1) . '"; // url to validate add game in TitleDB mode
         }
+        // if last game -> do default
     }
     else if ($editMode) {
-        echo '<form class="manage_game_form" action="./util/validate_update.php" method="post">'; // form to edit a game
+        $action = "./util/validate_update.php"; // url to validate update game in edit mode
     }
-    else {
-        echo '<form class="manage_game_form" action="./util/validate_add.php" method="post">'; // form to add a game in normal mode
-    }
+
+    // output form with action url
+    echo '<form class="manage_game_form" action="'. $action .'" method="post" onsubmit="showSpinner()">';
     ?>
         <fieldset class="basic_info_form">
             <legend>Game Information</legend>
@@ -162,7 +169,6 @@ if ($editMode) {
                            required>
                 </div>
 
-                <!-- TODO: populate developer list from database -->
                 <div class="game_info_field">
                     <label for="developer">Developer:</label>
                     <input list="developers" class="win_dark_input" name="developer" id="developer"
@@ -172,6 +178,20 @@ if ($editMode) {
                                     echo 'value="' . htmlspecialchars($game['developer']) . '"'; // set value to current game developer
                                 } ?>
                            required>
+
+                    <?php //TODO: AJAX populate the list instead of loading all at once ?>
+                    <datalist id="developers">
+                        <?php
+                        $query = "SELECT devName FROM developers ORDER BY devName"; // SQL statement to select all developers
+                        $stmt = $PDO->prepare($query); // prepare SQL statement for execution
+                        $stmt->execute(); // execute prepared statement
+                        $developers = $stmt->fetchAll(PDO::FETCH_COLUMN, 0); // fetch all results from $stmt and store in $developers
+                        // PDO::FETCH_COLUMN get each row & return as an array with column values
+                        foreach ($developers as $developer) {
+                            echo '<option value="' . htmlspecialchars($developer) . '">'; // output each developer as an option in the datalist
+                        }
+                        ?>
+                    </datalist>
                 </div>
 
                 <div class="game_info_field">
@@ -206,14 +226,16 @@ if ($editMode) {
             <div class="platforms-container">
                 <?php
                 $sql = "SELECT * FROM platforms ORDER BY platformCategory, platformID"; // SQL statement to select all platforms
-                $stmt = $PDO->query($sql); // execute SQL statement using PDO ("query" sends SQL statement to MySQL server & returns results)
+                $stmt = $PDO->prepare($sql); // prepare SQL statement for execution
+                $stmt->execute(); // execute prepared statement
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetch all results from $stmt and store in $results
+                // PDO::FETCH_ASSOC get each row & return as an associative array with column names as keys
 
                 $platformsByCategory = []; // empty array to store platforms by category
                 // pairs of keys and values (here: keys = platformCategory, values = platforms)
 
-                // fetch each row from $stmt and store in $row
-                // PDO::FETCH_ASSOC get next row & return as an associative array with column names as keys
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { // fetch each single row from $stmt and store in $row
+                // fetch each row from $results and store in $row
+                foreach($results as $row) { // fetch each single row from $stmt and store in $row
 
                     $platformsByCategory[$row['platformCategory']][] = $row; // add platform to $platformsByCategory array
                     // $row['platformCategory'] accesses the platformCategory column of the current $row
@@ -289,7 +311,7 @@ if ($editMode) {
                             $playermodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             foreach ($playermodes as $row) {
-                                generateMPCheckboxes($row, true); // line break
+                                generateMPCheckboxes($row, true);
                             }
                             ?>
                         </fieldset>
@@ -426,10 +448,12 @@ if ($editMode) {
                                                 modeID = :modeID";
 
                             $stmt = $PDO->prepare($query);
-                            $stmt->bindParam(':gameID', $editGameID, PDO::PARAM_INT);
-                            $stmt->bindParam(':platformID', $platID, PDO::PARAM_INT);
-                            $stmt->bindParam(':modeID', $row['modeID'], PDO::PARAM_INT);
-                            $stmt->execute();
+                            $stmt->execute([
+                                'gameID' => (int)$editGameID,
+                                'platformID' => (int)$platID,
+                                'modeID' => (int)$row['modeID']
+                                ]
+                            );
                             $mpData = $stmt->fetch(PDO::FETCH_ASSOC);
 
                             // check if the multiplayer mode exists in the fetched data
@@ -459,6 +483,7 @@ if ($editMode) {
 
     <div class="manage_game_form_control">
     <?php
+    // display previous button if in TitleDB mode and not the first game
     echo '<div class="control_btn_cont ctrl_btn_cont_left">';
     if ($titleDBenabled) {
         if ($gameIndex > 0) {
@@ -468,12 +493,14 @@ if ($editMode) {
     echo '</div>';
 
     // display different submit button text depending on whether the form is in edit mode or not
-    if ($editMode) {
-        echo '<input type="submit" value="Update game" class="submit_button">';
-    } else {
-        echo '<input type="submit" value="Add game" class="submit_button">';
-    }
+    $submitText = "Add game";
 
+    if ($editMode) {
+        $submitText = "Update game";
+    }
+    echo '<input type="submit" value="'. $submitText .'" class="submit_button">';
+
+    // display next button if in TitleDB mode and not the last game
     echo '<div class="control_btn_cont ctrl_btn_cont_right">';
     if ($titleDBenabled) {
         if (!$lastGame) {

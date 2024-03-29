@@ -14,7 +14,7 @@ ob_start(); // start output buffering
 
 // check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    var_dump($_POST);
+    //var_dump($_POST);
 
     // add developer-------------------------------------------------------------------------------
 
@@ -33,7 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($dev == null) {
         // insert new developer
         $stmt = $PDO->prepare("INSERT INTO developers (devName) VALUES (:devName)");
-        $stmt->execute(['devName' => $developerName]);
+        $stmt->bindParam(':devName', $developerName);
+        $stmt->execute();
         $devID = $PDO->lastInsertId();
     } else {
         $devID = $dev;
@@ -51,10 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $PDO->prepare("INSERT INTO games (gameName, gameRelease, devID, imageLink) VALUES (:gameName, :gameRelease, :devID, :imageLink)");
     $stmt->execute([
-        'gameName' => $gameName,
-        'gameRelease' => $gameRelease,
-        'devID' => $devID,
-        'imageLink' => $imageLink // TODO: handle as link in frontend & database
+        ':gameName' => $gameName,
+        ':gameRelease' => $gameRelease,
+        ':devID' => (int)$devID,
+        ':imageLink' => $imageLink
     ]);
     $gameID = $PDO->lastInsertId();
 
@@ -142,8 +143,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt = $PDO->prepare("INSERT INTO game_platform_link (gameID, platformID, releaseDate, storeLink, storeID) VALUES (:gameID, :platformID, :releaseDate, :storeLink , :storeID)");
         $stmt->execute([
-            ':gameID' => $gameID, // use the game ID from the previous insert
-            ':platformID' => $platformDetails['id'],
+            ':gameID' => (int)$gameID, // use the game ID from the previous insert
+            ':platformID' => (int)$platformDetails['id'],
             ':releaseDate' => $platformDetails['release_date'],
             ':storeLink' => $platformDetails['store_link'],
             ':storeID' => $platformDetails['store_id'],
@@ -209,10 +210,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             // insert into game_platform_player_link
                             $stmt = $PDO->prepare("INSERT INTO game_platform_player_link (game_platformID, modeID, minPlayers, maxPlayers) VALUES (:gamePlatformID, :modeID, :minPlayers, :maxPlayers)");
                             $stmt->execute([
-                                ':gamePlatformID' => $gamePlatformID,
-                                ':modeID' => $modeID,
-                                ':minPlayers' => $minPlayers,
-                                ':maxPlayers' => $maxPlayers,
+                                ':gamePlatformID' => (int)$gamePlatformID,
+                                ':modeID' => (int)$modeID,
+                                ':minPlayers' => (int)$minPlayers,
+                                ':maxPlayers' => (int)$maxPlayers,
                             ]);
                         }
                     }
@@ -265,7 +266,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function getModeIDFromModeName($PDO, $modeShort) {
     $stmt = $PDO->prepare("SELECT modeID FROM playermodes WHERE modeShort = :modeShort");
-    $stmt->execute([':modeShort' => $modeShort]);
+    $stmt->bindParam(':modeShort', $modeShort);
+    $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['modeID'] : null;
 }

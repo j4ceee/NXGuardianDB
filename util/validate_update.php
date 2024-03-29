@@ -122,7 +122,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // fetch existing platforms for game
     $currentPlatformsQuery = $PDO->prepare("SELECT platformID, releaseDate, storeLink, storeID FROM game_platform_link WHERE gameID = :gameID");
-    $currentPlatformsQuery->execute([':gameID' => $gameID]);
+    $currentPlatformsQuery->bindParam(':gameID', $gameID, PDO::PARAM_INT);
+    $currentPlatformsQuery->execute();
     $currentPlatforms = $currentPlatformsQuery->fetchAll(PDO::FETCH_ASSOC);
 
     // convert to associative array
@@ -137,7 +138,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     FROM game_platform_player_link gppl
     JOIN game_platform_link gp ON gppl.game_platformID = gp.game_platformID
     WHERE gp.gameID = :gameID");
-    $currentModesQuery->execute([':gameID' => $gameID]);
+    $currentModesQuery->bindParam(':gameID', $gameID, PDO::PARAM_INT);
+    $currentModesQuery->execute();
     $currentModes = $currentModesQuery->fetchAll(PDO::FETCH_ASSOC);
 
     // convert to associative array
@@ -231,8 +233,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($platformDetails['storeLink'] !== $currentPlatformsAssoc[$platformID]['storeLink'] || $platformDetails['releaseDate'] !== $currentPlatformsAssoc[$platformID]['releaseDate'] || $platformDetails['storeID'] !== $currentPlatformsAssoc[$platformID]['storeID']) {
                     $stmt = $PDO->prepare("UPDATE game_platform_link SET releaseDate = :releaseDate, storeLink = :storeLink, storeID = :storeID WHERE gameID = :gameID AND platformID = :platformID");
                     $stmt->execute([
-                        ':gameID' => $gameID,
-                        ':platformID' => $platformID,
+                        ':gameID' => (int)$gameID,
+                        ':platformID' => (int)$platformID,
                         ':releaseDate' => $platformDetails['releaseDate'],
                         ':storeLink' => $platformDetails['storeLink'],
                         ':storeID' => $platformDetails['storeID'],
@@ -255,8 +257,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // new platform link
                 $stmt = $PDO->prepare("INSERT INTO game_platform_link (gameID, platformID, releaseDate, storeLink, storeID) VALUES (:gameID, :platformID, :releaseDate, :storeLink, :storeID)");
                 $stmt->execute([
-                    ':gameID' => $gameID,
-                    ':platformID' => $platformID,
+                    ':gameID' => (int)$gameID,
+                    ':platformID' => (int)$platformID,
                     ':releaseDate' => $platformDetails['releaseDate'],
                     ':storeLink' => $platformDetails['storeLink'],
                     ':storeID' => $platformDetails['storeID'],
@@ -276,8 +278,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $stmt = $PDO->prepare("DELETE FROM game_platform_link WHERE gameID = :gameID AND platformID = :platformID");
                 $stmt->execute([
-                    ':gameID' => $gameID,
-                    ':platformID' => $platformID,
+                    ':gameID' => (int)$gameID,
+                    ':platformID' => (int)$platformID,
                 ]);
             }
         }
@@ -340,11 +342,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             $updateStmt = $PDO->prepare("UPDATE game_platform_player_link SET minPlayers = :minPlayers, maxPlayers = :maxPlayers WHERE game_platformID = (SELECT game_platformID FROM game_platform_link WHERE gameID = :gameID AND platformID = :platformID) AND modeID = :modeID");
                             $updateStmt->execute([
-                                ':minPlayers' => $minPlayers,
-                                ':maxPlayers' => $maxPlayers,
-                                ':gameID' => $gameID,
-                                ':platformID' => $platformID,
-                                ':modeID' => $modeID,
+                                ':minPlayers' => (int)$minPlayers,
+                                ':maxPlayers' => (int)$maxPlayers,
+                                ':gameID' => (int)$gameID,
+                                ':platformID' => (int)$platformID,
+                                ':modeID' => (int)$modeID,
                             ]);
                         }
                     } else { // mode is new
@@ -363,11 +365,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         $insertStmt = $PDO->prepare("INSERT INTO game_platform_player_link (game_platformID, modeID, minPlayers, maxPlayers) VALUES ((SELECT game_platformID FROM game_platform_link WHERE gameID = :gameID AND platformID = :platformID), :modeID, :minPlayers, :maxPlayers)");
                         $insertStmt->execute([
-                            ':gameID' => $gameID,
-                            ':platformID' => $platformID,
-                            ':modeID' => $modeID,
-                            ':minPlayers' => $minPlayers,
-                            ':maxPlayers' => $maxPlayers,
+                            ':gameID' => (int)$gameID,
+                            ':platformID' => (int)$platformID,
+                            ':modeID' => (int)$modeID,
+                            ':minPlayers' => (int)$minPlayers,
+                            ':maxPlayers' => (int)$maxPlayers,
                         ]);
                     }
 
@@ -394,9 +396,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // mode was removed by the user
                     $deleteStmt = $PDO->prepare("DELETE FROM game_platform_player_link WHERE game_platformID = (SELECT game_platformID FROM game_platform_link WHERE gameID = :gameID AND platformID = :platformID) AND modeID = :modeID");
                     $deleteStmt->execute([
-                        ':gameID' => $gameID,
-                        ':platformID' => $platformID,
-                        ':modeID' => $modeID,
+                        ':gameID' => (int)$gameID,
+                        ':platformID' => (int)$platformID,
+                        ':modeID' => (int)$modeID,
                     ]);
                 }
             }
@@ -423,7 +425,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function getModeIDFromModeName($PDO, $modeShort)
 {
     $stmt = $PDO->prepare("SELECT modeID FROM playermodes WHERE modeShort = :modeShort");
-    $stmt->execute([':modeShort' => $modeShort]);
+    $stmt->bindParam(':modeShort', $modeShort);
+    $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['modeID'] : null;
 }

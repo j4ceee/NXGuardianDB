@@ -14,7 +14,7 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
 template_header('Search Game', 'search');
 ?>
         <div class="manage_game_container">
-            <form class="manage_game_form" action="./list_games.php" method="post">
+            <form class="manage_game_form" action="./list_games.php" method="post" onsubmit="showSpinner()">
                 <fieldset class="basic_info_form">
                     <legend>Game Information</legend>
 
@@ -24,10 +24,23 @@ template_header('Search Game', 'search');
                             <input type="text" class="win_dark_input" name="title" id="title">
                         </div>
 
-                        <!-- TODO: populate developer list from database -->
                         <div class="game_info_field">
                             <label for="developer">Developer:</label>
                             <input list="developers" class="win_dark_input" name="developer" id="developer">
+
+                            <?php //TODO: AJAX populate the list instead of loading all at once ?>
+                            <datalist id="developers">
+                                <?php
+                                $query = "SELECT devName FROM developers ORDER BY devName"; // SQL statement to select all developers
+                                $stmt = $PDO->prepare($query); // prepare SQL statement for execution
+                                $stmt->execute(); // execute prepared statement
+                                $developers = $stmt->fetchAll(PDO::FETCH_COLUMN, 0); // fetch all results from $stmt and store in $developers
+                                // PDO::FETCH_COLUMN get each row & return as an array with column values
+                                foreach ($developers as $developer) {
+                                    echo '<option value="' . htmlspecialchars($developer) . '">'; // output each developer as an option in the datalist
+                                }
+                                ?>
+                            </datalist>
                         </div>
 
                         <div class="game_info_field">
@@ -42,14 +55,16 @@ template_header('Search Game', 'search');
                     <div class="platforms-container">
                         <?php
                         $sql = "SELECT * FROM platforms ORDER BY platformCategory, platformID"; // SQL statement to select all platforms
-                        $stmt = $PDO->query($sql); // execute SQL statement using PDO ("query" sends SQL statement to MySQL server & returns results)
+                        $stmt = $PDO->prepare($sql); // prepare SQL statement for execution
+                        $stmt->execute(); // execute prepared statement
+                        $results = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetch all results from $stmt and store in $results
+                        // PDO::FETCH_ASSOC get each row & return as an associative array with column names as keys
 
                         $platformsByCategory = []; // empty array to store platforms by category
                         // pairs of keys and values (here: keys = platformCategory, values = platforms)
 
-                        // fetch each row from $stmt and store in $row
-                        // PDO::FETCH_ASSOC get next row & return as an associative array with column names as keys
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { // fetch each single row from $stmt and store in $row
+                        // fetch each row from $results and store in $row
+                        foreach($results as $row) { // fetch each single row from $stmt and store in $row
 
                             $platformsByCategory[$row['platformCategory']][] = $row; // add platform to $platformsByCategory array
                             // $row['platformCategory'] accesses the platformCategory column of the current $row

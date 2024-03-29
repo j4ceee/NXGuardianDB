@@ -9,22 +9,39 @@ if ($PDO !== null) {
 // -> recreate the database regardless if it exists or not
 
     if ($dbConnection->checkDBExists()) {
-        // drop the database
-        $PDO->exec("DROP DATABASE " . $dbConnection->getDbname());
+        try {
+            // drop the database
+            $dbname = $dbConnection->getDbname();
+            $stmt = $PDO->prepare("DROP DATABASE $dbname");
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 
-    $PDO->exec("CREATE DATABASE " . $dbConnection->getDbname() . " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    try {
+        // create the database
+        $dbname = $dbConnection->getDbname();
+        $stmt = $PDO->prepare("CREATE DATABASE $dbname DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 
 // use the database
     $PDO = $dbConnection->useDB();
 
     if ($PDO !== null) {
         // execute SQL scripts
-        $sql = file_get_contents(dirname(__DIR__) . '/db/setup_db.sql');
-        $PDO->exec($sql);
+        $sql = file_get_contents(dirname(__DIR__) . '/db/setup_db.sql'); // read the SQL file - returns false if file does not exist
+        if ($sql !== false) {
+            $PDO->exec($sql);
+        }
 
         $sql = file_get_contents(dirname(__DIR__) . '/db/fill_basics_db.sql');
-        $PDO->exec($sql);
+        if ($sql !== false) {
+            $PDO->exec($sql);
+        }
     }
 }
 

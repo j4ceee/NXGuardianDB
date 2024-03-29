@@ -23,8 +23,8 @@ if (isset($_GET['gameID'])) {
     $devID = getDevID($PDO, $gameID);
 
     // prepare SQL to delete the game entry
-    $stmt = $PDO->prepare('DELETE FROM games WHERE gameID = ?');
-    $stmt->bindParam(1, $gameID, PDO::PARAM_INT);
+    $stmt = $PDO->prepare('DELETE FROM games WHERE gameID = :gameID');
+    $stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
     $stmt->execute();
 
     // check if the game was the last game for the developer
@@ -46,21 +46,23 @@ if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) {
 
 function getDevID($PDO, $gameID): int
 {
-    $stmt = $PDO->prepare('SELECT devID FROM games WHERE gameID = ?');
-    $stmt->bindParam(1, $gameID, PDO::PARAM_INT);
+    $stmt = $PDO->prepare('SELECT devID FROM games WHERE gameID = :gameID');
+    $stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC)['devID'];
+    return $stmt->fetch(PDO::FETCH_ASSOC)['devID']; // return the devID
 }
 
 function delLastGameForDeveloper($PDO, $devID): void
 {
-    $stmt = $PDO->prepare('SELECT gameID FROM games WHERE devID = ?');
-    $stmt->execute([$devID]);
+    $stmt = $PDO->prepare('SELECT gameID FROM games WHERE devID = :devID');
+    $stmt->bindParam(':devID', $devID, PDO::PARAM_INT);
+    $stmt->execute();
     $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (count($games) == 0) {
-        $stmt = $PDO->prepare('DELETE FROM developers WHERE devID = ?');
-        $stmt->execute([$devID]); // Pass $devID as an array
+        $stmt = $PDO->prepare('DELETE FROM developers WHERE devID = :devID');
+        $stmt->bindParam(':devID', $devID, PDO::PARAM_INT);
+        $stmt->execute();
     }
 }
 
