@@ -41,6 +41,7 @@ function template_header($title, $active, bool $showSpinner = false): void
     <body>
     <div class="page_wrap">
         <header>
+        <div class="cont_logo_nav">
             <nav class="navbar">
                 <a href="./index.php" $index>Start</a>
     EOT;
@@ -94,9 +95,43 @@ function template_header($title, $active, bool $showSpinner = false): void
             </a>
 
         </div>
+        </div>
+        
+        <button class="auth_button" id="auth_button" onclick="openAuthWindow()">
+            <div class="auth_icon" id="auth_icon" style="mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain" ></div>
+        </button>
     </header>
 
-    <main>  
+    <form class="auth_form" id="auth_window" action="#" method="post" autocomplete="off">
+        <fieldset class="auth_fieldset">
+            <legend>Sign In</legend>
+            <div class="auth_input_cont">
+                <input type="text" class="win_dark_input win_input_auth" name="auth_username" id="auth_username" placeholder="Username">
+                <label for="auth_username" class="auth_input_icon_bg">
+                    <div class="auth_input_icon" style="mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain" ></div>
+                </label>
+            </div>
+            <div class="auth_input_cont" >
+                <input type="email" class="win_dark_input win_input_auth" name="auth_email" id="auth_email" placeholder="Email">
+                <label for="auth_email" class="auth_input_icon_bg">
+                    <div class="auth_input_icon" style="mask: url(./icons/noun-email-842043-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-email-842043-grey.svg) no-repeat center / contain" ></div>
+                </label>
+            </div>
+            <div class="auth_input_cont">
+                <input type="password" class="win_dark_input win_input_auth" name="auth_password" id="auth_password" placeholder="Password">
+                <label for="auth_password" class="auth_input_icon_bg">
+                    <div class="auth_input_icon" style="mask: url(./icons/noun-password-2891566-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-password-2891566-grey.svg) no-repeat center / contain" ></div>
+                </label>
+            </div>
+        </fieldset>
+        <button class="auth_submit_btn" type="submit">
+            <p>Sign In</p>
+            <div class="auth_input_icon auth_submit_icon" style="mask: url(./icons/noun-login-1019092-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-login-1019092-grey.svg) no-repeat center / contain" ></div>
+        </button>
+    </form>
+
+    <main>
+        <div class="loading_overlay auth_overlay" id="auth_overlay" style="display: none"></div>
 EOT;
 
     if ($showSpinner) {
@@ -121,6 +156,9 @@ function template_footer(array $scripts = null): void
 {
     // add loading_spinner.js to scripts array
     $scripts[] = 'loading_spinner.js';
+
+    // add authorization window script to scripts array
+    $scripts[] = 'auth_window.js';
 
     $dbConnection = new DBConnection();
 

@@ -231,7 +231,9 @@ template_header('List Games', 'list');
         // output the page title + number of games (count number of different game_platformIDs)
         $gameCount = count(array_unique(array_column($results, 'game_platformID')));
 
-        echo '<h1 class="page_h1">Games ('. $gameCount .')</h1>';
+        echo '<div class="list_games_wrap">';
+
+        echo '<h1 class="list_games_header">Games ('. $gameCount .')</h1>';
 
         echo '<div class="game-list">';
 
@@ -334,5 +336,6 @@ template_header('List Games', 'list');
         }
 
         ?>
+    </div>
     </div>
 <?php template_footer(); ?>

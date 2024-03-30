@@ -18,7 +18,7 @@
 }
 
 * {
-    box-sizing:border-box
+    box-sizing:border-box;
 }
 body {
     background-color: var(--ryu-bg);
@@ -26,7 +26,9 @@ body {
     color:whitesmoke;
     width:100%;
     height:100%;
-    display:table
+    display:table;
+    font-size: 1.1rem;
+    font-family: sans-serif;
 }
 .page_wrap {
     width:100%;
@@ -40,10 +42,7 @@ body,
     padding:0
 }
 main {
-    padding: 5rem 0 6rem 0; /*Space for header & footer, top - bottom - */
-    font-size: 1.1rem;
-
-    font-family: sans-serif;
+    margin: 5rem 0 6rem 0; /*Space for header & footer, top - bottom - */
 }
 
 .loading_overlay {
@@ -84,6 +83,56 @@ main {
        fill: var(--ryu-blue);
 }
 
+/*------- default input styles -------*/
+
+.win_dark_input {
+    height: 1.8rem;
+    font-family: sans-serif;
+    color: whitesmoke;
+    background-color: var(--win-dark);
+    border: none;
+    border-radius: .3rem;
+    padding: .3rem;
+    border-bottom: var(--win-border) 2px solid;
+    transition: .2s;
+}
+
+.win_dark_input:focus-within {
+    background-color: var(--win-selected);
+    border-bottom: var(--ryu-blue) 2px solid;
+    outline: none;
+    transition: .2s;
+}
+
+.win_dark_check {
+    height: 1.6rem;
+    width: 1.6rem;
+    display: inline-block;
+    background-color: var(--ryu-dark); /* set to win-dark when hovered or checked */
+    position: absolute;
+    border-radius: 0.5rem;
+    border: var(--win-dark) 4px solid;
+    transition: .2s;
+}
+
+.win_dark_check:after {
+    content: "";
+    position: absolute;
+    display: block;
+    visibility: hidden; /* set to visible when checked */
+    opacity: 0; /* set to 1 when checked */
+    transition: opacity .2s;
+    left: 31%;
+    top: -47%;
+    width: 0.6rem;
+    height: 1.3rem;
+    border: solid var(--ryu-green);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
 /*--------------------Header-------------------------*/
 
 header {
@@ -96,6 +145,11 @@ header {
     padding: 1rem 2rem 1rem 2rem;
     z-index: 99999;
     background-color: var(--ryu-dark);
+}
+
+.cont_logo_nav {
+    display: flex;
+    gap: 3rem;
 }
 
 .logo-header {
@@ -145,7 +199,8 @@ header {
     font-size: 1.1rem;
     transition: 0.2s;
 }
-.navbar a:hover {
+.navbar a:hover,
+.navbar a:focus-within {
     color: var(--ryu-red);
     text-shadow: var(--ryu-red) 0 0 1px;
     transition: 0.2s;
@@ -181,6 +236,152 @@ header {
     .nav-bar a:not(.active) {
         display: none;
     }
+}
+
+.auth_button {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    order: 3;
+}
+
+.auth_button > .auth_icon,
+.auth_button > .auth_icon {
+    background-color: var(--light-grey);
+    transition: 0.2s;
+}
+
+.auth_button:hover > .auth_icon,
+.auth_button:focus-within > .auth_icon {
+    background-color: var(--ryu-red);
+    transition: 0.2s;
+}
+
+.auth_button:active > .auth_icon {
+    background-color: var(--ryu-blue);
+    transition: 0.2s;
+}
+
+.auth_icon {
+    width: 1.7rem;
+    height: 1.7rem;
+}
+
+/*-------------Login-----------------*/
+
+.auth_overlay {
+    z-index: 98;
+}
+
+.auth_form {
+    background-color: var(--win-selected);
+    box-shadow: 0 0 .2rem 0 var(--ryu-dark);
+    position: fixed;
+    right: .5rem;
+    top: 5.5rem;
+    border-radius: 1rem;
+    padding: 1rem;
+    z-index: 99;
+    display: none;
+    flex-direction: column;
+}
+
+.auth_fieldset {
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+}
+
+.win_input_auth ~ .auth_input_icon_bg {
+    height: 1.8rem;
+    width: 1.8rem;
+    background-color: var(--ryu-red);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .3rem 0 0 .3rem;
+    border-bottom: var(--win-border) 2px solid;
+    cursor: pointer;
+    order: 1;
+    transition: 0.2s;
+}
+
+.win_input_auth:focus-within ~ .auth_input_icon_bg {
+    background-color: var(--ryu-blue);
+    border-bottom: var(--ryu-blue) 2px solid;
+    transition: 0.2s;
+}
+
+.auth_input_icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: var(--ryu-dark);
+    transition: 0.2s;
+}
+
+.auth_input_cont {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+}
+
+.win_input_auth {
+    width: 15rem;
+    border-radius: 0 .3rem .3rem 0;
+    order: 2;
+}
+
+.auth_submit_btn {
+    background-color: transparent;
+    border: var(--ryu-blue) solid 3px;
+    border-radius: .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    align-self: flex-end;
+    margin-top: .5rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth_submit_btn:hover,
+.auth_submit_btn:focus-within {
+    background-color: var(--ryu-blue);
+    transition: 0.2s;
+}
+
+.auth_submit_btn > p {
+    color: var(--ryu-blue);
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    transition: 0.2s;
+}
+
+.auth_submit_btn:hover > p,
+.auth_submit_btn:focus-within > p {
+    color: var(--win-selected);
+    transition: 0.2s;
+}
+
+.auth_submit_btn > .auth_submit_icon {
+    background-color: var(--ryu-blue);
+    transition: 0.2s;
+}
+
+.auth_submit_btn:hover > .auth_submit_icon,
+.auth_submit_btn:focus-within > .auth_submit_icon {
+    background-color: var(--win-selected);
+    transition: 0.2s;
 }
 
 /*--------------------Footer-------------------------*/
@@ -475,6 +676,14 @@ footer {
     color: whitesmoke;
     font-family: sans-serif;
 
+    > form > fieldset:first-child {
+        border: none;
+        padding: 0 1rem 2rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
     > form > fieldset {
         border: none;
         padding: 2rem 1rem;
@@ -498,24 +707,6 @@ footer {
         margin: .7rem 0 1.2rem 0;
         border-radius: 2rem;
     }
-}
-
-.win_dark_input {
-    font-family: sans-serif;
-    color: whitesmoke;
-    background-color: var(--win-dark);
-    border: none;
-    border-radius: .3rem;
-    padding: .3rem;
-    border-bottom: var(--win-border) 2px solid;
-    transition: .2s;
-}
-
-.win_dark_input:focus-visible {
-    background-color: var(--win-selected);
-    border-bottom: var(--ryu-blue) 2px solid;
-    outline: none;
-    transition: .2s;
 }
 
 /*--------------------Game Info Container------------------------*/
@@ -765,8 +956,12 @@ input[type="number"]
 
 .mp_feature_check {
     position: absolute;
-    opacity: 0;
-    visibility: hidden;
+}
+
+.mp_feature_check:hover ~ .win_dark_check,
+.mp_feature_check:focus-within ~ .win_dark_check{
+    background-color: var(--win-dark);
+    transition: .2s;
 }
 
 .mp_feature_label {
@@ -784,28 +979,9 @@ input[type="number"]
     left: 2rem;
 }
 
-.win_dark_check {
-    display: inline-block;
-    height: 25px;
-    width: 25px;
-    background-color: transparent;
-    position: absolute;
-    border-radius: 0.5rem;
-    border: var(--win-dark) 4px solid;
-    transition: .2s;
-}
-
 .mp_feature_label:hover .win_dark_check {
     background-color: var(--win-dark);
     transition: .2s;
-}
-.win_dark_check:after {
-    content: "";
-    position: absolute;
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .2s;
 }
 
 .mp_feature_check:checked ~ .win_dark_check:after {
@@ -814,16 +990,8 @@ input[type="number"]
     transition: opacity .2s;
 }
 
-.win_dark_check:after {
-    left: 31%;
-    top: -47%;
-    width: 0.6rem;
-    height: 1.3rem;
-    border: solid var(--ryu-green);
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+.mp_feature_check:checked ~ .win_dark_check {
+    background-color: var(--win-dark);
 }
 
 .mp_feature_text {
@@ -833,12 +1001,16 @@ input[type="number"]
 
 /*--------------------Game List-------------------------*/
 
-.page_h1 {
+.list_games_wrap {
+    padding-top: .7rem;
+}
+
+.list_games_header {
     font-size: 1.5rem;
     color: whitesmoke;
     background-color: var(--ryu-dark);
     border-bottom: var(--ryu-purple) .3rem solid;
-    margin: .7rem 1rem 1.2rem 1rem;
+    margin: 0 1rem 1.2rem 1rem;
     border-radius: 2rem;
     font-weight: bold;
     padding: .3rem 1rem;
