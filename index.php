@@ -7,12 +7,31 @@ $PDO = $dbConnection->getConnection();
 
 $dbExists = false;
 
+// ------------------- LOGIN CHECK -------------------
+$loggedIn = false;
+
+session_set_cookie_params([
+    'lifetime' => 0, // cookie expires at end of session
+    'path' => '/', // cookie available within entire domain
+    'domain' => 'localhost', // cookie domain
+    'secure' => true, // cookie only sent over secure HTTPS connections
+    'httponly' => true, // cookie only accessible via HTTP protocol, not by JS
+    'samesite' => 'Strict' // cookie SameSite attribute: Lax (= some cross-site requests allowed) or Strict (= no cross-site requests allowed)
+]);
+
+session_start(); // start a session - preserves account data across pages // start a session - preserves account data across pages
+
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+    $loggedIn = true;
+}
+// ----------------- LOGIN CHECK END -------------------
+
 template_header("Start", "index");
 ?>
 
         <?php
         if ($PDO != null) {
-            if ($dbConnection->checkDBExists() && $dbConnection->checkDBSchema()) {
+            if ($dbConnection->checkDBExists() && $dbConnection->checkDBSchema() === true) {
                 $dbExists = true;
                 // Database exists, display tick SVG and message
                 echo '<div class="db-status-msg db-status">
@@ -20,8 +39,9 @@ template_header("Start", "index");
                  </svg>
                 <p class="status-text">Database is set up & running</p></div>';
 
-                echo '<div class="db-backup">';
-                echo '<a href="util/bk_create.php" class="db-status-msg db-bk-create" onclick="showSpinner()">
+                if ($loggedIn) { // only show backup / restore, fetch Nintendo Switch games if logged in
+                    echo '<div class="db-backup">';
+                    echo '<a href="util/bk_create.php" class="db-status-msg db-bk-create" onclick="showSpinner()">
                             <svg class="status-symbol" width="100%" height="100%" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"  style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                                 <g transform="matrix(0.926266,0,0,0.926266,44.2428,44.2417)">
                                     <path d="M1129.4,811.77C1109.92,811.77 1094.11,827.547 1094.11,847.063L1094.11,988.243C1094.11,1046.62 1046.6,1094.12 988.227,1094.12L211.827,1094.12C153.452,1094.12 105.947,1046.62 105.947,988.243L105.947,847.063C105.947,827.543 90.135,811.77 70.654,811.77C51.173,811.77 35.361,827.547 35.361,847.063L35.361,988.243C35.361,1085.55 114.525,1164.71 211.831,1164.71L988.231,1164.71C1085.54,1164.71 1164.7,1085.55 1164.7,988.243L1164.7,847.063C1164.7,827.547 1148.89,811.77 1129.41,811.77L1129.4,811.77Z" style="fill:rgb(111,111,111);fill-rule:nonzero;stroke:rgb(111,111,111);stroke-width:37.88px;"/>
@@ -29,8 +49,8 @@ template_header("Start", "index");
                                 </g>
                             </svg>
                             <p class="status-text">Create backup</p></a>';
-                if (glob(__DIR__ . '/db/bk/bk*.sql') != null) {
-                    echo '<div class="db-status-msg db-bk-restore">
+                    if (glob(__DIR__ . '/db/bk/bk*.sql') != null) {
+                        echo '<div class="db-status-msg db-bk-restore">
                             <div>
                             <svg class="status-symbol" width="100%" height="100%" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"  style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                                 <g transform="matrix(1.2558,0,0,1.2558,-97.5828,-153.784)">
@@ -39,31 +59,31 @@ template_header("Start", "index");
                             </svg>
                             <p class="status-text">Restore from backup</p></div><ul class="bk-list">';
 
-                    if (glob(__DIR__ . '/db/bk/bk_*.sql') != null) {
-                        $files = glob(__DIR__ . '/db/bk/bk_*.sql'); // get all file names
+                        if (glob(__DIR__ . '/db/bk/bk_*.sql') != null) {
+                            $files = glob(__DIR__ . '/db/bk/bk_*.sql'); // get all file names
 
-                        // sort the files by date
-                        usort($files, function($a, $b) {
-                            return filemtime($a) < filemtime($b);
-                        });
+                            // sort the files by date
+                            usort($files, function ($a, $b) {
+                                return filemtime($a) < filemtime($b);
+                            });
 
-                        foreach ($files as $file) {
-                            $fileName = basename($file, ".sql");
+                            foreach ($files as $file) {
+                                $fileName = basename($file, ".sql");
 
-                            $dateTimestamp = date("Y-m-d H:i" ,filemtime($file));
+                                $dateTimestamp = date("Y-m-d H:i", filemtime($file));
 
-                            echo '<li><a href="util/bk_restore.php?file=' . $fileName . '" onclick="showSpinner()">' . $dateTimestamp . '</a></li>';
+                                echo '<li><a href="util/bk_restore.php?file=' . $fileName . '" onclick="showSpinner()">' . $dateTimestamp . '</a></li>';
+                            }
                         }
-                    }
-                    if (file_exists(__DIR__ . '/db/bk/bk.sql')) {
-                        echo '<li><a href="util/bk_restore.php?file=bk" onclick="showSpinner()">manual backup</a></li>';
-                    }
+                        if (file_exists(__DIR__ . '/db/bk/bk.sql')) {
+                            echo '<li><a href="util/bk_restore.php?file=bk" onclick="showSpinner()">manual backup</a></li>';
+                        }
 
-                    echo '</ul></div>';
-                }
-                echo '</div>';
+                        echo '</ul></div>';
+                    }
+                    echo '</div>';
 
-                echo '<div class="db-status-msg db-titledb">
+                    echo '<div class="db-status-msg db-titledb">
                         <div>
                             <svg class="status-symbol" width="100%" height="100%" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                                 <g transform="matrix(1.73078,0,0,1.73078,-438.473,-438.468)">
@@ -79,6 +99,7 @@ template_header("Start", "index");
                             <li><a class="status-text" href="./util/fetch_titledb.php?mode=nsfp" onclick="showSpinner()">published by Nintendo</a></li>
                         </ul>
                       </div>';
+                }
             } else {
                 // Database doesn't exist / not set up correctly, display cross SVG and message
                 echo '<a href="./util/setup_db.php"><div class="db-status-msg db-status" onclick="showSpinner()">
@@ -114,9 +135,13 @@ template_header("Start", "index");
             <?php
             if ($dbExists) {
                 echo "
-                <div class=\"menu-buttons\">
-                    <button class=\"menu-btn\" onclick=\"window.location='./manage_game.php'\">Add Game</button>
-                    <button class=\"menu-btn\" onclick=\"window.location='./search_games.php'\">Search Games</button>
+                <div class=\"menu-buttons\">";
+                if ($loggedIn) {
+                    echo "<button class=\"menu-btn\" onclick=\"window.location='./manage_game.php'\">Add Game</button>";
+                } else  {
+                    echo "<button class=\"menu-btn\" onclick=\"window.location='./list_games.php'\">List All Games</button>";
+                }
+                echo "<button class=\"menu-btn\" onclick=\"window.location='./search_games.php'\">Search Games</button>
                 </div>";
             }
             ?>

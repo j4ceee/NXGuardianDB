@@ -11,6 +11,17 @@ if ($PDO === null || !$dbConnection->checkDBSchema()) {
     exit();
 }
 
+session_set_cookie_params([
+    'lifetime' => 0, // cookie expires at end of session
+    'path' => '/', // cookie available within entire domain
+    'domain' => 'localhost', // cookie domain
+    'secure' => true, // cookie only sent over secure HTTPS connections
+    'httponly' => true, // cookie only accessible via HTTP protocol, not by JS
+    'samesite' => 'Strict' // cookie SameSite attribute: Lax (= some cross-site requests allowed) or Strict (= no cross-site requests allowed)
+]);
+
+session_start(); // start a session - preserves account data across pages // start a session - preserves account data across pages
+
 template_header('Search Game', 'search');
 ?>
         <div class="manage_game_container">
@@ -47,6 +58,7 @@ template_header('Search Game', 'search');
                             <label for="game_id">Game ID:</label>
                             <input type="text" class="win_dark_input" name="game_id" id="game_id">
                         </div>
+                        <div class="game_info_empty"></div>
                     </div>
                 </fieldset>
 

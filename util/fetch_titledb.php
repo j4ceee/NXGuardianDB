@@ -2,6 +2,27 @@
 require_once(dirname(__DIR__) . "/libs/json-machine/json_loader.php");
 use \JsonMachine\Items;
 
+// ------------------- LOGIN CHECK -------------------
+session_set_cookie_params([
+    'lifetime' => 0, // cookie expires at end of session
+    'path' => '/', // cookie available within entire domain
+    'domain' => 'localhost', // cookie domain
+    'secure' => true, // cookie only sent over secure HTTPS connections
+    'httponly' => true, // cookie only accessible via HTTP protocol, not by JS
+    'samesite' => 'Strict' // cookie SameSite attribute: Lax (= some cross-site requests allowed) or Strict (= no cross-site requests allowed)
+]);
+
+session_start(); // start a session - preserves account data across pages // start a session - preserves account data across pages
+
+session_regenerate_id(true); // regenerate session id for security
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // if user is not logged in, redirect to home page
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . '/index.php?status=334');
+    exit();
+}
+// ----------------- LOGIN CHECK END -------------------
+
 //-------------------- TitleDB mode --------------------
 
 // check if url contains titledb mode (?mode=ns...) & game index (?index=0)
@@ -72,6 +93,8 @@ function fetchTitleDB(string $titleDBurl): void
         'Additional',
         'Tool',
         'Membership',
+        'Collection Bundle',
+        'Game Bundle',
 
         // all kinds of passes
         'Season Pass',

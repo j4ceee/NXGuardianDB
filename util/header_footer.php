@@ -1,8 +1,17 @@
-<?php
+<?php /** @noinspection ALL */
 require_once(dirname(__DIR__) . '\util\conn_db.php'); // include database connection file
+require_once(dirname(__DIR__) . '\util\validate.php'); // include database connection file
 
 function template_header($title, $active, bool $showSpinner = false): void
 {
+    // ------------------- LOGIN CHECK -------------------
+    $loggedIn = false;
+
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+        $loggedIn = true;
+    }
+    // ----------------- LOGIN CHECK END -------------------
+
     $dbConnection = new DBConnection();
 
     $index = '';
@@ -45,12 +54,14 @@ function template_header($title, $active, bool $showSpinner = false): void
             <nav class="navbar">
                 <a href="./index.php" $index>Start</a>
     EOT;
-    if ($dbConnection->checkDBSchema()) {
+    if ($dbConnection->checkDBSchema() === true) {
         echo <<<EOT
             <a href="./search_games.php" $search>Search Games</a>
             <a href="./list_games.php" $list onclick="showSpinner()">List Games</a>
-            <a href="./manage_game.php" $add>Add Game</a>
         EOT;
+        if ($loggedIn) {
+            echo '<a href="./manage_game.php" '. $add .'>Add Game</a>';
+        }
     }
 
     echo <<<EOT
@@ -97,43 +108,80 @@ function template_header($title, $active, bool $showSpinner = false): void
         </div>
         </div>
         
-        <button class="auth_button" id="auth_button" onclick="openAuthWindow()">
+        <button class="auth_button" id="auth_button" onclick="toggleAuthWindow()">
             <div class="auth_icon" id="auth_icon" style="mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain" ></div>
         </button>
     </header>
+    EOT;
 
-    <form class="auth_form" id="auth_window" action="#" method="post" autocomplete="off">
+    if (!$loggedIn) {
+        echo <<<EOT
+        <form class="auth_form" id="auth_window" action="./util/auth_login.php" method="post">
         <fieldset class="auth_fieldset">
             <legend>Sign In</legend>
             <div class="auth_input_cont">
-                <input type="text" class="win_dark_input win_input_auth" name="auth_username" id="auth_username" placeholder="Username">
+                <input type="text" class="win_dark_input win_input_auth" name="auth_username" id="auth_username" placeholder="Username" required>
                 <label for="auth_username" class="auth_input_icon_bg">
                     <div class="auth_input_icon" style="mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-user-6714086-grey.svg) no-repeat center / contain" ></div>
                 </label>
             </div>
+        EOT;
+
+        // honeypot field -> hidden from users & screen readers -> only bots will fill this field
+        // if honeypot field is not empty -> redirect to previous page
+        // is set as not required in JS when form is submitted
+        echo <<<EOT
+            <div class="auth_input_cont auth_pin" aria-hidden="true">
+                <input type="password" class="win_dark_input win_input_auth" name="auth_pin" id="auth_pin" placeholder="PIN" aria-hidden="true" tabindex="-1" required>
+                <label for="auth_password" class="auth_input_icon_bg" aria-hidden="true">
+                    <div class="auth_input_icon" style="mask: url(./icons/noun-password-2891566-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-password-2891566-grey.svg) no-repeat center / contain" aria-hidden="true"></div>
+                </label>
+            </div>
+            EOT;
+
+        echo <<<EOT
             <div class="auth_input_cont" >
-                <input type="email" class="win_dark_input win_input_auth" name="auth_email" id="auth_email" placeholder="Email">
+                <input type="email" class="win_dark_input win_input_auth" name="auth_email" id="auth_email" placeholder="Email" required>
                 <label for="auth_email" class="auth_input_icon_bg">
                     <div class="auth_input_icon" style="mask: url(./icons/noun-email-842043-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-email-842043-grey.svg) no-repeat center / contain" ></div>
                 </label>
             </div>
             <div class="auth_input_cont">
-                <input type="password" class="win_dark_input win_input_auth" name="auth_password" id="auth_password" placeholder="Password">
+                <input type="password" class="win_dark_input win_input_auth" name="auth_password" id="auth_password" placeholder="Password" required>
                 <label for="auth_password" class="auth_input_icon_bg">
                     <div class="auth_input_icon" style="mask: url(./icons/noun-password-2891566-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-password-2891566-grey.svg) no-repeat center / contain" ></div>
                 </label>
             </div>
         </fieldset>
-        <button class="auth_submit_btn" type="submit">
+        <button class="auth_submit_btn" type="submit" onclick="setNotRequired('auth_pin')">
             <p>Sign In</p>
             <div class="auth_input_icon auth_submit_icon" style="mask: url(./icons/noun-login-1019092-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-login-1019092-grey.svg) no-repeat center / contain" ></div>
         </button>
+        EOT;
+    } else {
+        $username = htmlspecialchars($_SESSION['name'], ENT_QUOTES, 'UTF-8');
+
+        echo <<<EOT
+        <form class="auth_form" id="auth_window" action="./util/auth_logout.php" method="post" autocomplete="off">
+        <div class="auth_greeting">
+            <p class="auth_welcome">Welcome back,</p>
+            <div class="auth_user">
+                <p class="auth_user">{$username}</p>
+                <p class="auth_welcome">!</p>
+            </div>
+        </div>
+        <button class="auth_submit_btn auth_signout_btn" type="submit">
+            <p>Sign Out</p>
+            <div class="auth_input_icon auth_submit_icon" style = "mask: url(./icons/noun-login-1019092-logout-grey.svg) no-repeat center / contain; -webkit-mask: url(./icons/noun-login-1019092-logout-grey.svg) no-repeat center / contain" ></div >
+        </button>
+        EOT;
+    }
+    echo <<<EOT
     </form>
 
     <main>
         <div class="loading_overlay auth_overlay" id="auth_overlay" style="display: none"></div>
 EOT;
-
     if ($showSpinner) {
         $displaySpinner = 'display: flex';
     } else {
@@ -154,6 +202,14 @@ EOT;
 
 function template_footer(array $scripts = null): void
 {
+    // ------------------- LOGIN CHECK -------------------
+    $loggedIn = false;
+
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+        $loggedIn = true;
+    }
+    // ----------------- LOGIN CHECK END -------------------
+
     // add loading_spinner.js to scripts array
     $scripts[] = 'loading_spinner.js';
 
@@ -170,13 +226,14 @@ function template_footer(array $scripts = null): void
             <a href="./index.php">Start</a>
             <a href="./index.php">Disclaimer</a>
     EOT;
-    if ($dbConnection->checkDBSchema()) {
+    if ($dbConnection->checkDBSchema() === true) {
         echo <<<EOT
             <a href="./search_games.php">Search Games</a>
             <a href="./list_games.php" onclick="showSpinner()">List Games</a>
-            <a href="./manage_game.php">Add Game</a>
         EOT;
-
+        if ($loggedIn) {
+            echo '<a href="./manage_game.php">Add Game</a>';
+        }
     }
     echo <<<EOT
         </nav>
@@ -184,12 +241,13 @@ function template_footer(array $scripts = null): void
 </div>
 EOT;
     if ($scripts !== null) {
-        for ($i = 0; $i < count($scripts); $i++) {
-            echo '<script src="./js/' . $scripts[$i] . '"></script>';
-        };
+        foreach ($scripts as $script) {
+            echo '<script src="./js/' . $script . '"></script>';
+        }
     }
     echo <<<EOT
 </body>
 </html>
 EOT;
+    getErrorMsg();
 }

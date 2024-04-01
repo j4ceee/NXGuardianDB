@@ -5,10 +5,29 @@ require_once(__DIR__ . '/util/header_footer.php');
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
-if ($PDO === null || !$dbConnection->checkDBSchema()) {
+if ($PDO === null || $dbConnection->checkDBSchema() !== true) {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/index.php");
     exit();
 }
+
+// ------------------- LOGIN CHECK -------------------
+$loggedIn = false;
+
+session_set_cookie_params([
+    'lifetime' => 0, // cookie expires at end of session
+    'path' => '/', // cookie available within entire domain
+    'domain' => 'localhost', // cookie domain
+    'secure' => true, // cookie only sent over secure HTTPS connections
+    'httponly' => true, // cookie only accessible via HTTP protocol, not by JS
+    'samesite' => 'Strict' // cookie SameSite attribute: Lax (= some cross-site requests allowed) or Strict (= no cross-site requests allowed)
+]);
+
+session_start(); // start a session - preserves account data across pages // start a session - preserves account data across pages
+
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+    $loggedIn = true;
+}
+// ----------------- LOGIN CHECK END -------------------
 
 template_header('List Games', 'list');
 ?>
@@ -24,9 +43,10 @@ template_header('List Games', 'list');
         }
 
         // collect search criteria from form sent via POST
-        $title = isset($_POST['title']) ? trim($_POST['title']) : null;
-        $developer = isset($_POST['developer']) ? trim($_POST['developer']) : null;
-        $storeID = isset($_POST['game_id']) ? trim($_POST['game_id']) : null;
+        $title = isset($_POST['title']) ? (string)trim($_POST['title']) : null;
+        $developer = isset($_POST['developer']) ? (string)trim($_POST['developer']) : null;
+        $storeID = isset($_POST['game_id']) ? (int)trim($_POST['game_id']) : null;
+
 
         // collect platforms based on dynamic keys
         $platforms = [];
@@ -248,31 +268,32 @@ template_header('List Games', 'list');
                 // start a new game-platform div
                 echo "<div class='game game_platform_" . htmlspecialchars($row['game_platformID']) . "' tabindex='0'>";
 
-                // edit button
-                echo "<a href='./manage_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='edit_button' title='Edit " . htmlspecialchars($row['game_name']) . "'>
-                        <img class='edit_icon' src='./icons/noun-edit-1047822-grey.svg' alt='Edit " . htmlspecialchars($row['game_name']) . "'>
-                      </a>";
+                if ($loggedIn) { // only show edit and delete buttons if logged in
+                    // edit button
+                    echo "<a href='./manage_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='edit_button' title='Edit " . htmlspecialchars($row['game_name']) . "'>
+                            <img class='edit_icon' src='./icons/noun-edit-1047822-grey.svg' alt='Edit " . htmlspecialchars($row['game_name']) . "'>
+                          </a>";
 
-                // delete buttons
-                echo "<div class='game_delete'>";
-                // button to delete game_platform entry
-                /*
-                echo "<a href='./util/delete_game.php?game_platformID=" . htmlspecialchars($row['game_platformID']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['platform']) . " version'>
-                        <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['platform']) . " version'>
-                        <img class='trash_gpl_icon' src='./img/platforms/" . htmlspecialchars($row['platformID']) . ".svg' class='trash_game_icon' alt='Platform Logo'/>
-                      </a>";
-                */
-                // button to delete game
-                echo "<a href='./util/delete_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['game_name']) . "'>
-                      <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['game_name']) . "'>";
-                // echo "<img class='trash_game_icon' src='" . htmlspecialchars($row['imageLink']) . "' alt='Game Image'/>";
-                echo "</a>";
-                echo "</div>";
+                    // delete buttons
+                    echo "<div class='game_delete'>";
+                    // button to delete game_platform entry
+                    /*
+                    echo "<a href='./util/delete_game.php?game_platformID=" . htmlspecialchars($row['game_platformID']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['platform']) . " version'>
+                            <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['platform']) . " version'>
+                            <img class='trash_gpl_icon' src='./img/platforms/" . htmlspecialchars($row['platformID']) . ".svg' class='trash_game_icon' alt='Platform Logo'/>
+                          </a>";
+                    */
+                    // button to delete game
+                    echo "<a href='./util/delete_game.php?gameID=" . htmlspecialchars($row['game_id']) . "' class='delete_button' title='Delete " . htmlspecialchars($row['game_name']) . "'>
+                          <img class='trash_icon' src='./icons/noun-trash-2025467-grey.svg' alt='Delete " . htmlspecialchars($row['game_name']) . "'>";
+                    echo "</a>";
+                    echo "</div>";
+                }
 
                 // if store link is set, create a link to the store
                 // else wrap in div
                 if ($row['storeLink'] !== null && $row['storeLink'] !== '') {
-                    echo "<a class='game_prev' href='" . $row['storeLink'] ."' target='_blank'>";
+                    echo "<a class='game_prev' href='" . htmlspecialchars($row['storeLink']) ."' target='_blank'>";
                 } else {
                     echo "<div class='game_prev'>";
                 }

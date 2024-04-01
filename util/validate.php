@@ -2,6 +2,7 @@
 
 use JetBrains\PhpStorm\NoReturn;
 
+
 /*
  * ERROR MESSAGES
  */
@@ -15,6 +16,14 @@ $errorDict = [
     "406" => "Error! No multiplayer modes selected for a platform.",
     "407" => "Error! Missing player count for one of the selected multiplayer modes.",
 
+    // login errors
+    "300" => "Error! Invalid ",
+    "301" => "Error! Missing ",
+    "302" => "Error! Too long: ",
+    "303" => "Error! Too short: ",
+    "333" => "Error! Login failed. Please check your credentials and try again.",
+    "334" => "Error! You need to be logged in to access this page.",
+
     // input format errors
     "500" => "Error! Invalid input format for field: ",
     "501" => "Error! Input too long for field: ",
@@ -24,10 +33,12 @@ $errorDict = [
     "505" => "Error! The image is not square."
 ];
 
-function getErrorMsg(): void
+function getErrorMsg(bool $alertError = true): string
 {
+    $message = "";
+
     if (isset($_GET['status'])) {
-        $status = $_GET['status'];
+        $status = (string)$_GET['status'];
 
         // sanitize status (remove all characters except numbers & unicode letters)
         $status = preg_replace('/[^a-zA-Z0-9éÉ :-]/', '', $status); // TODO: better sanitization
@@ -52,10 +63,20 @@ function getErrorMsg(): void
             $message = "Error! Unknown error occurred.";
         }
 
-        echo "<script>alert('$message');</script>";
+        if ($alertError) {
+            echo "<script>alert('". htmlspecialchars($message) ."');</script>";
+        }
     }
+
+    return $message;
 }
 
+/*
+ * VALIDATION FUNCTIONS - ADD / EDIT GAME INPUTS
+ *
+ * validate_inputs() is the main function that calls all other validation functions
+ * -> it is called when a game is added or updated
+ */
 
 function validate_inputs($post): void
 {
@@ -85,24 +106,24 @@ function validate_inputs($post): void
     if(isset($_SERVER['HTTP_REFERER'])) {
         // get the previous page URL
         $url = $_SERVER['HTTP_REFERER'];
-        $strippedURL = strtok($_SERVER['HTTP_REFERER'], '?'); // remove query string from URL
-
-        $urlParams = parse_url($url, PHP_URL_QUERY); // get the query string from the URL
-        parse_str($urlParams, $urlParams); // convert the query string to an associative array
-
-        $urlParams['status'] = $msg; // add the error message to the URL parameters / overwrite it if it already exists
-
-        $url = $strippedURL . '?' . http_build_query($urlParams); // rebuild the URL with the new parameters
-
-        // redirect to the previous page
-        header('Location: ' . $url);
-
-        //echo "Redirecting to: $url";
     } else { // if there is no previous page
-        // redirect to a default page
-        header('Location: index.php');
+        $url = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php";
     }
-    exit;
+
+    $strippedURL = strtok($url, '?'); // remove query string from URL
+
+    $urlParams = parse_url($url, PHP_URL_QUERY); // get the query string from the URL
+    parse_str($urlParams, $urlParams); // convert the query string to an associative array
+
+    $urlParams['status'] = $msg; // add the error message to the URL parameters / overwrite it if it already exists
+
+    $url = $strippedURL . '?' . http_build_query($urlParams); // rebuild the URL with the new parameters
+
+    // redirect to the previous page
+    header('Location: ' . $url);
+
+    //echo "Redirecting to: $url";
+    exit();
 }
 
 function validate_basics($post): void
@@ -440,5 +461,54 @@ function validate_dev_exists(string $devName): int|null
         return null;
     } else {
         return $result[0]['devID'];
+    }
+}
+
+/*
+ * VALIDATION FUNCTIONS - AUTHENTICATION
+ */
+
+function validate_login($username, $email, $password): void
+{
+    // check if required fields are set
+    $requiredFields = [
+        'username' => $username,
+        'email' => $email,
+        'password' => $password
+    ];
+
+    foreach ($requiredFields as $field => $value) {
+        if (empty($value)) {
+            redirectToPreviousPage("301/$field");
+        }
+    }
+
+    // validate input format
+    validate_username($username);
+    validate_password($password);
+    validate_email($email);
+}
+
+function validate_username($username): void
+{
+    if (strlen($username) > 20) {
+        redirectToPreviousPage("302/username");
+    }
+}
+
+function validate_password($password): void
+{
+    if (strlen($password) < 8) {
+        redirectToPreviousPage("303/password");
+    }
+}
+
+function validate_email($email): void
+{
+    if (strlen($email) > 50) {
+        redirectToPreviousPage("302/email");
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        redirectToPreviousPage("300/email");
     }
 }

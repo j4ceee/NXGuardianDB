@@ -7,10 +7,31 @@ $PDO = $dbConnection->getConnection();
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
-if ($PDO === null || !$dbConnection->checkDBSchema()) {
+if ($PDO === null || $dbConnection->checkDBSchema() !== true) {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/index.php");
     exit();
 }
+
+// ------------------- LOGIN CHECK -------------------
+session_set_cookie_params([
+    'lifetime' => 0, // cookie expires at end of session
+    'path' => '/', // cookie available within entire domain
+    'domain' => 'localhost', // cookie domain
+    'secure' => true, // cookie only sent over secure HTTPS connections
+    'httponly' => true, // cookie only accessible via HTTP protocol, not by JS
+    'samesite' => 'Strict' // cookie SameSite attribute: Lax (= some cross-site requests allowed) or Strict (= no cross-site requests allowed)
+]);
+
+session_start(); // start a session - preserves account data across pages // start a session - preserves account data across pages
+
+session_regenerate_id(true); // regenerate session ID to prevent session fixation attacks
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // if user is not logged in, redirect to home page
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . '/index.php?status=334');
+    exit();
+}
+// ----------------- LOGIN CHECK END -------------------
 
 $msg = '';
 
@@ -41,42 +62,4 @@ else {
 if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 2) . "/list_games.php");
     exit();
-}
-
-
-function getDevID($PDO, $gameID): int
-{
-    $stmt = $PDO->prepare('SELECT devID FROM games WHERE gameID = :gameID');
-    $stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC)['devID']; // return the devID
-}
-
-function delLastGameForDeveloper($PDO, $devID): void
-{
-    $stmt = $PDO->prepare('SELECT gameID FROM games WHERE devID = :devID');
-    $stmt->bindParam(':devID', $devID, PDO::PARAM_INT);
-    $stmt->execute();
-    $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    if (count($games) == 0) {
-        $stmt = $PDO->prepare('DELETE FROM developers WHERE devID = :devID');
-        $stmt->bindParam(':devID', $devID, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-}
-
-
-// delete all games & developers
-
-function deleteAllGames($PDO): void
-{
-    $stmt = $PDO->prepare('DELETE FROM games');
-    $stmt->execute();
-}
-
-function deleteAllDevelopers($PDO): void
-{
-    $stmt = $PDO->prepare('DELETE FROM developers');
-    $stmt->execute();
 }

@@ -1,4 +1,4 @@
-window.onload = function() {
+window.addEventListener('load', function() {
     // only continue if no gameID is present in the URL
     if (!window.location.href.includes('gameID') && !window.location.href.includes('nsall') && !window.location.href.includes('nsfp')) {
 
@@ -20,7 +20,7 @@ window.onload = function() {
             }
         });
     }
-}
+});
 
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -7,10 +7,29 @@ require_once(__DIR__ . '/util/utility_func.php');
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->useDB();
 
-if ($PDO === null || !$dbConnection->checkDBSchema()) {
+if ($PDO === null || $dbConnection->checkDBSchema() !== true) {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/index.php");
     exit();
 }
+
+// ------------------- LOGIN CHECK -------------------
+session_set_cookie_params([
+    'lifetime' => 0, // cookie expires at end of session
+    'path' => '/', // cookie available within entire domain
+    'domain' => 'localhost', // cookie domain
+    'secure' => true, // cookie only sent over secure HTTPS connections
+    'httponly' => true, // cookie only accessible via HTTP protocol, not by JS
+    'samesite' => 'Strict' // cookie SameSite attribute: Lax (= some cross-site requests allowed) or Strict (= no cross-site requests allowed)
+]);
+
+session_start(); // start a session - preserves account data across pages // start a session - preserves account data across pages
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // if user is not logged in, redirect to home page
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/index.php?status=334');
+    exit();
+}
+// ----------------- LOGIN CHECK END -------------------
 
 
 //-------------------- TitleDB mode --------------------
@@ -515,6 +534,4 @@ if ($editMode) {
 </div>
 <?php
 template_footer(["game_editor.js"]);
-
-getErrorMsg();
 ?>
