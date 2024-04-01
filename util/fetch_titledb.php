@@ -95,6 +95,22 @@ function fetchTitleDB(string $titleDBurl): void
         'Membership',
         'Collection Bundle',
         'Game Bundle',
+        'Play Test',
+        'World Premiere',
+        'costume for',
+        'in-game',
+        'Bonus Items',
+        'exclusive gear',
+        'Fighter Costume',
+        'Special Episode',
+        'Recipe',
+        'Parts Set',
+        'hairstyle set',
+        'Uniform Set',
+        'Emotes',
+        'Collaboration Set',
+        'Decals',
+
 
         // all kinds of passes
         'Season Pass',
@@ -129,6 +145,7 @@ function fetchTitleDB(string $titleDBurl): void
         // editions
         'Retail',
         'Preorder',
+        'Steelbook',
     );
 
     $first_all = true;
@@ -196,11 +213,27 @@ function fetchTitleDB(string $titleDBurl): void
         }
 
         // if title contains "Edition" & has no image, skip it
-        if (preg_match('/\bEdition\b/i', $data->name) && $data->iconUrl === '') {
+        if (preg_match('/\bEdition\b/i', $data->name) && $data->iconUrl === null) {
+            $blacklisted = true;
+        }
+
+        // if it has no player number & image, but an id -> likely DLC -> skip it
+        if ($data->numberOfPlayers === null && $data->iconUrl === null && $data->id !== null) {
+            $blacklisted = true;
+        }
+
+        // if title contains ABC + XYZ or ABC: XYZ and has no image, storeID and numberOfPlayers
+        if (preg_match('/[A-Z0-9](\s?\+|:)\s?[A-Z0-9]/i', $data->name) && ($data->iconUrl === null && $data->id === null && $data->numberOfPlayers === null)) {
             $blacklisted = true;
         }
 
         if ($blacklisted) {
+            /*
+            // write only title of Nintendo games to debug_blacklist.json
+            if ($data->publisher === 'Nintendo') {
+                file_put_contents(dirname(__DIR__) . '/titledb/debug_blacklist.txt', $data->name . ",\n", FILE_APPEND);
+            }
+            */
             continue; // skip this entry
         }
 
@@ -275,8 +308,3 @@ function fetchTitleDB(string $titleDBurl): void
 
     $titleDB = null; // free memory
 }
-
-
-
-
-

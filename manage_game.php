@@ -50,6 +50,8 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
     $titleDBgames = null;
     $lastGame = false;
 
+    $nsPlatID = 14; // Nintendo Switch platform ID
+
     if ($titleDBMode === 'nsall') {
         $titleDBgames = json_decode(file_get_contents(__DIR__ . '/titledb/nx_titledb_all.json'), true); // load all games from Nintendo Switch title database
     } else {
@@ -75,7 +77,7 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
     $currentGame = $titleDBgames[$gameIndex];
 
     // check if game is already in database
-    $isGameInDB = check_duplicate_game_entry($currentGame['title'], $currentGame['publisher'], $currentGame['releaseDate']);
+    $isGameInDB = check_duplicate_game_entry($currentGame['title'], $currentGame['publisher'], $currentGame['releaseDate'], null, $currentGame['storeID'], $nsPlatID);
 
     if ($isGameInDB !== false) { // if game is already in database, redirect to next game
 
@@ -98,8 +100,6 @@ if ($titleDBMode === 'nsall' || $titleDBMode === 'nsfp') {
             }
         }
     }
-
-    $nsPlatID = 14; // Nintendo Switch platform ID
 
     $titleDBenabled = true;
 }
@@ -162,7 +162,7 @@ if ($editMode) {
     if ($titleDBenabled) {
         // load next game from Nintendo Switch title database when submitting the form, if there are more games
         if (!$lastGame) {
-            $action = "./util/validate_add.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1) . '"; // url to validate add game in TitleDB mode
+            $action = './util/validate_add.php?mode=' . htmlspecialchars($titleDBMode) . '&index=' . htmlspecialchars($gameIndex + 1); // url to validate add game in TitleDB mode
         }
         // if last game -> do default
     }
