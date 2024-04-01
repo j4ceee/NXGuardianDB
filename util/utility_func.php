@@ -1,5 +1,6 @@
 <?php /** @noinspection CssUnknownTarget */
 
+// generate checkboxes for game platforms
 function createGamePlatformSelection(array $platformsByCategory, array $previousPlatforms = null): void
 {
     // loop through each category in $platformsByCategory
@@ -17,7 +18,6 @@ function createGamePlatformSelection(array $platformsByCategory, array $previous
                 echo '<input type="checkbox" class="plat_list_check" id="platform' . htmlspecialchars($platform['platformID']) . '" name="platform' . htmlspecialchars($platform['platformID']) . '" value="' . htmlspecialchars($platform['platformID']) . '">';
             }
 
-            // same as 'echo '<input type="checkbox" name="platforms" value="' . $platform['platformID'] . '">';' but with htmlspecialchars()
             echo '<label for="platform' . htmlspecialchars($platform['platformID']) . '">' . htmlspecialchars($platform['platformName']) . '</label>';
             echo '<div class="plat_list_logo" style="mask: url(./img/platforms/' . htmlspecialchars($platform['platformID']) . '.svg) no-repeat center / contain; -webkit-mask: url(./img/platforms/' . htmlspecialchars($platform['platformID']) . '.svg) no-repeat center / contain"> </div>';
             echo '</div>';
@@ -77,4 +77,48 @@ function generateMPCheckboxes(mixed $mode, bool $modifyPlayers, string $platID =
         echo '</div>';
     }
     echo "\r\n\r\n";
+}
+
+
+// get the devID for a gameID
+function getDevID($PDO, $gameID): int
+{
+    $stmt = $PDO->prepare('SELECT devID FROM games WHERE gameID = :gameID');
+    $stmt->bindParam(':gameID', $gameID, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC)['devID']; // return the devID
+}
+
+/*
+ * DELETE FUNCTIONS
+ */
+
+
+// delete the developer if the game was the last game for the developer
+function delLastGameForDeveloper($PDO, $devID): void
+{
+    $stmt = $PDO->prepare('SELECT gameID FROM games WHERE devID = :devID');
+    $stmt->bindParam(':devID', $devID, PDO::PARAM_INT);
+    $stmt->execute();
+    $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($games) == 0) {
+        $stmt = $PDO->prepare('DELETE FROM developers WHERE devID = :devID');
+        $stmt->bindParam(':devID', $devID, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+}
+
+
+// delete all games & developers
+function deleteAllGames($PDO): void
+{
+    $stmt = $PDO->prepare('DELETE FROM games');
+    $stmt->execute();
+}
+
+function deleteAllDevelopers($PDO): void
+{
+    $stmt = $PDO->prepare('DELETE FROM developers');
+    $stmt->execute();
 }

@@ -62,9 +62,10 @@ class DBConnection {
         return count($result) > 0; // return true if database exists, false otherwise
     }
 
-    function checkDBSchema(): bool
+    function checkDBSchema(): bool|array
+    // returns true if all tables exist, otherwise returns an array of missing tables
     {
-        $reqTables = array("developers", "games", "game_platform_link", "game_platform_player_link", "platforms", "playermodes");
+        $reqTables = array("developers", "games", "game_platform_link", "game_platform_player_link", "platforms", "playermodes", "accounts");
 
         if ($this->connection === null) {
             return false;
@@ -84,10 +85,10 @@ class DBConnection {
             $tables[] = $table[0]; // store table name in $tables
         }
 
-        foreach ($reqTables as $reqTable) {
-            if (!in_array($reqTable, $tables)) { // if required table is not $tables (all tables in database)
-                return false;
-            }
+        $missingTables = array_diff($reqTables, $tables); // get missing tables
+
+        if (count($missingTables) > 0) {
+            return $missingTables;
         }
         return true;
     }

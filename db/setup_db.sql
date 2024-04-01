@@ -27,7 +27,6 @@ CREATE TABLE `games`
     `gameName`    varchar(176) NOT NULL,           -- name of game
     `gameRelease` date         NOT NULL,           -- release date of game
     `devID`       int(11) NOT NULL,                -- foreign key to developers table
-    -- `steamgridID` int(12) NULL,                 -- SteamGridDB ID --TODO: implement SteamGridDB feature
     `imageLink` varchar(150) NOT NULL,             -- Link to image of game
 
     PRIMARY KEY (`gameID`),
@@ -88,7 +87,7 @@ CREATE TABLE `game_platform_link`
 -- links games to platforms to player modes
 CREATE TABLE `game_platform_player_link`
 (
-    `game_platform_playerID` int(11) NOT NULL AUTO_INCREMENT, -- primary key
+    `game_platform_playerID` int(11) NOT NULL AUTO_INCREMENT,                          -- primary key
     `game_platformID` int(11) NOT NULL,                                                -- foreign key to game_platform_link table
     `modeID`          int(11) NOT NULL,                                                -- foreign key to playermodes table
     `minPlayers`      int(11) NOT NULL CHECK ( `minPlayers` >= 0 ),                    -- minimum number of players for mode
@@ -100,6 +99,22 @@ CREATE TABLE `game_platform_player_link`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+
+-- create table accounts
+CREATE TABLE IF NOT EXISTS `accounts`
+(
+    `id`       int(11)      NOT NULL AUTO_INCREMENT, -- primary key
+    `username` varchar(20)  NOT NULL,                -- username
+    `password` varchar(255) NOT NULL,                -- password
+    `email`    varchar(50) NOT NULL,                -- email
+
+    PRIMARY KEY (`id`),
+    UNIQUE (`username`), -- every account should have a unique username (no duplicates)
+    UNIQUE (`email`)     -- every account should have a unique email (no duplicates)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8;
 
 
 -- database optimization
