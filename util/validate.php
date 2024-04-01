@@ -148,7 +148,7 @@ function validate_basics($post): void
 
     // check if the game already exists in the database
     $duplicate = check_duplicate_game_entry($post['title'], $post['developer'], $post['release'], $gameID);
-    
+
     if ($duplicate !== false) {
         redirectToPreviousPage($duplicate);
     }
@@ -245,9 +245,9 @@ function validate_players($post, array $platformModes): void
                         redirectToPreviousPage("407");
                     }
 
-/*
-* VALIDATION FUNCTIONS - INPUT FORMAT
-*/
+                    /*
+                    * VALIDATION FUNCTIONS - INPUT FORMAT
+                    */
 
                     /*
                      * check if:
@@ -402,7 +402,7 @@ function validate_store_id($storeID, $platformID, $gameID): void
 */
 
 // check if the game already exists in the database
-function check_duplicate_game_entry($title, $developer, $release, int $gameID = null): string|bool
+function check_duplicate_game_entry($title, $developer, $release, int $DBgameID = null, $storeID = null, $platformID = null): string|bool
 {
     // echo "<p>Checking for duplicate game entry: $title by $developer, released on $release<br></p>";
 
@@ -420,15 +420,44 @@ function check_duplicate_game_entry($title, $developer, $release, int $gameID = 
     $stmt->bindParam(':title', $title);
     $stmt->bindParam(':developer', $developer);
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result_names = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // TODO: checking for duplicates by names or by IDs can be separated into standalone functions
+
+    if ($storeID !== null && $platformID !== null) {
+        //check if the storeID is already in the database for the selected platform
+        $sql = "SELECT 
+                    *
+                FROM 
+                    games 
+                JOIN
+                    game_platform_link ON games.gameID = game_platform_link.gameID
+                WHERE 
+                    storeID = :storeID AND 
+                    platformID = :platformID";
+        $stmt = $GLOBALS['PDO']->prepare($sql);
+        $stmt->bindParam(':storeID', $storeID);
+        $stmt->bindParam(':platformID', $platformID);
+        $stmt->execute();
+        $result_id = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    $foundGames = null;
+
+    // use result_id if not empty, else use result_names if not empty, else keep foundGames as null
+    if (!empty($result_id)) {
+        $foundGames = $result_id;
+    } else if (!empty($result_names)) {
+        $foundGames = $result_names;
+    }
 
     // if there are games with the same title and developer...
-    if (!empty($result)) {
-        foreach ($result as $row) {
+    if ($foundGames !== null) {
+        foreach ($foundGames as $row) {
             // ...check if the gameID is different
             // if same gameID -> the game is being updated, no need to check for duplicates
             // if yes / null -> check if the release year is the same
-            if ($gameID != $row['gameID']) {
+            if ($DBgameID != $row['gameID']) {
                 if (date('Y', strtotime($row['gameRelease'])) === date('Y', strtotime($release))) {
                     // if the release year is the same, return an error
                     // if not -> the game is not a duplicate -> e.g. Need for Speed: Most Wanted (2005) and Need for Speed: Most Wanted (2012)

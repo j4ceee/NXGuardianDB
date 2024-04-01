@@ -1,5 +1,6 @@
 <?php /** @noinspection SqlWithoutWhere */
 require_once(dirname(__DIR__) . '/util/conn_db.php'); // include database connection file
+require_once(dirname(__DIR__) . '/util/utility_func.php'); // validate functions
 
 $dbConnection = new DBConnection();
 $PDO = $dbConnection->getConnection();
